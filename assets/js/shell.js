@@ -115,6 +115,7 @@ const tpl = {
       <span data-slot="colophon-runtime">
         ${SITE.colophon.uptime} · ${SITE.colophon.stack.join(" / ")}
       </span>
+      <a href="skeleton.html">骨架屏参考</a>
       <a href="${SITE.colophon.icp.href}">${SITE.colophon.icp.label}</a>
     </div>
   </footer>`,
@@ -341,29 +342,34 @@ const SK_TPL = {
   line: (n) => Array.from({ length: n }, () => `<span class="sk sk-line"></span>`).join(""),
 };
 
+/* 原始内容存在 Map 里，不写进 data-* 属性。
+   写属性会让整段 HTML 出现在 DOM 里、内存翻倍，读出来还要反转义。 */
+const skeletonBackup = new Map();
+const skeletonReady = new WeakSet();
+
 const Skeleton = {
   /** 把 el 的内容换成骨架，原始内容先存起来 */
   show(el, variant = "entry", count = 4) {
     if (!el) return;
-    const build = SK_TPL[variant] || SK_TPL.entry;
-    if (!el.dataset.skeletonBackup) {
-      el.dataset.skeletonBackup = el.innerHTML;
-    }
+    if (!skeletonBackup.has(el)) skeletonBackup.set(el, el.innerHTML);
     el.setAttribute("aria-busy", "true");
-    el.innerHTML = build(count);
+    el.innerHTML = (SK_TPL[variant] || SK_TPL.entry)(count);
   },
 
   /** 还原原始内容 */
   clear(el) {
-    if (!el || !el.dataset.skeletonBackup) return;
-    el.innerHTML = el.dataset.skeletonBackup;
-    delete el.dataset.skeletonBackup;
+    if (!el || !skeletonBackup.has(el)) return;
+    el.innerHTML = skeletonBackup.get(el);
+    skeletonBackup.delete(el);
     el.removeAttribute("aria-busy");
   },
 };
 
 function setupSkeletons() {
   document.querySelectorAll("[data-skeleton]").forEach((el) => {
+    if (skeletonReady.has(el)) return; // 防止重复初始化时把骨架又存成原始内容
+    skeletonReady.add(el);
+
     const [variant, count] = String(el.dataset.skeleton).split(":");
     Skeleton.show(el, variant, Number(count) || 4);
 
