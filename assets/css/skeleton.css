@@ -609,7 +609,9 @@ body.drawer-open { overflow: hidden; }
   flex: 1 1 auto;
   min-width: var(--s6);
   border-bottom: 1px dotted var(--rule-strong);
-  transform: translateY(-4px);
+  /* 不要加 translateY 抬升。.ledger__row 是 align-items:baseline，
+     空元素的基线就是它的下外边距边缘 —— 所以 border-bottom 本来
+     就正好落在文字基线上。再抬 4px 就跑到文字腰部了。 */
 }
 .ledger__tag {
   flex: 0 0 auto;
@@ -951,8 +953,10 @@ body.drawer-open { overflow: hidden; }
 
 /* 空状态 */
 .blank {
-  padding: var(--s12) var(--s6);
-  text-align: center;
+  padding: var(--s10) 0;
+  /* 左对齐，不居中。全站都是左对齐 + 左侧栏线节奏，
+     中间冒出一段居中文字会像是没对齐。 */
+  text-align: left;
   /* 只留下边框。上边框会和上方区块的下边框形成「两条平行线夹一片空白」，
      看起来像渲染错误。 */
   border-bottom: 1px solid var(--rule);
@@ -966,6 +970,13 @@ body.drawer-open { overflow: hidden; }
   color: var(--ink-3);
 }
 .blank__desc { margin: 0; font-size: var(--t-small); color: var(--ink-2); }
+
+/* 画布类留白仍然居中 —— 那块的语义是「一块待挂载的区域」，
+   居中读起来才对。 */
+.blank--tall {
+  padding: var(--s24) var(--s6);
+  text-align: center;
+}
 
 /* --------------------------------------------------------------------------
    10. 正文排版
@@ -1245,9 +1256,6 @@ html.show-slots [data-slot]::after {
 .mb-10 { margin-bottom: var(--s10); }
 .maxw-sm { max-width: 420px; }
 .maxw-md { max-width: 560px; }
-
-/* 空状态的高版：给画布类留白用 */
-.blank--tall { padding: var(--s24) var(--s6); }
 
 /* 目录行的正文变体：说说的正文就是一句话，不需要摘要的小字号 */
 .entry__text {
