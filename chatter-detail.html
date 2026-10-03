@@ -7,9 +7,33 @@
 <meta name="theme-color" content="#f8fafc">
 <title>{{杂谈标题}} · xingyub's blog</title>
 <meta name="description" content="{{杂谈摘要}}">
+<script>
+  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  try {
+    var t = localStorage.getItem("skeleton-theme");
+    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="">
+
+<noscript>
+  <div class="noscript-bar">
+    <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
+    <a href="index.html">首页</a>
+    <a href="projects.html">项目</a>
+    <a href="timeline.html">归档</a>
+    <a href="photowall.html">照片墙</a>
+    <a href="music.html">音乐</a>
+    <a href="tree.html">灵境</a>
+    <a href="moments.html">说说</a>
+    <a href="chatter.html">杂谈</a>
+    <a href="friends.html">友链</a>
+    <a href="about.html">关于</a>
+  </div>
+</noscript>
 
 <div class="bg-layer" aria-hidden="true">
   <div class="bg-layer__orb bg-layer__orb--a"></div>
@@ -26,7 +50,7 @@
 
     <!-- 封面图 -->
     <div class="cover" data-slot="chatter-cover">
-      <img src="assets/img/placeholder.svg" alt="">
+      <img src="assets/img/placeholder.svg" alt="{{图片描述}}">
     </div>
 
     <div class="grid-12 mt-lg">
@@ -63,7 +87,7 @@
 
         <article class="card author" data-slot="author-card">
           <div class="card__body">
-            <img class="author__avatar" src="assets/img/placeholder.svg" alt="">
+            <img class="author__avatar" src="assets/img/placeholder.svg" alt="{{作者名}}">
             <h3 class="author__name">{{作者名}}</h3>
             <p class="author__bio">{{作者一句话简介}}</p>
           </div>

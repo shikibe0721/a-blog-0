@@ -137,7 +137,8 @@ function mountShell() {
   if (document.body.dataset.floats !== "off") {
     document.body.insertAdjacentHTML("beforeend", tpl.floats());
   }
-  if (document.body.dataset.splash === "on") {
+  // 启动屏：先查会话标记再插入。若先插入再移除，已看过的用户会看到一次闪现。
+  if (document.body.dataset.splash === "on" && store.get(SPLASH_KEY) !== "1") {
     document.body.insertAdjacentHTML("beforeend", tpl.splash());
   }
 
@@ -253,15 +254,9 @@ function setupSplash() {
   // 注意用 data-splash-screen 而不是 [data-splash]：body 上有 data-splash="on" 这个开关，
   // 用 [data-splash] 会先命中 body，导致 is-done 加到 body 上、启动屏永远不消失。
   const splash = document.querySelector("[data-splash-screen]");
-  if (!splash) return;
+  if (!splash) return; // 已看过的会话里 mountShell 根本不会插入
 
-  // 同一会话内只看一次，避免每次站内跳转都重新播一遍
-  if (store.get(SPLASH_KEY) === "1") {
-    splash.remove();
-    return;
-  }
   store.set(SPLASH_KEY, "1");
-
   const hide = () => splash.classList.add("is-done");
   window.addEventListener("load", () => setTimeout(hide, 700));
   setTimeout(hide, 2200); // 兜底，避免资源加载失败时卡在启动屏
