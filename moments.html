@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>说说 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/moments">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <div class="page-head page-head--center" data-slot="page-head">
+      <h1 class="page-title">说说</h1>
+      <p class="page-sub page-sub--quote">“ {{一句短引语}} ”</p>
+    </div>
+
+    <div class="search" data-slot="moments-search">
+      <span class="search__icon">⌕</span>
+      <input class="search__input" type="search" placeholder="搜索说说…">
+    </div>
+
+    <!-- 说说流：按时间倒序，短文本 + 可选图 + 可选心情 -->
+    <section class="stack" data-slot="moment-feed">
+
+      <article class="card" data-slot="moment-item">
+        <div class="card__body">
+          <div class="spread" style="margin-bottom:12px;">
+            <div class="row" style="gap:12px;">
+              <div class="profile__avatar" style="width:40px;height:40px;border-radius:50%;font-size:15px;">头</div>
+              <div>
+                <div style="font-family:var(--font-ui);font-weight:800;font-size:14px;">{{昵称}}</div>
+                <div style="font-family:var(--font-mono);font-size:11px;color:var(--fg-faint);">{{YYYY-MM-DD HH:mm}}</div>
+              </div>
+            </div>
+            <span class="badge badge--soft">{{心情 / 标签}}</span>
+          </div>
+          <p class="prose" style="margin:0;font-size:15.5px;">{{说说正文，一两句话，可以带话题标签。}}</p>
+          <div class="tag-row mt-sm">
+            <span class="tag">#{{话题一}}</span>
+            <span class="tag">#{{话题二}}</span>
+          </div>
+        </div>
+      </article>
+
+      <article class="card" data-slot="moment-item">
+        <div class="card__body">
+          <div class="spread" style="margin-bottom:12px;">
+            <div class="row" style="gap:12px;">
+              <div class="profile__avatar" style="width:40px;height:40px;border-radius:50%;font-size:15px;">头</div>
+              <div>
+                <div style="font-family:var(--font-ui);font-weight:800;font-size:14px;">{{昵称}}</div>
+                <div style="font-family:var(--font-mono);font-size:11px;color:var(--fg-faint);">{{YYYY-MM-DD HH:mm}}</div>
+              </div>
+            </div>
+            <span class="badge badge--soft">{{心情 / 标签}}</span>
+          </div>
+          <p class="prose" style="margin:0;font-size:15.5px;">{{说说正文。}}</p>
+          <div class="media-card mt-md" style="min-height:200px;border-radius:var(--r-md);" data-slot="moment-image">
+            <div class="media-card__img"><img src="" alt=""></div>
+          </div>
+        </div>
+      </article>
+
+    </section>
+
+    <div class="empty mt-lg" data-slot="moments-more">
+      <div class="empty__icon">⋯</div>
+      <span class="empty__title">加载更多</span>
+      <span class="empty__hint">{{分页 / 无限滚动的占位说明}}</span>
+    </div>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>友链 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/friends">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <div class="page-head page-head--center" data-slot="page-head">
+      <h1 class="page-title">友链</h1>
+      <p class="page-sub">{{一句话副标题：互相路过的邻居们}}</p>
+    </div>
+
+    <div class="search" data-slot="friends-search">
+      <span class="search__icon">⌕</span>
+      <input class="search__input" type="search" placeholder="搜索友链…">
+    </div>
+
+    <!-- 友链网格 -->
+    <section class="grid-12" data-slot="friend-grid">
+
+      <div class="col-4">
+        <a class="card" href="#" style="display:block;">
+          <div class="card__body card--tight">
+            <div class="row">
+              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
+              <div class="fill">
+                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
+                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-4">
+        <a class="card" href="#" style="display:block;">
+          <div class="card__body card--tight">
+            <div class="row">
+              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
+              <div class="fill">
+                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
+                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-4">
+        <a class="card" href="#" style="display:block;">
+          <div class="card__body card--tight">
+            <div class="row">
+              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
+              <div class="fill">
+                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
+                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- 申请友链 -->
+    <section class="card mt-lg" data-slot="friend-apply">
+      <div class="card__body card--pad-lg">
+        <span class="card-label">Apply</span>
+        <h2 style="margin:0 0 12px;font-family:var(--font-ui);font-size:22px;font-weight:800;">申请友链</h2>
+        <div class="grid-12" style="gap:12px;">
+          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">站点名称：{{占位}}</div></div>
+          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">站点地址：{{占位}}</div></div>
+          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">头像链接：{{占位}}</div></div>
+          <div class="col-12"><div class="chip" style="display:block;padding:10px 14px;">一句话简介：{{占位}}</div></div>
+        </div>
+        <button class="filter is-active mt-md" type="button">提交申请</button>
+      </div>
+    </section>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

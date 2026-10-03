@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>光影画廊 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/photowall">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page page--wide">
+
+    <!-- 页头：标题 + 副标题 + 搜索 -->
+    <div class="spread" style="align-items:flex-end;margin-bottom:56px;" data-slot="page-head">
+      <div>
+        <h1 class="page-title">光影画廊</h1>
+        <p class="page-sub">{{一句话副标题：这个相册在记录什么}}</p>
+      </div>
+      <div class="search" style="max-width:320px;margin:0;">
+        <span class="search__icon">⌕</span>
+        <input class="search__input" type="search" placeholder="搜索相册…">
+      </div>
+    </div>
+
+    <!-- 相册网格：每张卡是「堆叠纸片」效果，hover 显示张数 -->
+    <section class="grid-12" data-slot="album-grid">
+
+      <div class="col-4">
+        <a class="album" href="#">
+          <div class="album__stack">
+            <div class="album__sheet album__sheet--back"></div>
+            <div class="album__sheet album__sheet--mid"></div>
+            <div class="album__sheet album__sheet--front">
+              <div class="album__front-img"></div>
+              <div class="album__overlay">
+                <span class="album__count">{{N}} 张照片</span>
+                <span class="album__cta">Click to Open</span>
+              </div>
+            </div>
+          </div>
+          <div class="album__meta">
+            <div class="album__title-row">
+              <h2 class="album__title">{{相册名称}}</h2>
+              <span class="album__date">{{YYYY.MM}}</span>
+            </div>
+            <p class="album__desc">{{相册一句话描述}}</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-4">
+        <a class="album" href="#">
+          <div class="album__stack">
+            <div class="album__sheet album__sheet--back"></div>
+            <div class="album__sheet album__sheet--mid"></div>
+            <div class="album__sheet album__sheet--front">
+              <div class="album__front-img"></div>
+              <div class="album__overlay">
+                <span class="album__count">{{N}} 张照片</span>
+                <span class="album__cta">Click to Open</span>
+              </div>
+            </div>
+          </div>
+          <div class="album__meta">
+            <div class="album__title-row">
+              <h2 class="album__title">{{相册名称}}</h2>
+              <span class="album__date">{{YYYY.MM}}</span>
+            </div>
+            <p class="album__desc">{{相册一句话描述}}</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="col-4">
+        <a class="album" href="#">
+          <div class="album__stack">
+            <div class="album__sheet album__sheet--back"></div>
+            <div class="album__sheet album__sheet--mid"></div>
+            <div class="album__sheet album__sheet--front">
+              <div class="album__front-img"></div>
+              <div class="album__overlay">
+                <span class="album__count">{{N}} 张照片</span>
+                <span class="album__cta">Click to Open</span>
+              </div>
+            </div>
+          </div>
+          <div class="album__meta">
+            <div class="album__title-row">
+              <h2 class="album__title">{{相册名称}}</h2>
+              <span class="album__date">{{YYYY.MM}}</span>
+            </div>
+            <p class="album__desc">{{相册一句话描述}}</p>
+          </div>
+        </a>
+      </div>
+
+    </section>
+
+    <!-- 灯箱占位：点击相册后展开的大图查看器 -->
+    <div class="empty card mt-lg" data-slot="lightbox-placeholder">
+      <div class="empty__icon">▣</div>
+      <span class="empty__title">Lightbox Slot</span>
+      <span class="empty__hint">点击相册后在此展开大图查看器（当前为骨架占位）</span>
+    </div>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

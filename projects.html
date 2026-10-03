@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>项目矩阵 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/projects">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <div class="page-head" data-slot="page-head">
+      <h1 class="page-title">项目矩阵</h1>
+      <p class="page-sub">{{一句话副标题：在做的、做过的、想做的}}</p>
+    </div>
+
+    <div class="filters" style="justify-content:flex-start;" data-slot="project-filters">
+      <button class="filter is-active" type="button" data-filter>全部</button>
+      <button class="filter" type="button" data-filter>进行中</button>
+      <button class="filter" type="button" data-filter>已归档</button>
+      <button class="filter" type="button" data-filter>实验性</button>
+    </div>
+
+    <!-- 项目卡网格 -->
+    <section class="grid-12 mt-lg" data-slot="project-grid">
+
+      <div class="col-4">
+        <article class="card project">
+          <div class="project__thumb"></div>
+          <div class="project__body">
+            <h3 class="project__name">{{项目名称}}</h3>
+            <p class="project__desc">{{项目一句话说明，说明它解决什么问题。}}</p>
+            <div class="tag-row">
+              <span class="tag">{{技术栈}}</span>
+              <span class="tag">{{技术栈}}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-4">
+        <article class="card project">
+          <div class="project__thumb"></div>
+          <div class="project__body">
+            <h3 class="project__name">{{项目名称}}</h3>
+            <p class="project__desc">{{项目一句话说明。}}</p>
+            <div class="tag-row">
+              <span class="tag">{{技术栈}}</span>
+              <span class="tag">{{技术栈}}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-4">
+        <article class="card project">
+          <div class="project__thumb"></div>
+          <div class="project__body">
+            <h3 class="project__name">{{项目名称}}</h3>
+            <p class="project__desc">{{项目一句话说明。}}</p>
+            <div class="tag-row">
+              <span class="tag">{{技术栈}}</span>
+            </div>
+          </div>
+        </article>
+      </div>
+
+    </section>
+
+    <div class="empty card mt-lg" data-slot="project-empty">
+      <div class="empty__icon">◫</div>
+      <span class="empty__title">更多项目整理中</span>
+      <span class="empty__hint">{{空状态提示文案}}</span>
+    </div>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

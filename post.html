@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{文章标题}} · xingyub's blog</title>
+<meta name="description" content="{{文章摘要}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <!-- 封面图 -->
+    <div class="cover" data-slot="post-cover">
+      <img src="" alt="">
+    </div>
+
+    <div class="grid-12 mt-lg">
+
+      <!-- 正文 -->
+      <div class="col-8">
+        <article class="card">
+          <div class="article">
+
+            <header class="article__head" data-slot="post-head">
+              <div class="badge-row">
+                <span class="badge badge--soft">#{{标签一}}</span>
+                <span class="badge badge--soft">#{{标签二}}</span>
+                <span class="badge badge--soft">#{{标签三}}</span>
+              </div>
+              <h1 class="article__title">{{文章标题}}</h1>
+              <div class="article__meta">
+                <span>{{YYYY-MM-DD HH:mm}}</span>
+                <span>·</span>
+                <span>预计阅读 {{N}} 分钟</span>
+                <span>·</span>
+                <span>{{字数}} 字</span>
+              </div>
+            </header>
+
+            <!-- 目录（可选） -->
+            <div data-slot="post-toc">
+              <p class="article__toc">目录</p>
+              <ol style="margin:0 0 32px;padding-left:1.4em;font-size:14px;color:var(--fg-muted);">
+                <li><a href="#s1">{{一级标题}}</a></li>
+                <li><a href="#s2">{{一级标题}}</a></li>
+              </ol>
+            </div>
+
+            <!-- 正文排版 -->
+            <div class="prose" data-slot="post-body">
+              <h2 id="s1">{{一级标题}}</h2>
+              <p>{{正文段落。骨架里只保留排版样例，正式内容替换即可。}}</p>
+
+              <h3>{{二级标题}}</h3>
+              <p>支持<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>、<a href="#">链接</a>。</p>
+
+              <blockquote><p>{{引用块内容}}</p></blockquote>
+
+              <pre><code>{{代码块占位}}
+$ echo "hello skeleton"</code></pre>
+
+              <ul>
+                <li>{{列表项}}</li>
+                <li>{{列表项}}</li>
+              </ul>
+
+              <h2 id="s2">{{一级标题}}</h2>
+              <p>{{正文段落。}}</p>
+
+              <table>
+                <thead><tr><th>{{表头}}</th><th>{{表头}}</th></tr></thead>
+                <tbody>
+                  <tr><td>{{单元格}}</td><td>{{单元格}}</td></tr>
+                  <tr><td>{{单元格}}</td><td>{{单元格}}</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </article>
+      </div>
+
+      <!-- 侧栏 -->
+      <div class="col-4 sidebar">
+
+        <article class="card author" data-slot="author-card">
+          <div class="card__body">
+            <img class="author__avatar" src="" alt="">
+            <h3 class="author__name">{{作者名}}</h3>
+            <p class="author__bio">{{作者一句话简介}}</p>
+          </div>
+        </article>
+
+        <article class="card" data-slot="recommend-card">
+          <div class="card__body">
+            <span class="card-label">Recommended</span>
+            <div class="rec-list">
+              <a class="rec" href="post.html">
+                <span class="rec__title">{{推荐文章标题}}</span>
+                <span class="rec__date">{{YYYY-MM-DD HH:mm}}</span>
+              </a>
+              <a class="rec" href="post.html">
+                <span class="rec__title">{{推荐文章标题}}</span>
+                <span class="rec__date">{{YYYY-MM-DD HH:mm}}</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

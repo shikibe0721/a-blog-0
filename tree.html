@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>灵境 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/tree">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page page--wide">
+
+    <div class="page-head page-head--center" data-slot="page-head">
+      <h1 class="page-title">灵境</h1>
+      <p class="page-sub">{{一句话副标题：可视化 / 知识图谱 / 交互实验场}}</p>
+    </div>
+
+    <!-- 主视区：全屏交互画布占位 -->
+    <section class="card" data-slot="canvas-stage">
+      <div class="card__body" style="padding:0;">
+        <div style="position:relative;width:100%;min-height:420px;display:flex;align-items:center;justify-content:center;
+                    background:radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--brand) 22%, transparent), transparent 62%);">
+          <div class="empty">
+            <div class="empty__icon">✳</div>
+            <span class="empty__title">Canvas / WebGL Stage</span>
+            <span class="empty__hint">在此挂载可视化实例（Canvas、WebGL、力导向图等）</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 控制面板 + 说明 -->
+    <section class="grid-12 mt-lg">
+      <div class="col-8">
+        <article class="card" data-slot="scene-controls">
+          <div class="card__body">
+            <span class="card-label">Controls</span>
+            <div class="row row--wrap">
+              <button class="filter is-active" type="button" data-filter>{{参数组一}}</button>
+              <button class="filter" type="button" data-filter>{{参数组二}}</button>
+              <button class="filter" type="button" data-filter>{{参数组三}}</button>
+            </div>
+            <div class="mt-md stack stack--sm">
+              <div class="spread"><span style="font-size:14px;color:var(--fg-muted);">{{参数名}}</span><span class="chip">{{值}}</span></div>
+              <div class="spread"><span style="font-size:14px;color:var(--fg-muted);">{{参数名}}</span><span class="chip">{{值}}</span></div>
+              <div class="spread"><span style="font-size:14px;color:var(--fg-muted);">{{参数名}}</span><span class="chip">{{值}}</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="col-4">
+        <article class="card" data-slot="scene-notes">
+          <div class="card__body">
+            <span class="card-label">Notes</span>
+            <p style="margin:0;font-size:14px;color:var(--fg-muted);">{{这一页在讲什么，以及交互方式说明。}}</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

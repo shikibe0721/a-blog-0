@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>归档与探索 · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/timeline">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <div class="page-head page-head--center" data-slot="page-head">
+      <h1 class="page-title">归档与探索</h1>
+      <p class="page-sub">{{一句话副标题：按时间轴回看全部记录}}</p>
+    </div>
+
+    <div class="search" data-slot="archive-search">
+      <span class="search__icon">⌕</span>
+      <input class="search__input" type="search" placeholder="按标题或标签检索归档…">
+    </div>
+
+    <div class="filters mt-md" data-slot="archive-filters">
+      <button class="filter is-active" type="button" data-filter>全部</button>
+      <button class="filter" type="button" data-filter># 标签一</button>
+      <button class="filter" type="button" data-filter># 标签二</button>
+      <button class="filter" type="button" data-filter># 标签三</button>
+    </div>
+
+    <!-- 时间轴：按年份分组，每组内按日期倒序 -->
+    <section class="card mt-lg" data-slot="timeline">
+      <div class="card__body card--pad-lg">
+        <div class="timeline">
+
+          <div class="timeline__group">
+            <h2 class="timeline__year">{{YYYY}}</h2>
+            <a class="timeline__item" href="post.html">
+              <span class="timeline__date">{{MM-DD}}</span>
+              <span class="timeline__title">{{文章标题占位}}</span>
+            </a>
+            <a class="timeline__item" href="post.html">
+              <span class="timeline__date">{{MM-DD}}</span>
+              <span class="timeline__title">{{文章标题占位}}</span>
+            </a>
+            <a class="timeline__item" href="chatter-detail.html">
+              <span class="timeline__date">{{MM-DD}}</span>
+              <span class="timeline__title">{{杂谈标题占位}}</span>
+            </a>
+          </div>
+
+          <div class="timeline__group">
+            <h2 class="timeline__year">{{YYYY - 1}}</h2>
+            <a class="timeline__item" href="post.html">
+              <span class="timeline__date">{{MM-DD}}</span>
+              <span class="timeline__title">{{文章标题占位}}</span>
+            </a>
+          </div>
+
+        </div>
+
+        <div class="empty" data-slot="timeline-empty">
+          <div class="empty__icon">⌛</div>
+          <span class="empty__title">暂无更早的记录</span>
+          <span class="empty__hint">{{空状态提示文案}}</span>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

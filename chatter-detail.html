@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{杂谈标题}} · xingyub's blog</title>
+<meta name="description" content="{{杂谈摘要}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="">
+
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <!-- 封面图 -->
+    <div class="cover" data-slot="chatter-cover">
+      <img src="" alt="">
+    </div>
+
+    <div class="grid-12 mt-lg">
+
+      <!-- 正文 -->
+      <div class="col-8">
+        <article class="card">
+          <div class="article">
+
+            <header class="article__head" data-slot="chatter-head">
+              <div class="badge-row">
+                <span class="badge">✨ {{心情}}</span>
+                <span class="badge badge--soft">#{{标签一}}</span>
+                <span class="badge badge--soft">#{{标签二}}</span>
+              </div>
+              <h1 class="article__title">{{杂谈标题}}</h1>
+              <div class="article__meta">
+                <span>{{YYYY-MM-DD HH:mm:ss}}</span>
+              </div>
+            </header>
+
+            <div class="prose" data-slot="chatter-body">
+              <p>{{杂谈正文段落。杂谈比文章更随意，短句、碎念、脑洞都放这里。}}</p>
+              <p>{{正文段落。}}</p>
+              <blockquote><p>{{一句结论 / 一句吐槽}}</p></blockquote>
+            </div>
+
+          </div>
+        </article>
+      </div>
+
+      <!-- 侧栏 -->
+      <div class="col-4 sidebar">
+
+        <article class="card author" data-slot="author-card">
+          <div class="card__body">
+            <img class="author__avatar" src="" alt="">
+            <h3 class="author__name">{{作者名}}</h3>
+            <p class="author__bio">{{作者一句话简介}}</p>
+          </div>
+        </article>
+
+        <!-- 日历：标记有记录的日期 -->
+        <article class="card" data-slot="calendar">
+          <div class="card__body">
+            <div class="calendar__head">
+              <span>{{YYYY}} 年 {{MM}} 月</span>
+              <span style="color:var(--fg-faint);font-size:12px;">‹ ›</span>
+            </div>
+            <div class="calendar__grid">
+              <span class="calendar__dow">一</span><span class="calendar__dow">二</span><span class="calendar__dow">三</span>
+              <span class="calendar__dow">四</span><span class="calendar__dow">五</span><span class="calendar__dow">六</span>
+              <span class="calendar__dow">日</span>
+              <span class="calendar__day">1</span><span class="calendar__day">2</span><span class="calendar__day">3</span>
+              <span class="calendar__day">4</span><span class="calendar__day">5</span><span class="calendar__day">6</span>
+              <span class="calendar__day has-post">7</span>
+              <span class="calendar__day is-today">8</span><span class="calendar__day">9</span><span class="calendar__day">10</span>
+              <span class="calendar__day">11</span><span class="calendar__day">12</span><span class="calendar__day">13</span>
+              <span class="calendar__day">14</span>
+              <span class="calendar__day">15</span><span class="calendar__day">16</span><span class="calendar__day">17</span>
+              <span class="calendar__day">18</span><span class="calendar__day">19</span><span class="calendar__day">20</span>
+              <span class="calendar__day">21</span>
+              <span class="calendar__day">22</span><span class="calendar__day">23</span><span class="calendar__day">24</span>
+              <span class="calendar__day">25</span><span class="calendar__day">26</span><span class="calendar__day">27</span>
+              <span class="calendar__day">28</span>
+              <span class="calendar__day">29</span><span class="calendar__day">30</span><span class="calendar__day">31</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card" data-slot="recent-records">
+          <div class="card__body">
+            <span class="card-label">Recent Records</span>
+            <div class="rec-list">
+              <a class="rec" href="chatter-detail.html">
+                <span class="rec__title">{{杂谈标题}}</span>
+                <span class="rec__date">{{YYYY-MM-DD}}</span>
+              </a>
+              <a class="rec" href="chatter-detail.html">
+                <span class="rec__title">{{杂谈标题}}</span>
+                <span class="rec__date">{{YYYY-MM-DD}}</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+
+  </main>
+
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{页面标题}} · xingyub's blog</title>
+<meta name="description" content="{{页面描述}}">
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<!-- data-route 决定导航高亮；data-splash="on" 开启启动屏；data-floats="off" 关闭浮动控件 -->
+<body data-route="/" data-splash="on">
+
+<!-- ===== 背景层：光晕 + 磨砂遮罩 + 底部渐变 ===== -->
+<div class="bg-layer" aria-hidden="true">
+  <div class="bg-layer__orb bg-layer__orb--a"></div>
+  <div class="bg-layer__orb bg-layer__orb--b"></div>
+  <div class="bg-layer__orb bg-layer__orb--c"></div>
+  <div class="bg-layer__veil"></div>
+</div>
+<div class="bg-layer__wave" aria-hidden="true"></div>
+
+<div class="shell">
+
+  <!-- ===== 顶栏（由 shell.js 挂载） ===== -->
+  <div data-shell="header"></div>
+
+  <main class="page">
+
+    <!-- 搜索 -->
+    <div class="search" data-slot="home-search">
+      <span class="search__icon">⌕</span>
+      <input class="search__input" type="search" placeholder="搜索文章、杂谈、照片…">
+    </div>
+
+    <div class="stack">
+
+      <!-- ===== 第 1 屏：个人卡 + 音乐播放器 ===== -->
+      <section class="grid-12">
+
+        <!-- 个人卡 -->
+        <div class="col-7 stack">
+          <article class="card" data-slot="profile-card">
+            <div class="card__body">
+              <div class="profile">
+                <div class="profile__avatar" data-slot="profile-avatar">头</div>
+                <div class="fill">
+                  <h1 class="profile__name" data-slot="profile-name">{{昵称}}</h1>
+                  <p class="profile__bio" data-slot="profile-tagline">{{一句话简介}}</p>
+                </div>
+              </div>
+
+              <div class="spread mt-lg">
+                <div class="stats" data-slot="profile-stats">
+                  <div class="stat">
+                    <div class="stat__value">0</div>
+                    <div class="stat__label">文章</div>
+                  </div>
+                  <div class="stat-divider"></div>
+                  <div class="stat">
+                    <div class="stat__value">0</div>
+                    <div class="stat__label">杂谈</div>
+                  </div>
+                  <div class="stat-divider"></div>
+                  <div class="stat">
+                    <div class="stat__value">0</div>
+                    <div class="stat__label">照片</div>
+                  </div>
+                </div>
+
+                <div class="socials" data-slot="profile-socials">
+                  <a class="social" href="#" title="{{社交平台 1}}">1</a>
+                  <a class="social" href="#" title="{{社交平台 2}}">2</a>
+                  <a class="social" href="#" title="{{社交平台 3}}">3</a>
+                  <a class="social" href="#" title="{{社交平台 4}}">4</a>
+                  <a class="social" href="#" title="{{社交平台 5}}">5</a>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <!-- 音乐播放器 -->
+        <div class="col-5 stack">
+          <article class="card" data-slot="music-player">
+            <div class="card__body">
+              <div class="player">
+                <div class="player__art">♪</div>
+                <span class="player__title">No Music Available</span>
+                <span class="player__hint">请检查播放列表或网络连接</span>
+                <div class="player__bar"><span></span></div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ===== 第 2 屏：精选文章 + 相册入口 + 最新杂谈 + 主题卡 ===== -->
+      <section class="grid-12">
+
+        <!-- 精选文章（大图） -->
+        <div class="col-4 stack">
+          <article class="media-card media-card--tall" data-slot="featured-post">
+            <div class="media-card__img"><img src="" alt=""></div>
+            <div class="media-card__scrim"></div>
+            <div class="media-card__body">
+              <div class="badge-row">
+                <span class="badge">Latest Insight</span>
+                <span class="badge badge--ghost">{{YYYY.MM.DD HH:mm}}</span>
+              </div>
+              <h2 class="media-card__title">{{精选文章标题}}</h2>
+              <p class="media-card__desc">{{精选文章摘要}}</p>
+            </div>
+            <div class="media-card__body" style="position:absolute;right:0;bottom:0;left:auto;padding:16px;">
+              <div class="dots">
+                <button class="dots__item" type="button" aria-label="第 1 张"></button>
+                <button class="dots__item is-active" type="button" aria-label="第 2 张"></button>
+                <button class="dots__item" type="button" aria-label="第 3 张"></button>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="col-8 stack">
+
+          <!-- 相册入口（通栏大图） -->
+          <a class="media-card media-card--xl" href="photowall.html" data-slot="album-entry">
+            <div class="media-card__img"><img src="" alt=""></div>
+            <div class="media-card__scrim"></div>
+            <div class="media-card__body">
+              <h3 class="media-card__title">{{相册名称}}</h3>
+              <p class="media-card__desc">{{相册描述}}</p>
+            </div>
+          </a>
+
+          <div class="grid-12">
+
+            <!-- 最新杂谈 -->
+            <div class="col-8">
+              <a class="media-card" href="chatter-detail.html" data-slot="latest-chatter">
+                <div class="media-card__img"><img src="" alt=""></div>
+                <div class="media-card__scrim media-card__scrim--left"></div>
+                <div class="media-card__body">
+                  <div class="badge-row">
+                    <span class="badge">Records</span>
+                    <span class="badge badge--ghost">{{YYYY.MM.DD HH:mm}}</span>
+                  </div>
+                  <h3 class="media-card__title">{{杂谈标题}}</h3>
+                  <p class="media-card__desc">{{杂谈摘要}}</p>
+                </div>
+              </a>
+            </div>
+
+            <!-- 主题切换卡 -->
+            <div class="col-4">
+              <button class="card theme-card" type="button" data-theme-toggle data-slot="theme-card" style="width:100%;height:100%;">
+                <div class="theme-card__orb">🌸</div>
+                <h3 class="theme-card__title">夜间模式</h3>
+                <p class="theme-card__desc">流萤飞舞的深空</p>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== 第 3 屏：运行状态条 ===== -->
+      <section class="card" data-slot="status-bar">
+        <div class="card__body" style="padding:0;">
+          <div class="statusbar">
+            <div class="statusbar__clock" data-clock>00:00:00</div>
+            <div class="statusbar__meta fill" style="padding:16px 24px;">
+              <span class="statusbar__item">
+                <span class="pulse"></span>
+                系统已稳定运行：<strong style="color:var(--brand);font-weight:900;">{{运行时长}}</strong>
+              </span>
+              <span class="chip">Next.js 15</span>
+              <span class="chip">React 19</span>
+              <span class="chip">Tailwind 4</span>
+            </div>
+            <a class="statusbar__item" style="padding:0 24px;" href="#">萌ICP备00000000号</a>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- ===== 页脚（由 shell.js 挂载） ===== -->
+  <div data-shell="footer"></div>
+</div>
+
+<script src="assets/js/shell.js"></script>
+</body>
+</html>
