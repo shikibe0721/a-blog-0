@@ -99,6 +99,10 @@
   --dur-fast: 120ms;
   --dur: 180ms;
   --dur-slow: 260ms;
+  /* 入场：整个页面 0.2s 走完。分档错开 40ms，
+     最慢的一档 3×40 + 200 = 320ms，视觉上尾巴几乎察觉不到。 */
+  --dur-enter: 200ms;
+  --stagger: 40ms;
 
   /* — 层级 — */
   --z-sticky: 50;
@@ -991,18 +995,52 @@ html.show-slots [data-slot]::after {
 /* --------------------------------------------------------------------------
    13. 动效
    -------------------------------------------------------------------------- */
-@keyframes rise {
-  from { opacity: 0; transform: translateY(10px); }
+
+/* 入场：淡入 + 8px 上浮。不用缩放、不用模糊 ——
+   那是「弹出来」的观感，和纸的质感冲突。纸是「落下来」的。 */
+@keyframes enter {
+  from { opacity: 0; transform: translateY(8px); }
   to { opacity: 1; transform: none; }
 }
-.rise { animation: rise var(--dur-slow) var(--ease-out) both; }
 
+/* 正文按块错开入场。只给前四块排延迟，
+   更靠后的内容基本都在首屏之外，排了也看不到。 */
+.sheet > * { animation: enter var(--dur-enter) var(--ease-out) both; }
+.sheet > *:nth-child(2) { animation-delay: var(--stagger); }
+.sheet > *:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+.sheet > *:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+
+/* 报头与页脚是脚本挂载的，只做淡入，不做位移 ——
+   顶栏滑一下会让人觉得页面在抖。 */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.masthead,
+.colophon,
+.tools { animation: fade-in var(--dur-enter) var(--ease-out) both; }
+
+/* 尊重系统偏好：关掉位移，只保留极短淡入。
+   注意 reduced-motion 不等于「无动效」—— 完全不动会让「页面已就绪」
+   这个信号消失。要的是少动，不是不动。 */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  /* 默认把所有动效压到不可感知，防止以后新增的动效漏掉这一步 */
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+
+  /* 例外：入场淡入保留 80ms，只留透明度、不留位移 */
+  .sheet > *,
+  .masthead,
+  .colophon,
+  .tools {
+    animation-name: fade-in !important;
+    animation-duration: 80ms !important;
+    animation-delay: 0ms !important;
   }
 }
 
