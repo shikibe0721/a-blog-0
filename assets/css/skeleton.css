@@ -307,8 +307,10 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 
 /* 3.2 图标按钮定义见 §8 控件（统一高度与圆角） */
 
-/* 3.3 移动端抽屉 */
-.drawer-trigger { display: none; }
+/* 3.3 移动端抽屉
+   ⚠️ 选择器必须写 .iconbtn.drawer-trigger：§9 的 .iconbtn { display: inline-flex }
+   与本条同优先级，靠后定义会覆盖掉 display:none，导致汉堡按钮在桌面端也显示。 */
+.iconbtn.drawer-trigger { display: none; }
 .drawer { display: none; }
 
 @media (max-width: 1100px) {
@@ -316,7 +318,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
 }
 @media (max-width: 960px) {
   .masthead__nav { display: none; }
-  .drawer-trigger { display: inline-flex; margin-left: auto; }
+  .iconbtn.drawer-trigger { display: inline-flex; margin-left: auto; }
   .masthead__tools { margin-left: 0; }
 
   .drawer {
@@ -479,7 +481,7 @@ body.drawer-open { overflow: hidden; }
   display: flex;
   flex-direction: column;
   gap: var(--s1);
-  padding-top: 5px;
+  padding-top: var(--s1);
   font-family: var(--mono);
   font-size: var(--t-micro);
   letter-spacing: 0.03em;
@@ -739,7 +741,7 @@ body.drawer-open { overflow: hidden; }
   padding: var(--s5) var(--s3) var(--s5) 0;
   border-top: 1px solid var(--rule);
 }
-.sk-entry__meta { display: flex; flex-direction: column; gap: var(--s2); padding-top: 5px; }
+.sk-entry__meta { display: flex; flex-direction: column; gap: var(--s2); padding-top: var(--s1); }
 .sk-entry__body { display: flex; flex-direction: column; gap: var(--s3); }
 
 /* 索引卡骨架 —— 与 .index-card 同盒模型 */
@@ -829,6 +831,8 @@ body.drawer-open { overflow: hidden; }
 .field input {
   width: 100%;
   height: var(--control-h-lg);
+  appearance: none;
+  -webkit-appearance: none;
   padding: 0 var(--s3);
   border: 1px solid var(--control-line);
   border-radius: var(--r-sm);
@@ -980,6 +984,7 @@ body.drawer-open { overflow: hidden; }
 }
 
 .prose { font-size: var(--t-body); line-height: var(--lead-body); }
+.prose > :first-child { margin-top: 0; }
 .prose > * + * { margin-top: 1.15em; }
 .prose h2 {
   margin-top: 2.1em;
@@ -1071,6 +1076,8 @@ body.drawer-open { overflow: hidden; }
 
 /* --------------------------------------------------------------------------
    11. 浮动工具条
+   整条显隐，不是隐藏其中一个按钮 —— 用 opacity 藏按钮会留下空槽位，
+   看起来像坏掉的控件。滚动 400px 后由 JS 加 .is-shown。
    -------------------------------------------------------------------------- */
 .tools {
   position: fixed;
@@ -1078,14 +1085,24 @@ body.drawer-open { overflow: hidden; }
   bottom: var(--s5);
   z-index: var(--z-tools);
   display: flex;
-  gap: var(--s1);
   padding: var(--s1);
   border: 1px solid var(--rule);
   border-radius: var(--r-md);
   background: var(--paper-raised);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition:
+    opacity var(--dur) var(--ease),
+    visibility var(--dur) var(--ease),
+    transform var(--dur) var(--ease-out);
+}
+.tools.is-shown {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
 }
 .tools .iconbtn { width: 34px; height: 34px; }
-.tools .iconbtn.is-hidden { opacity: 0; pointer-events: none; }
 
 @media (max-width: 960px) {
   .tools { left: var(--s3); bottom: var(--s3); }

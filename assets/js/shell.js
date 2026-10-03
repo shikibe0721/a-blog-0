@@ -27,7 +27,6 @@ const SITE = {
     { label: "灵境", href: "tree.html", route: "/tree" },
     { label: "友链", href: "friends.html", route: "/friends" },
     { label: "关于", href: "about.html", route: "/about" },
-    { label: "骨架屏", href: "skeleton.html", route: "/skeleton" },
   ],
 
   socials: [
@@ -130,10 +129,13 @@ const tpl = {
       .join("")}
   </div>`,
 
+  /* 只放「回到顶部」一个按钮。
+     主题切换已经在报头里常驻，不在这里重复第二遍 ——
+     两个入口是冗余，不是便利。
+     整条工具条在滚动 400px 之前完全不出现，所以不会留下空槽位。 */
   tools: () => `
-  <div class="tools" data-slot="tools">
-    <button class="iconbtn" type="button" data-theme-toggle aria-label="切换主题">${icon("moon")}</button>
-    <button class="iconbtn is-hidden" type="button" data-to-top aria-label="回到顶部">${icon("up")}</button>
+  <div class="tools" data-tools-bar data-slot="tools">
+    <button class="iconbtn" type="button" data-to-top aria-label="回到顶部">${icon("up")}</button>
   </div>`,
 };
 
@@ -255,8 +257,12 @@ function setupDrawer() {
    滚动状态
    ------------------------------------------------------------------------- */
 function setupScroll() {
-  const toTop = document.querySelector("[data-to-top]");
-  const onScroll = () => toTop?.classList.toggle("is-hidden", window.scrollY < 400);
+  // 工具条整条显隐，而不是隐藏其中一个按钮 ——
+  // 用 opacity 藏按钮会留下一个空槽位，看起来像坏掉的控件。
+  const tools = document.querySelector("[data-tools-bar]");
+  const onScroll = () => {
+    tools?.classList.toggle("is-shown", window.scrollY >= 400);
+  };
   window.addEventListener("scroll", onScroll, { passive: true });
   onScroll();
   document.addEventListener("click", (e) => {
