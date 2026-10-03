@@ -88,6 +88,13 @@ input, select, textarea { font: inherit; color: inherit; }
 
 ::selection { background: color-mix(in srgb, var(--brand) 35%, transparent); }
 
+/* 键盘可达性：默认不显示焦点环，只在键盘导航时显示 */
+:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
 /* --------------------------------------------------------------------------
    3. 背景层（原站：渐变光晕 + 粒子 + 流星 + 底部波浪）
    结构与原站一致，用纯 CSS 表现，避免外部资源依赖。
@@ -177,6 +184,7 @@ html[data-theme="dark"] .bg-layer__orb { opacity: .3; }
   display: inline-flex;
   align-items: baseline;
   gap: 4px;
+  flex: 0 0 auto;
   font-family: var(--font-ui);
   font-size: 20px;
   font-weight: 900;
@@ -196,6 +204,7 @@ html[data-theme="dark"] .bg-layer__orb { opacity: .3; }
 .main-nav {
   display: flex;
   gap: 32px;
+  min-width: 0;
   font-family: var(--font-ui);
   font-size: 14px;
   font-weight: 700;
@@ -203,6 +212,8 @@ html[data-theme="dark"] .bg-layer__orb { opacity: .3; }
 .main-nav__link {
   position: relative;
   padding: 4px 0;
+  /* 不许换行：顶栏高度固定，中文标签一旦折行就会溢出 64px 的栏体 */
+  white-space: nowrap;
   color: var(--fg-muted);
   transition: color .25s ease;
 }
@@ -218,7 +229,7 @@ html[data-theme="dark"] .bg-layer__orb { opacity: .3; }
   background: var(--brand);
 }
 
-.header-actions { display: flex; align-items: center; gap: 10px; }
+.header-actions { display: flex; align-items: center; gap: 10px; flex: 0 0 auto; }
 
 .icon-btn {
   width: 36px; height: 36px;
@@ -1118,6 +1129,21 @@ html.show-slots [data-slot]::before {
 /* --------------------------------------------------------------------------
    10. 响应式
    -------------------------------------------------------------------------- */
+
+/* 10.1 顶栏收缩档
+   实测：品牌 + 10 个导航项 + 两个按钮，在 32px 间距下需要约 1067px 视口才放得下。
+   原先把折叠断点设在 768px，导致 769–1067px 区间导航标签被挤压换行、
+   溢出 64px 固定高度的栏体。改为三段式：收紧 → 折叠。 */
+@media (max-width: 1180px) {
+  .main-nav { gap: 18px; }
+  .brand__tag { display: none; }
+}
+
+@media (max-width: 1080px) {
+  .main-nav { display: none; }
+  .drawer-trigger { display: flex; }
+}
+
 @media (max-width: 1024px) {
   .col-4, .col-5, .col-7, .col-8 { grid-column: span 12; }
   .masonry { columns: 2; }
@@ -1125,8 +1151,6 @@ html.show-slots [data-slot]::before {
 
 @media (max-width: 768px) {
   :root { --gap: 16px; }
-  .main-nav { display: none; }
-  .drawer-trigger { display: flex; }
   .page { padding: calc(var(--header-h) + 24px) 16px 32px; }
   .site-header__inner { padding: 0 16px; }
   .site-footer { padding: 16px 16px 120px; }
@@ -1165,3 +1189,6 @@ html.show-slots [data-slot]::before {
 .drawer__link { font-family: var(--font-ui); font-size: 22px; font-weight: 800; }
 .drawer__link[aria-current="page"] { color: var(--brand); }
 .drawer__close { position: absolute; top: 24px; right: 24px; font-size: 28px; }
+
+/* 抽屉打开时锁住背景滚动 */
+body.drawer-open { overflow: hidden; }

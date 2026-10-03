@@ -31,8 +31,11 @@ xingyub-skeleton/
 ├── post.html             文章详情
 ├── chatter-detail.html   杂谈详情
 └── assets/
-    ├── css/skeleton.css  设计令牌 + 布局 + 组件
-    └── js/shell.js       站点配置 + 外壳挂载 + 交互
+    ├── css/skeleton.css       设计令牌 + 布局 + 组件
+    ├── js/shell.js            站点配置 + 外壳挂载 + 交互
+    └── img/
+        ├── favicon.svg        站点图标（12 页均已引用）
+        └── placeholder.svg    图片占位（替换 src 即可）
 ```
 
 ---
@@ -65,11 +68,12 @@ xingyub-skeleton/
 | 区域 | 槽位 | 说明 |
 |---|---|---|
 | 顶栏 | `header` | 固定定位、滚动后磨砂、导航高亮由 `body[data-route]` 决定 |
-| 移动端 | `drawer` | ≤768px 显示右侧胶囊触发钮，展开全屏菜单 |
-| 页脚 | `footer` | 版权 / 构建信息 / 备案号 |
+| 移动端 | `drawer` | ≤1080px 显示右侧胶囊触发钮，展开全屏菜单；`Esc` 可关、打开时锁背景滚动 |
+| 社交图标 | `socials` | 由 `SITE.socials` 渲染，首页个人卡用它 |
+| 页脚 | `footer` | 版权 / 构建信息 / 运行时长 + 技术栈徽章 / 备案号 |
 | 浮动层 | `float-controls` | 左下：主题切换 + 回顶（滚动 320px 后出现） |
 | 浮动层 | `mascot` | 右下：吉祥物 + 工具按钮 + 气泡台词 |
-| 启动屏 | `splash` | `body[data-splash="on"]` 开启，含兜底超时 |
+| 启动屏 | `splash` | `body[data-splash="on"]` 开启，含兜底超时；同会话只播一次 |
 
 `body` 属性开关：
 
@@ -77,12 +81,28 @@ xingyub-skeleton/
 - `data-splash="on"` → 开启启动屏
 - `data-floats="off"` → 关闭浮动控件
 
+> 注意属性命名冲突：`body` 上的开关属性**不能和子元素的挂载钩子同名**。
+> `document.querySelector("[data-x]")` 按文档序会先命中 `<body>`。启动屏因此拆成
+> 开关 `data-splash`（在 body 上）+ 钩子 `data-splash-screen`（在 div 上）。
+
+### 顶栏断点
+
+品牌 + 10 个导航项 + 2 个按钮在 32px 间距下约需 1067px 视口。分三段处理，避免中间区间挤爆：
+
+| 视口宽度 | 行为 |
+|---|---|
+| > 1180px | 完整导航（间距 32px，显示 `home` 小标） |
+| 1080–1180px | 导航间距收到 18px，隐藏小标 |
+| ≤ 1080px | 收起导航，改用右侧抽屉 |
+
+导航链接一律 `white-space: nowrap` —— 顶栏高度固定 64px，中文标签一旦折行就会溢出栏体。
+
 ---
 
 ## 5. 页面槽位清单
 
 **首页 `index.html`**
-`home-search` → `profile-card`（`profile-avatar` / `profile-name` / `profile-tagline` / `profile-stats` / `profile-socials`）→ `music-player` → `featured-post` → `album-entry` → `latest-chatter` → `theme-card` → `status-bar`
+`home-search` → `profile-card`（`profile-avatar` / `profile-name` / `profile-tagline` / `profile-stats` + `data-shell="socials"`）→ `music-player` → `featured-post` → `album-entry` → `latest-chatter` → `theme-card` → `status-bar`
 
 **归档 `timeline.html`**
 `page-head` → `archive-search` → `archive-filters` → `timeline`（按年分组：`timeline__year` + `timeline__item`）→ `timeline-empty`
@@ -157,5 +177,7 @@ xingyub-skeleton/
 ## 8. 已知边界
 
 - 页面间为普通 `<a>` 跳转，不含前端路由与数据请求；接入框架时把 `shell.js` 的 `SITE` 配置与组件壳平移过去即可。
-- 启动屏、粒子背景、吉祥物动画、灯箱在原站是客户端组件，模板里保留结构位与样式，行为需自行接续。
-- 图片全部留空（`src=""`），骨架模式下会显示渐变占位底色。
+- 粒子背景、吉祥物动画、灯箱在原站是客户端组件，模板里保留结构位与样式，行为需自行接续。
+- 图片占位统一用 `assets/img/placeholder.svg`（内联 SVG，不产生额外请求）。**不要用 `src=""`** —— 空 src 会让浏览器重新请求当前文档，N 张图就是 N 次多余请求。替换时直接改 `src` 值即可。
+- 首屏主题由 `html[data-theme]` 决定，HTML 里硬编码 `light`，`shell.js` 载入后才切到用户偏好，因此深色用户会看到一次极短的浅色闪烁。介意的话在 `<head>` 里加一段内联脚本提前设 `data-theme`。
+- 顶栏 `--header-h` 固定 64px，导航项超过约 10 个时需自行调整断点。

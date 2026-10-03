@@ -68,11 +68,12 @@ const tpl = {
     </div>
   </header>
 
-  <button class="drawer-trigger" type="button" data-drawer-open aria-label="打开菜单">
+  <button class="drawer-trigger" type="button" data-drawer-open
+          aria-label="打开菜单" aria-controls="site-drawer" aria-expanded="false">
     <span></span><span></span><span></span>
   </button>
 
-  <div class="drawer" data-drawer>
+  <div class="drawer" id="site-drawer" data-drawer role="dialog" aria-modal="true" aria-label="站内导航">
     <button class="drawer__close" type="button" data-drawer-close aria-label="关闭菜单">×</button>
     ${SITE.nav
       .map((n) => `<a class="drawer__link" href="${n.href}" data-route="${n.route}">${n.label}</a>`)
@@ -85,8 +86,19 @@ const tpl = {
       <span>${SITE.footer.copyright.replace("{{站点名}}", SITE.name)}</span>
       <span>构建于 {{构建工具}} · 托管于 {{托管平台}}</span>
     </div>
+    <div class="row row--wrap" data-slot="footer-runtime">
+      <span class="statusbar__item"><span class="pulse"></span>${SITE.footer.uptime}</span>
+      ${SITE.footer.stack.map((s) => `<span class="chip">${s}</span>`).join("")}
+    </div>
     <a href="${SITE.footer.icp.href}">${SITE.footer.icp.label}</a>
   </footer>`,
+
+  socials: () => `
+  <div class="socials" data-slot="socials">
+    ${SITE.socials
+      .map((s) => `<a class="social" href="${s.href}" title="${s.title}" aria-label="${s.title}">${s.label}</a>`)
+      .join("")}
+  </div>`,
 
   floats: () => `
   <div class="float-left" data-slot="float-controls">
@@ -169,8 +181,16 @@ function prefersDark() {
   }
 }
 
+// 移动端浏览器地址栏配色跟随主题
+function syncThemeColor() {
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (!meta) return;
+  meta.setAttribute("content", document.documentElement.dataset.theme === "dark" ? "#020617" : "#f8fafc");
+}
+
 function setupTheme() {
   document.documentElement.dataset.theme = store.get("skeleton-theme") || (prefersDark() ? "dark" : "light");
+  syncThemeColor();
 
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-theme-toggle]");
@@ -178,15 +198,37 @@ function setupTheme() {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
     document.documentElement.dataset.theme = next;
     store.set("skeleton-theme", next);
+    syncThemeColor();
   });
 }
 
 function setupDrawer() {
-  const open = () => document.querySelector("[data-drawer]")?.classList.add("is-open");
-  const close = () => document.querySelector("[data-drawer]")?.classList.remove("is-open");
+  const drawer = document.querySelector("[data-drawer]");
+  const trigger = document.querySelector("[data-drawer-open]");
+  if (!drawer) return;
+
+  const open = () => {
+    drawer.classList.add("is-open");
+    document.body.classList.add("drawer-open"); // 锁住背景滚动
+    trigger?.setAttribute("aria-expanded", "true");
+    drawer.querySelector(".drawer__close")?.focus();
+  };
+  const close = () => {
+    const wasOpen = drawer.classList.contains("is-open");
+    drawer.classList.remove("is-open");
+    document.body.classList.remove("drawer-open");
+    trigger?.setAttribute("aria-expanded", "false");
+    if (wasOpen) trigger?.focus(); // 焦点归还给触发按钮
+  };
+
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-drawer-open]")) open();
-    if (e.target.closest("[data-drawer-close]")) close();
+    else if (e.target.closest("[data-drawer-close]")) close();
+  });
+
+  // Esc 关闭：抽屉是 aria-modal 的对话框，键盘用户必须能退出
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && drawer.classList.contains("is-open")) close();
   });
 }
 
@@ -205,11 +247,21 @@ function setupScroll() {
   });
 }
 
+const SPLASH_KEY = "skeleton-splash-seen";
+
 function setupSplash() {
   // 注意用 data-splash-screen 而不是 [data-splash]：body 上有 data-splash="on" 这个开关，
   // 用 [data-splash] 会先命中 body，导致 is-done 加到 body 上、启动屏永远不消失。
   const splash = document.querySelector("[data-splash-screen]");
   if (!splash) return;
+
+  // 同一会话内只看一次，避免每次站内跳转都重新播一遍
+  if (store.get(SPLASH_KEY) === "1") {
+    splash.remove();
+    return;
+  }
+  store.set(SPLASH_KEY, "1");
+
   const hide = () => splash.classList.add("is-done");
   window.addEventListener("load", () => setTimeout(hide, 700));
   setTimeout(hide, 2200); // 兜底，避免资源加载失败时卡在启动屏

@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f8fafc">
 <title>{{页面标题}} · xingyub's blog</title>
 <meta name="description" content="{{页面描述}}">
 <link rel="stylesheet" href="assets/css/skeleton.css">
@@ -67,13 +69,8 @@
                   </div>
                 </div>
 
-                <div class="socials" data-slot="profile-socials">
-                  <a class="social" href="#" title="{{社交平台 1}}">1</a>
-                  <a class="social" href="#" title="{{社交平台 2}}">2</a>
-                  <a class="social" href="#" title="{{社交平台 3}}">3</a>
-                  <a class="social" href="#" title="{{社交平台 4}}">4</a>
-                  <a class="social" href="#" title="{{社交平台 5}}">5</a>
-                </div>
+                <!-- 社交图标来自 shell.js 的 SITE.socials，改配置即可，不用改这里 -->
+                <div data-shell="socials"></div>
               </div>
             </div>
           </article>
@@ -100,7 +97,7 @@
         <!-- 精选文章（大图） -->
         <div class="col-4 stack">
           <article class="media-card media-card--tall" data-slot="featured-post">
-            <div class="media-card__img"><img src="" alt=""></div>
+            <div class="media-card__img"><img src="assets/img/placeholder.svg" alt=""></div>
             <div class="media-card__scrim"></div>
             <div class="media-card__body">
               <div class="badge-row">
@@ -124,7 +121,7 @@
 
           <!-- 相册入口（通栏大图） -->
           <a class="media-card media-card--xl" href="photowall.html" data-slot="album-entry">
-            <div class="media-card__img"><img src="" alt=""></div>
+            <div class="media-card__img"><img src="assets/img/placeholder.svg" alt=""></div>
             <div class="media-card__scrim"></div>
             <div class="media-card__body">
               <h3 class="media-card__title">{{相册名称}}</h3>
@@ -137,7 +134,7 @@
             <!-- 最新杂谈 -->
             <div class="col-8">
               <a class="media-card" href="chatter-detail.html" data-slot="latest-chatter">
-                <div class="media-card__img"><img src="" alt=""></div>
+                <div class="media-card__img"><img src="assets/img/placeholder.svg" alt=""></div>
                 <div class="media-card__scrim media-card__scrim--left"></div>
                 <div class="media-card__body">
                   <div class="badge-row">
@@ -152,10 +149,11 @@
 
             <!-- 主题切换卡 -->
             <div class="col-4">
+              <!-- button 内只允许 phrasing content，标题/描述用 span 而非 h3/p -->
               <button class="card theme-card" type="button" data-theme-toggle data-slot="theme-card" style="width:100%;height:100%;">
-                <div class="theme-card__orb">🌸</div>
-                <h3 class="theme-card__title">夜间模式</h3>
-                <p class="theme-card__desc">流萤飞舞的深空</p>
+                <span class="theme-card__orb">🌸</span>
+                <span class="theme-card__title">夜间模式</span>
+                <span class="theme-card__desc">流萤飞舞的深空</span>
               </button>
             </div>
           </div>
