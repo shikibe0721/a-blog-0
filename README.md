@@ -1,209 +1,209 @@
-# xingyub-skeleton — 网页骨架模板
+# xingyub-skeleton — 网页骨架模板 ·「档案室」
 
-从 **xingyub.com** 的页面结构反推出来的通用骨架模板。
-只保留「路由 / 分区 / 组件壳 / 视觉令牌」，所有业务内容都换成了 `{{占位}}`，按槽位填充即可复用。
+从 **xingyub.com** 的页面结构反推出来的通用骨架模板，经过一轮整体重做。
+只保留「路由 / 分区 / 组件壳 / 视觉令牌」，业务内容全部是 `{{占位}}`。
 
 ---
 
 ## 1. 怎么用
 
 1. 双击 `index.html` 直接预览（纯静态，无需构建、无需联网）。
-2. 按 **`G`** 键或点顶栏 `▦` 按钮 → 打开**骨架模式**：所有可填充区域会描边并标出 `data-slot` 名称。
-3. 按槽位替换 `{{...}}` 文本、把 `src=""` 补上图片地址，即得到自己的站点。
+2. 按 **`G`** 键或点报头右侧的网格按钮 → 打开**骨架模式**：所有可填充区域会描边并标出 `data-slot` 名称。
+3. 按槽位替换 `{{...}}` 文本、把 `src` 与 `alt` 补上，即得到自己的站点。
 4. 改站点级信息（站名、导航、社交、页脚）只需动 `assets/js/shell.js` 顶部的 `SITE` 对象。
 
 ---
 
-## 2. 目录结构
+## 2. 设计方向：为什么长这样
+
+### 领域探查
+
+**Domain**：手稿纸、索引卡片、档案盒、实验记录本、分子结构式、标本切片、目录页与页码。
+**Color world**：稿纸米白、蓝黑墨水、铅笔石墨灰、**朱砂批注红**、牛皮纸档案盒、打字机色带墨。
+
+### 签名元素：卡片目录
+
+每条记录是一行「**编号 + 日期 + 标题 + 摘要**」，靠顶部一条发丝线分隔，**不是漂浮的卡片**。
+整站读起来是一条连续的目录，而不是一堆并列的盒子。放大版就是首页的头条。
+
+### 被替换掉的默认值
+
+| 默认做法 | 本模板 |
+|---|---|
+| indigo→purple→pink 渐变光晕 | 稿纸米白单色，**零渐变** |
+| 玻璃拟态铺满（`backdrop-filter`） | 实色纸面 + 发丝边框 |
+| emoji 当图标（🌸🐱♪⌕） | 内联 SVG，统一 1.5px 描边 |
+| 24px 大圆角 + 胶囊徽章 | **3px 小圆角** + 方角标签 |
+| 启动屏 / 吉祥物 / 粒子画布 | 全部删除 |
+| 居中对称、卡片等宽平铺 | 左内容 + 右边栏，**非对称** |
+| 阴影表达层级 | **borders-only**，全程一种深度策略 |
+
+---
+
+## 3. 目录结构
 
 ```
 xingyub-skeleton/
-├── index.html            首页
-├── projects.html         项目矩阵
-├── timeline.html         归档与探索
-├── photowall.html        光影画廊
-├── music.html            音乐馆
-├── tree.html             灵境（可视化实验场）
+├── index.html            首页（目录）
+├── timeline.html         归档（账本式点线索引）
+├── chatter.html          杂谈
+├── photowall.html        照片墙
+├── projects.html         项目
 ├── moments.html          说说
-├── chatter.html          云端杂谈
+├── music.html            音乐
+├── tree.html             灵境
 ├── friends.html          友链
-├── about.html            个人简介
+├── about.html            关于
 ├── post.html             文章详情
 ├── chatter-detail.html   杂谈详情
 └── assets/
-    ├── css/skeleton.css       设计令牌 + 布局 + 组件
-    ├── js/shell.js            站点配置 + 外壳挂载 + 交互
+    ├── css/skeleton.css       设计令牌 + 组件层（约 700 行）
+    ├── js/shell.js            站点配置 + 外壳挂载 + 图标集 + 交互
     └── img/
-        ├── favicon.svg        站点图标（12 页均已引用）
-        └── placeholder.svg    图片占位（替换 src 即可）
+        ├── favicon.svg        站标（朱砂书签）
+        └── placeholder.svg    图片占位
 ```
 
 ---
 
-## 3. 站点地图（对照原站路由）
+## 4. 站点地图（对照原站路由）
 
-| 原站路由 | 模板文件 | 导航名 | 页面标题 |
-|---|---|---|---|
-| `/` | `index.html` | 首页 | — |
-| `/projects` | `projects.html` | 项目 | 项目矩阵 |
-| `/timeline` | `timeline.html` | 归档 | 归档与探索 |
-| `/photowall` | `photowall.html` | 照片墙 | 光影画廊 |
-| `/music` | `music.html` | 音乐 | 音乐馆 |
-| `/tree` | `tree.html` | 灵境 | — |
-| `/moments` | `moments.html` | 说说 | 说说 |
-| `/chatter` | `chatter.html` | 杂谈 | 云端杂谈 |
-| `/friends` | `friends.html` | 友链 | 友链 |
-| `/about` | `about.html` | 关于 | 个人简介 |
-| `/posts/:slug` | `post.html` | — | 文章详情 |
-| `/chatter/:slug` | `chatter-detail.html` | — | 杂谈详情 |
-
-原站为 Next.js App Router 项目，模板用同名 HTML 文件平铺替代，路由语义一一对应。
+| 原站路由 | 模板文件 | 导航名 |
+|---|---|---|
+| `/` | `index.html` | 首页 |
+| `/timeline` | `timeline.html` | 归档 |
+| `/chatter` | `chatter.html` | 杂谈 |
+| `/photowall` | `photowall.html` | 照片墙 |
+| `/projects` | `projects.html` | 项目 |
+| `/moments` | `moments.html` | 说说 |
+| `/music` | `music.html` | 音乐 |
+| `/tree` | `tree.html` | 灵境 |
+| `/friends` | `friends.html` | 友链 |
+| `/about` | `about.html` | 关于 |
+| `/posts/:slug` | `post.html` | — |
+| `/chatter/:slug` | `chatter-detail.html` | — |
 
 ---
 
-## 4. 全站共用外壳
+## 5. 全站共用外壳
 
-`<div data-shell="header">` / `<div data-shell="footer">` 是挂载点，由 `shell.js` 注入。改一处，全站生效。
+`<div data-shell="header">` / `<div data-shell="colophon">` / `<div data-shell="socials">` 是挂载点，由 `shell.js` 注入。
 
 | 区域 | 槽位 | 说明 |
 |---|---|---|
-| 顶栏 | `header` | 固定定位、滚动后磨砂、导航高亮由 `body[data-route]` 决定 |
-| 移动端 | `drawer` | ≤1080px 显示右侧胶囊触发钮，展开全屏菜单；`Esc` 可关、打开时锁背景滚动 |
-| 社交图标 | `socials` | 由 `SITE.socials` 渲染，首页个人卡用它 |
-| 页脚 | `footer` | 版权 / 构建信息 / 运行时长 + 技术栈徽章 / 备案号 |
-| 浮动层 | `float-controls` | 左下：主题切换 + 回顶（滚动 320px 后出现） |
-| 浮动层 | `mascot` | 右下：吉祥物 + 工具按钮 + 气泡台词 |
-| 启动屏 | `splash` | `body[data-splash="on"]` 开启，含兜底超时；同会话只播一次（已看过的会话不插入，避免闪现） |
-| 无 JS 兜底 | `<noscript>` | 每页 body 开头一段静态导航，脚本不可用时顶上 |
+| 报头 | `header` | 实色纸面 + 发丝底边，**不用毛玻璃**；活跃项朱砂色 + 2px 下划线 |
+| 移动端 | `drawer` | ≤960px 显示菜单按钮；`Esc` 关闭、**焦点陷阱**、滚动锁、焦点归还 |
+| 页脚 | `colophon` | 版本记录页写法：版权 / 构建 / 运行时长 / 技术栈 / 备案 |
+| 边栏 | `socials` | 由 `SITE.socials` 渲染成事实表 |
+| 工具条 | `tools` | 左下：主题切换 + 回顶（滚动 400px 后出现） |
 
 `body` 属性开关：
 
 - `data-route="/photowall"` → 高亮对应导航项
-- `data-splash="on"` → 开启启动屏
-- `data-floats="off"` → 关闭浮动控件
+- `data-tools="off"` → 关闭左下工具条
 
-> 注意属性命名冲突：`body` 上的开关属性**不能和子元素的挂载钩子同名**。
-> `document.querySelector("[data-x]")` 按文档序会先命中 `<body>`。启动屏因此拆成
-> 开关 `data-splash`（在 body 上）+ 钩子 `data-splash-screen`（在 div 上）。
+> ⚠️ **属性命名冲突**：`body` 上的开关属性**不能和子元素的挂载钩子同名**。
+> `document.querySelector("[data-x]")` 按文档序会先命中 `<body>`。
 
-### 顶栏断点
-
-品牌 + 10 个导航项 + 2 个按钮在 32px 间距下约需 1067px 视口。分三段处理，避免中间区间挤爆：
+### 报头断点
 
 | 视口宽度 | 行为 |
 |---|---|
-| > 1180px | 完整导航（间距 32px，显示 `home` 小标） |
-| 1080–1180px | 导航间距收到 18px，隐藏小标 |
-| ≤ 1080px | 收起导航，改用右侧抽屉 |
+| > 1100px | 完整导航，间距 24px |
+| 960–1100px | 导航间距收到 16px，字号 14px |
+| ≤ 960px | 收起导航，改用抽屉 |
 
-导航链接一律 `white-space: nowrap` —— 顶栏高度固定 64px，中文标签一旦折行就会溢出栏体。
-
----
-
-## 5. 页面槽位清单
-
-**首页 `index.html`**
-`home-search` → `profile-card`（`profile-avatar` / `profile-name` / `profile-tagline` / `profile-stats` + `data-shell="socials"`）→ `music-player` → `featured-post` → `album-entry` → `latest-chatter` → `theme-card` → `status-bar`
-
-**归档 `timeline.html`**
-`page-head` → `archive-search` → `archive-filters` → `timeline`（按年分组：`timeline__year` + `timeline__item`）→ `timeline-empty`
-
-**项目 `projects.html`**
-`page-head` → `project-filters` → `project-grid`（`col-4` 项目卡：缩略图 / 名称 / 说明 / 技术标签）→ `project-empty`
-
-**照片墙 `photowall.html`**
-`page-head`（标题 + 副标题 + 搜索）→ `album-grid`（`album` 堆叠纸片卡，hover 显示「N 张照片 / Click to Open」）→ `lightbox-placeholder`
-
-**音乐 `music.html`**
-`page-head` → `now-playing`（封面 / 曲名 / 艺术家 / 进度条）→ `playlist` → `music-empty`
-
-**灵境 `tree.html`**
-`page-head` → `canvas-stage`（Canvas / WebGL 挂载区）→ `scene-controls` → `scene-notes`
-
-**说说 `moments.html`**
-`page-head` → `moments-search` → `moment-feed`（`moment-item`：头像 / 昵称 / 时间 / 心情 / 正文 / 话题 / 可选配图）→ `moments-more`
-
-**杂谈 `chatter.html`**
-`page-head` → `chatter-search` → `chatter-filters` → `chatter-masonry`（CSS 多列瀑布流卡片）→ `chatter-more`
-
-**友链 `friends.html`**
-`page-head` → `friends-search` → `friend-grid` → `friend-apply`（申请表单字段）
-
-**关于 `about.html`**
-`profile-dossier`（`avatar` / `bio-body` 支持标题、列表、引用）→ `contact-card` → `site-meta`
-
-**文章详情 `post.html`**
-`post-cover` → `post-head`（标签 / 标题 / 时间 / 阅读量）→ `post-toc` → `post-body`（`prose` 排版：h2/h3/引用/代码块/列表/表格）→ `author-card` → `recommend-card`
-
-**杂谈详情 `chatter-detail.html`**
-`chatter-cover` → `chatter-head` → `chatter-body` → `author-card` → `calendar`（有记录的日期加下划线、今天高亮）→ `recent-records`
+导航项一律 `white-space: nowrap` —— 报头高度固定 60px，中文标签一旦折行就会溢出。
 
 ---
 
-## 6. 设计令牌（`skeleton.css` 顶部 `:root`）
+## 6. 设计令牌
+
+令牌命名刻意避开 `--gray-700` / `--surface-2` 这类通用名。读到变量名就知道这是什么产品。
+
+### 颜色
 
 | 令牌 | 浅色 | 深色 | 用途 |
 |---|---|---|---|
-| `--brand` | `#5b5ee6` | `#818cf8` | 主色，导航高亮 / 按钮 / 链接 |
-| `--brand-2` | `#a855f7` | — | 渐变中段 |
-| `--brand-3` | `#ec4899` | — | 渐变末段，槽位描边色 |
-| `--bg` | `#f8fafc` | `#020617` | 页面底色 |
-| `--fg` | `#0f172a` | `#f1f5f9` | 正文 |
-| `--fg-muted` | `#475569` | `#94a3b8` | 次级文字 |
-| `--fg-faint` | `#64748b` | `#7f8ea3` | 三级文字（标签 / 日期 / 提示） |
-| `--card` | `rgba(255,255,255,.55)` | `rgba(30,41,59,.5)` | 玻璃卡片底 |
-| `--r-lg` | `24px` | — | 卡片圆角 |
-| `--maxw` | `1152px` | — | 常规页宽（`--maxw-wide` 为 1280px） |
-| `--font-body` | Noto Serif SC 衬线 | — | 正文 |
-| `--font-ui` | Geist 无衬线 | — | 标题 / 导航 / 按钮 |
+| `--paper` | `#f7f4ec` | `#16140e` | 页面底 —— 稿纸米白 |
+| `--paper-raised` | `#fdfcf8` | `#1d1b14` | 卡片 / 抬起面 |
+| `--paper-sunk` | `#efebdf` | `#12100b` | 输入框 / 凹陷面 |
+| `--ink` | `#1c1a16` | `#ede8da` | 正文 |
+| `--ink-2` | `#4a463d` | `#b8b2a2` | 次级 |
+| `--ink-3` | `#6e6a5f` | `#8e8878` | 三级 / 元信息 |
+| `--rule` | `#e2dccc` | `#312d24` | 装饰发丝 |
+| `--rule-strong` | `#c9c2ae` | `#4a4536` | 强调分隔 |
+| `--control-line` | `#948c74` | `#6a6350` | 控件边框（单独给值以满足 3:1） |
+| `--vermilion` | `#b4432b` | `#e0705a` | **唯一强调色** |
 
 ### 对比度基线（WCAG AA，正文 ≥4.5:1）
 
-改色前先对一遍这张表，别把已经达标的令牌改回不达标：
+改色前先对一遍这张表：
 
-| 组合 | 比值 |
-|---|---|
-| 浅色 `--fg` on `#ffffff` | 17.85:1 |
-| 浅色 `--fg-muted` on `#ffffff` | 7.58:1 |
-| 浅色 `--fg-faint` on `#ffffff` | 4.76:1 |
-| 浅色 `--brand` on `#ffffff` | 5.01:1 |
-| 白字压浅色 `--brand` 底 | 5.01:1 |
-| 深色 `--fg` on `#020617` | 18.41:1 |
-| 深色 `--fg-muted` on `#020617` | 7.87:1 |
-| 深色 `--fg-faint` on `#0f172a` | 5.36:1 |
-| 深色 `--brand` on `#0f172a` | 5.98:1 |
+| 组合 | 浅色 | 深色 |
+|---|---|---|
+| `--ink` on `--paper` | 15.81:1 | 15.04:1 |
+| `--ink-2` on `--paper` | 8.55:1 | 8.70:1 |
+| `--ink-3` on `--paper` | 4.91:1 | 5.21:1 |
+| `--vermilion` on `--paper` | 5.06:1 | 5.82:1 |
+| `--control-line` on `--paper` | 3.05:1 | 3.08:1 |
 
-深色主题由 `html[data-theme="dark"]` 覆盖同名变量，主题偏好写入 `localStorage`，首次访问跟随系统。
-每个页面的 `<head>` 里有一段内联脚本，在样式表之前就把 `data-theme` 写到 `<html>` 上，避免深色用户看到一次浅色闪烁。
+装饰发丝（`--rule`）刻意只有 1.25:1 —— 栏线不该是你第一眼看到的东西。
+
+### 字体
+
+两个族，分工明确，**没有第三个**：
+
+| 令牌 | 值 | 用途 |
+|---|---|---|
+| `--serif` | Noto Serif SC / Songti SC | 标题、正文、导航 |
+| `--mono` | IBM Plex Mono / SF Mono | 日期、编号、标签、代码、页脚 |
+
+### 间距 / 圆角 / 动效
+
+- 间距基数 **4px**：`--s1` 4 · `--s2` 8 · `--s3` 12 · `--s4` 16 · `--s5` 20 · `--s6` 24 · `--s8` 32 · `--s10` 40 · `--s12` 48 · `--s16` 64 · `--s20` 80 · `--s24` 96
+- 圆角：`--r-xs` 2px · `--r-sm` 3px · `--r-md` 5px —— **小**
+- 缓动：`--ease`（状态变化）· `--ease-out`（入场）· 时长 120 / 180 / 260ms
 
 ---
 
-## 7. 常用类速查
+## 7. 核心组件
 
-| 类 | 作用 |
-|---|---|
-| `.page` / `.page--wide` | 页面容器，内置顶栏留白 |
-| `.card` + `.card__body` | 玻璃卡片；`.card--pad-lg` 加大内边距 |
-| `.grid-12` + `.col-4/.col-5/.col-7/.col-8/.col-12` | 12 栅格，≤1024px 自动堆叠 |
-| `.media-card` | 大图 + 渐变遮罩 + 文案（`--tall` / `--xl` 加高，`__scrim--left` 左向遮罩） |
-| `.masonry` | 瀑布流多列 |
-| `.timeline` / `.album` / `.project` / `.player` / `.calendar` | 各页专属组件 |
-| `.prose` | 正文排版（含代码块、引用、表格） |
-| `.empty` | 空状态 |
-| `.stack` / `.row` / `.spread` / `.fill` | 布局工具 |
-| `html.show-slots` | 骨架模式，描边所有 `data-slot` |
+| 组件 | 类 | 用途 |
+|---|---|---|
+| 页码头 | `.folio` + `.folio__num` / `__title` / `__desc` | `§ 00 · 目录` + 大标题 + 导语 |
+| 章节标记 | `.section-mark` | 等宽小字 + 引到右端的发丝线 |
+| **目录行** | `.entry` | 签名组件：编号列 + 内容列，顶部分隔线 |
+| 头条 | `.lead-entry` | 目录行的放大版，2px 顶线 |
+| 账本 | `.ledger` + `.ledger__row` / `__leader` | 点线引导的索引行（归档页） |
+| 索引卡 | `.index-card` | 项目 / 友链的方盒 |
+| 图版 | `.plate` | 图像带框 + 等宽图注 |
+| 边栏注 | `.margin-note` | 左侧 2px 竖线的旁注，不是卡片 |
+| 事实表 | `.facts` | 键值对齐（侧栏 / 关于页） |
+| 控件 | `.btn` · `.field` · `.chip` · `.tag` | 方角、等宽标签 |
+| 空状态 | `.blank` | 上下发丝线的留白区 |
+| 分栏 | `.split` / `.split--flip` | 内容 + 268px 边栏 |
+| 工具 | `.mt-3`…`.mt-12` · `.mb-5`…`.mb-10` · `.maxw-sm` / `--md` | 只用令牌值的间距工具 |
+
+**页面里没有任何 inline style** —— 需要间距就加工具类。
 
 ---
 
 ## 8. 已知边界
 
-- 页面间为普通 `<a>` 跳转，不含前端路由与数据请求；接入框架时把 `shell.js` 的 `SITE` 配置与组件壳平移过去即可。
-- 粒子背景、吉祥物动画、灯箱在原站是客户端组件，模板里保留结构位与样式，行为需自行接续。
-- **图片占位**统一用 `assets/img/placeholder.svg`，`alt` 写成 `{{图片描述}}`（头像用 `{{作者名}}`）。
-  **不要用 `src=""`** —— 空 src 会让浏览器重新请求当前文档，N 张图就是 N 次多余请求。
-  **也不要让内容图 `alt` 留空** —— 那会让屏幕阅读器整段跳过，而这些图承载信息。替换时改 `src` 与 `alt` 两处。
-- **外壳依赖脚本**：顶栏 / 页脚 / 社交图标由 `shell.js` 挂载。脚本不可用时靠每页的 `<noscript>` 静态导航兜底，
-  但那只是应急——正式发布前应确认脚本能正常加载。
-- 顶栏 `--header-h` 固定 64px，导航项超过约 10 个时需自行调整断点。
-- 瀑布流（`.masonry`，杂谈页）用 CSS 多列实现，内容按**列优先**排列，键盘 Tab 顺序与视觉顺序不一致。
-  在意可访问性时把它换成 `grid`（会失去瀑布流的错落感）。
+- 页面间为普通 `<a>` 跳转，不含前端路由与数据请求。
+- 灵境页的可视化区（`canvas-stage`）只留了一块等高留白，没有跑渲染循环。
+- 图片占位统一用 `assets/img/placeholder.svg`，`alt` 写成 `{{图片描述}}`。
+  **不要用 `src=""`**（会让浏览器重新请求当前文档），**也不要让内容图 `alt` 留空**（屏幕阅读器会整段跳过）。
+- 外壳依赖脚本：脚本不可用时靠每页的 `<noscript>` 静态导航兜底，但那只是应急。
+- 瀑布流已从杂谈页移除（CSS 多列会打乱键盘 Tab 顺序），改为目录行。
+- 首屏主题由 `<head>` 内联脚本在样式表之前设好，无闪烁。
+
+---
+
+## 9. 改这个模板时的四条自检
+
+1. **换色测试** —— 把配色换成 slate + blue，如果看起来没差多少，说明颜色是默认值不是选择。
+2. **眯眼测试** —— 模糊看，还能分出正文区、导航、主行动吗？层级太平就会糊成一片。
+3. **签名测试** —— 能指出五个具体的签名元素吗？（本项目：目录行、账本点线、`§` 编号、边栏旁注、图版计数）
+4. **令牌测试** —— 把 CSS 变量名念出来。念着像某个产品，还是像在填模板？

@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
+<meta name="theme-color" content="#f7f4ec">
 <title>云端杂谈 · xingyub's blog</title>
-<meta name="description" content="{{页面描述}}">
+<meta name="description" content="代码、学术、提瓦特与泰拉大陆的碎片记录。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,133 +18,90 @@
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/chatter">
-
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
   <div data-shell="header"></div>
-
-  <main class="page page--wide">
-
-    <div class="page-head page-head--center" data-slot="page-head">
-      <h1 class="page-title">云端杂谈</h1>
-      <p class="page-sub page-sub--quote">“ {{一句短引语}} ”</p>
-    </div>
-
-    <div class="search" data-slot="chatter-search">
-      <span class="search__icon" aria-hidden="true">⌕</span>
-      <input class="search__input" type="search" placeholder="搜索杂谈…" aria-label="搜索杂谈…">
-    </div>
-
-    <!-- 标签筛选 -->
-    <div class="filters" data-slot="chatter-filters">
-      <button class="filter is-active" type="button" data-filter>全部</button>
-      <button class="filter" type="button" data-filter># {{标签一}}</button>
-      <button class="filter" type="button" data-filter># {{标签二}}</button>
-      <button class="filter" type="button" data-filter># {{标签三}}</button>
-    </div>
-
-    <!-- 瀑布流卡片：每张 = 封面图 + 心情徽章 + 日期 + 标题 + 摘要 + 标签 -->
-    <section class="masonry mt-lg" data-slot="chatter-masonry">
-
-      <div class="break-inside-avoid">
-        <a class="card" href="chatter-detail.html" style="display:block;">
-          <div style="position:relative;height:208px;overflow:hidden;">
-            <div class="media-card__img" style="position:absolute;"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-            <div class="media-card__scrim"></div>
-            <span class="badge" style="position:absolute;top:16px;right:16px;">✨ {{心情}}</span>
-          </div>
-          <div class="card__body">
-            <div style="font-family:var(--font-ui);font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:12px;">
-              {{YYYY-MM-DD HH:mm:ss}}
-            </div>
-            <h3 style="margin:0 0 12px;font-family:var(--font-ui);font-size:20px;font-weight:800;line-height:1.3;">{{杂谈标题}}</h3>
-            <p style="margin:0;font-size:14.5px;color:var(--fg-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{杂谈摘要，三行以内。}}</p>
-            <div class="tag-row mt-md">
-              <span class="tag">#{{标签一}}</span>
-              <span class="tag">#{{标签二}}</span>
-              <span class="tag">#{{标签三}}</span>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="break-inside-avoid">
-        <a class="card" href="chatter-detail.html" style="display:block;">
-          <div style="position:relative;height:160px;overflow:hidden;">
-            <div class="media-card__img" style="position:absolute;"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-            <div class="media-card__scrim"></div>
-            <span class="badge" style="position:absolute;top:16px;right:16px;">✨ {{心情}}</span>
-          </div>
-          <div class="card__body">
-            <div style="font-family:var(--font-ui);font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:12px;">
-              {{YYYY-MM-DD HH:mm:ss}}
-            </div>
-            <h3 style="margin:0 0 12px;font-family:var(--font-ui);font-size:20px;font-weight:800;line-height:1.3;">{{杂谈标题}}</h3>
-            <p style="margin:0;font-size:14.5px;color:var(--fg-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{杂谈摘要。}}</p>
-            <div class="tag-row mt-md">
-              <span class="tag">#{{标签一}}</span>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="break-inside-avoid">
-        <a class="card" href="chatter-detail.html" style="display:block;">
-          <div style="position:relative;height:190px;overflow:hidden;">
-            <div class="media-card__img" style="position:absolute;"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-            <div class="media-card__scrim"></div>
-            <span class="badge" style="position:absolute;top:16px;right:16px;">✨ {{心情}}</span>
-          </div>
-          <div class="card__body">
-            <div style="font-family:var(--font-ui);font-size:10px;font-weight:900;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);margin-bottom:12px;">
-              {{YYYY-MM-DD HH:mm:ss}}
-            </div>
-            <h3 style="margin:0 0 12px;font-family:var(--font-ui);font-size:20px;font-weight:800;line-height:1.3;">{{杂谈标题}}</h3>
-            <p style="margin:0;font-size:14.5px;color:var(--fg-muted);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;">{{杂谈摘要。}}</p>
-            <div class="tag-row mt-md">
-              <span class="tag">#{{标签一}}</span>
-              <span class="tag">#{{标签二}}</span>
-            </div>
-          </div>
-        </a>
-      </div>
-
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 02 · 杂谈</span>
+      <h1 class="folio__title">云端杂谈</h1>
+      <p class="folio__desc">代码、学术、提瓦特与泰拉大陆的碎片记录。比文章短，比说说长。</p>
+      <hr class="folio__rule">
     </section>
 
-    <div class="empty mt-lg" data-slot="chatter-more">
-      <div class="empty__icon">⋯</div>
-      <span class="empty__title">加载更多</span>
-      <span class="empty__hint">{{分页 / 无限滚动的占位说明}}</span>
+    <div class="split">
+      <div>
+        <label class="field field--icon" data-slot="chatter-search" class="mb-5">
+          <span class="field__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
+          <input type="search" placeholder="搜索杂谈" aria-label="搜索杂谈">
+        </label>
+
+        <div class="chips" data-slot="chatter-chips" class="mb-5">
+          <button class="chip is-active" type="button" data-chip>全部</button>
+          <button class="chip" type="button" data-chip>明日方舟</button>
+          <button class="chip" type="button" data-chip>学术脑洞</button>
+          <button class="chip" type="button" data-chip>日常</button>
+        </div>
+
+        <div class="catalog" data-slot="chatter-catalog">
+          <a class="entry" href="chatter-detail.html">
+            <div class="entry__meta"><span class="entry__no">№ 003</span><span>2026-03-25</span></div>
+            <div>
+              <h2 class="entry__title">源石结晶与目标蛋白结合的猜想</h2>
+              <p class="entry__excerpt">如果把源石结晶过程视作一种极端暴烈的分子自组装行为，它在感染者体内的增殖会不会类似某种不可逆的激酶靶点结合？</p>
+              <p class="mt-3"><span class="tag"># 明日方舟</span> <span class="tag"># 学术脑洞</span> <span class="tag"># 日常</span></p>
+            </div>
+          </a>
+          <a class="entry" href="chatter-detail.html">
+            <div class="entry__meta"><span class="entry__no">№ 005</span><span>2026-03-18</span></div>
+            <div>
+              <h2 class="entry__title">{{杂谈标题占位}}</h2>
+              <p class="entry__excerpt">{{两到三行的正文摘要，写清楚这条记录在讲什么。}}</p>
+              <p class="mt-3"><span class="tag"># {{标签}}</span></p>
+            </div>
+          </a>
+          <a class="entry" href="chatter-detail.html">
+            <div class="entry__meta"><span class="entry__no">№ 006</span><span>2026-03-11</span></div>
+            <div>
+              <h2 class="entry__title">{{杂谈标题占位}}</h2>
+              <p class="entry__excerpt">{{正文摘要。}}</p>
+              <p class="mt-3"><span class="tag"># {{标签}}</span></p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <aside class="margin-col">
+        <div class="margin-note" data-slot="chatter-note">
+          <p class="margin-note__title">关于杂谈</p>
+          <p>这里放不成篇的东西：读到一半的论文、跑崩的实验、游戏里的联想。</p>
+        </div>
+        <div class="margin-note">
+          <p class="margin-note__title">计数</p>
+          <div class="facts">
+            <div class="facts__row"><span class="facts__k">杂谈</span><span class="facts__v num">3</span></div>
+            <div class="facts__row"><span class="facts__k">标签</span><span class="facts__v num">4</span></div>
+          </div>
+        </div>
+      </aside>
     </div>
-
   </main>
-
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>

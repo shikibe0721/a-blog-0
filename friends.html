@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
+<meta name="theme-color" content="#f7f4ec">
 <title>友链 · xingyub's blog</title>
-<meta name="description" content="{{页面描述}}">
+<meta name="description" content="常读的博客与常去的地方。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,113 +18,63 @@
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/friends">
-
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
   <div data-shell="header"></div>
-
-  <main class="page">
-
-    <div class="page-head page-head--center" data-slot="page-head">
-      <h1 class="page-title">友链</h1>
-      <p class="page-sub">{{一句话副标题：互相路过的邻居们}}</p>
-    </div>
-
-    <div class="search" data-slot="friends-search">
-      <span class="search__icon" aria-hidden="true">⌕</span>
-      <input class="search__input" type="search" placeholder="搜索友链…" aria-label="搜索友链…">
-    </div>
-
-    <!-- 友链网格 -->
-    <section class="grid-12" data-slot="friend-grid">
-
-      <div class="col-4">
-        <a class="card" href="#" style="display:block;">
-          <div class="card__body card--tight">
-            <div class="row">
-              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
-              <div class="fill">
-                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
-                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-4">
-        <a class="card" href="#" style="display:block;">
-          <div class="card__body card--tight">
-            <div class="row">
-              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
-              <div class="fill">
-                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
-                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
-      <div class="col-4">
-        <a class="card" href="#" style="display:block;">
-          <div class="card__body card--tight">
-            <div class="row">
-              <div class="profile__avatar" style="width:52px;height:52px;border-radius:var(--r-sm);font-size:18px;">友</div>
-              <div class="fill">
-                <div style="font-family:var(--font-ui);font-weight:800;">{{站点名}}</div>
-                <div style="font-size:12px;color:var(--fg-muted);">{{一句话简介}}</div>
-              </div>
-            </div>
-          </div>
-        </a>
-      </div>
-
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 08 · 友链</span>
+      <h1 class="folio__title">互相路过的邻居</h1>
+      <p class="folio__desc">常读的博客与常去的地方。</p>
+      <hr class="folio__rule">
     </section>
 
-    <!-- 申请友链 -->
-    <section class="card mt-lg" data-slot="friend-apply">
-      <div class="card__body card--pad-lg">
-        <span class="card-label">Apply</span>
-        <h2 style="margin:0 0 12px;font-family:var(--font-ui);font-size:22px;font-weight:800;">申请友链</h2>
-        <div class="grid-12" style="gap:12px;">
-          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">站点名称：{{占位}}</div></div>
-          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">站点地址：{{占位}}</div></div>
-          <div class="col-4"><div class="chip" style="display:block;padding:10px 14px;">头像链接：{{占位}}</div></div>
-          <div class="col-12"><div class="chip" style="display:block;padding:10px 14px;">一句话简介：{{占位}}</div></div>
-        </div>
-        <button class="filter is-active mt-md" type="button">提交申请</button>
-      </div>
-    </section>
+    <div class="card-grid" data-slot="friend-grid">
+      <a class="index-card" href="#">
+        <span class="index-card__no">№ 01</span>
+        <h2 class="index-card__title">{{站点名}}</h2>
+        <p class="index-card__desc">{{一句话简介}}</p>
+        <div class="index-card__foot"><span class="tag">{{域名}}</span></div>
+      </a>
+      <a class="index-card" href="#">
+        <span class="index-card__no">№ 02</span>
+        <h2 class="index-card__title">{{站点名}}</h2>
+        <p class="index-card__desc">{{一句话简介}}</p>
+        <div class="index-card__foot"><span class="tag">{{域名}}</span></div>
+      </a>
+      <a class="index-card" href="#">
+        <span class="index-card__no">№ 03</span>
+        <h2 class="index-card__title">{{站点名}}</h2>
+        <p class="index-card__desc">{{一句话简介}}</p>
+        <div class="index-card__foot"><span class="tag">{{域名}}</span></div>
+      </a>
+    </div>
 
+    <p class="section-mark mt-12">§ 08.1 · 申请</p>
+    <div class="facts maxw-md" data-slot="friend-apply">
+      <div class="facts__row"><span class="facts__k">站点名称</span><span class="facts__v">{{占位}}</span></div>
+      <div class="facts__row"><span class="facts__k">站点地址</span><span class="facts__v">{{占位}}</span></div>
+      <div class="facts__row"><span class="facts__k">头像链接</span><span class="facts__v">{{占位}}</span></div>
+      <div class="facts__row"><span class="facts__k">一句话简介</span><span class="facts__v">{{占位}}</span></div>
+    </div>
+    <p class="mt-5"><button class="btn btn--solid" type="button">提交申请 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></button></p>
   </main>
-
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>

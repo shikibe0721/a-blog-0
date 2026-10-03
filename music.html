@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
-<title>音乐馆 · xingyub's blog</title>
-<meta name="description" content="{{页面描述}}">
+<meta name="theme-color" content="#f7f4ec">
+<title>在循环的东西 · xingyub's blog</title>
+<meta name="description" content="写代码和读文献时放着的曲目单。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,91 +18,76 @@
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/music">
-
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
   <div data-shell="header"></div>
-
-  <main class="page">
-
-    <div class="page-head" data-slot="page-head">
-      <h1 class="page-title">音乐馆</h1>
-      <p class="page-sub">{{一句话副标题：写作时在循环什么}}</p>
-    </div>
-
-    <section class="grid-12">
-
-      <!-- 播放器主卡 -->
-      <div class="col-8">
-        <article class="card" data-slot="now-playing">
-          <div class="card__body card--pad-lg">
-            <span class="card-label">Now Playing</span>
-            <div class="row" style="gap:24px;align-items:flex-start;">
-              <div class="player__art" style="margin:0;width:120px;height:120px;border-radius:var(--r-md);font-size:36px;">♪</div>
-              <div class="fill">
-                <h2 style="margin:0 0 6px;font-family:var(--font-ui);font-size:22px;font-weight:800;">{{曲名}}</h2>
-                <p style="margin:0;color:var(--fg-muted);font-size:14px;">{{艺术家}} · {{专辑}}</p>
-                <div class="player__bar" style="margin-top:20px;"><span></span></div>
-                <div class="spread mt-sm" style="font-family:var(--font-mono);font-size:12px;color:var(--fg-faint);">
-                  <span>{{00:00}}</span><span>{{00:00}}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <!-- 播放列表 -->
-      <div class="col-4">
-        <article class="card" data-slot="playlist">
-          <div class="card__body">
-            <span class="card-label">Playlist</span>
-            <div class="rec-list">
-              <a class="rec" href="#"><span class="rec__title">{{曲名占位}}</span><span class="rec__date">{{时长}}</span></a>
-              <a class="rec" href="#"><span class="rec__title">{{曲名占位}}</span><span class="rec__date">{{时长}}</span></a>
-              <a class="rec" href="#"><span class="rec__title">{{曲名占位}}</span><span class="rec__date">{{时长}}</span></a>
-              <a class="rec" href="#"><span class="rec__title">{{曲名占位}}</span><span class="rec__date">{{时长}}</span></a>
-            </div>
-          </div>
-        </article>
-      </div>
-
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 06 · 音乐</span>
+      <h1 class="folio__title">在循环的东西</h1>
+      <p class="folio__desc">写代码和读文献时放着的。没有播放器，就一张单子。</p>
+      <hr class="folio__rule">
     </section>
 
-    <div class="empty card mt-lg" data-slot="music-empty">
-      <div class="empty__icon">♪</div>
-      <span class="empty__title">No Music Available</span>
-      <span class="empty__hint">请检查播放列表或网络连接</span>
+    <div class="split">
+      <div>
+        <p class="section-mark">§ 06.1 · 曲目</p>
+        <div class="catalog" data-slot="track-list">
+          <div class="entry">
+            <div class="entry__meta"><span class="entry__no">01</span><span>4:12</span></div>
+            <div>
+              <h2 class="entry__title">{{曲名}}</h2>
+              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="entry__meta"><span class="entry__no">02</span><span>3:48</span></div>
+            <div>
+              <h2 class="entry__title">{{曲名}}</h2>
+              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="entry__meta"><span class="entry__no">03</span><span>5:30</span></div>
+            <div>
+              <h2 class="entry__title">{{曲名}}</h2>
+              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
+            </div>
+          </div>
+          <div class="entry">
+            <div class="entry__meta"><span class="entry__no">04</span><span>2:56</span></div>
+            <div>
+              <h2 class="entry__title">{{曲名}}</h2>
+              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="margin-col">
+        <div class="margin-note" data-slot="music-note">
+          <p class="margin-note__title">播放器</p>
+          <p>原站有常驻播放器。骨架里只留了曲目单——真接了音频再把它加回来。</p>
+        </div>
+      </aside>
     </div>
-
   </main>
-
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>

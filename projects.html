@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
-<title>项目矩阵 · xingyub's blog</title>
-<meta name="description" content="{{页面描述}}">
+<meta name="theme-color" content="#f7f4ec">
+<title>在写的东西 · xingyub's blog</title>
+<meta name="description" content="做过的、在做的、以及开了个头就搁着的项目。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,105 +18,67 @@
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/projects">
-
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
   <div data-shell="header"></div>
-
-  <main class="page">
-
-    <div class="page-head" data-slot="page-head">
-      <h1 class="page-title">项目矩阵</h1>
-      <p class="page-sub">{{一句话副标题：在做的、做过的、想做的}}</p>
-    </div>
-
-    <div class="filters" style="justify-content:flex-start;" data-slot="project-filters">
-      <button class="filter is-active" type="button" data-filter>全部</button>
-      <button class="filter" type="button" data-filter>进行中</button>
-      <button class="filter" type="button" data-filter>已归档</button>
-      <button class="filter" type="button" data-filter>实验性</button>
-    </div>
-
-    <!-- 项目卡网格 -->
-    <section class="grid-12 mt-lg" data-slot="project-grid">
-
-      <div class="col-4">
-        <article class="card project">
-          <div class="project__thumb"></div>
-          <div class="project__body">
-            <h3 class="project__name">{{项目名称}}</h3>
-            <p class="project__desc">{{项目一句话说明，说明它解决什么问题。}}</p>
-            <div class="tag-row">
-              <span class="tag">{{技术栈}}</span>
-              <span class="tag">{{技术栈}}</span>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <div class="col-4">
-        <article class="card project">
-          <div class="project__thumb"></div>
-          <div class="project__body">
-            <h3 class="project__name">{{项目名称}}</h3>
-            <p class="project__desc">{{项目一句话说明。}}</p>
-            <div class="tag-row">
-              <span class="tag">{{技术栈}}</span>
-              <span class="tag">{{技术栈}}</span>
-            </div>
-          </div>
-        </article>
-      </div>
-
-      <div class="col-4">
-        <article class="card project">
-          <div class="project__thumb"></div>
-          <div class="project__body">
-            <h3 class="project__name">{{项目名称}}</h3>
-            <p class="project__desc">{{项目一句话说明。}}</p>
-            <div class="tag-row">
-              <span class="tag">{{技术栈}}</span>
-            </div>
-          </div>
-        </article>
-      </div>
-
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 04 · 项目</span>
+      <h1 class="folio__title">在写的东西</h1>
+      <p class="folio__desc">做过的、在做的、以及开了个头就搁着的。都记在这里，免得忘掉。</p>
+      <hr class="folio__rule">
     </section>
 
-    <div class="empty card mt-lg" data-slot="project-empty">
-      <div class="empty__icon">◫</div>
-      <span class="empty__title">更多项目整理中</span>
-      <span class="empty__hint">{{空状态提示文案}}</span>
+    <div class="chips" data-slot="project-chips" class="mb-8">
+      <button class="chip is-active" type="button" data-chip>全部</button>
+      <button class="chip" type="button" data-chip>进行中</button>
+      <button class="chip" type="button" data-chip>已归档</button>
+      <button class="chip" type="button" data-chip>实验性</button>
     </div>
 
+    <div class="card-grid" data-slot="project-grid">
+      <article class="index-card">
+        <span class="index-card__no">№ 01 · 进行中</span>
+        <h2 class="index-card__title">{{项目名称}}</h2>
+        <p class="index-card__desc">{{一句话说明它解决什么问题，以及为什么值得做。}}</p>
+        <div class="index-card__foot"><span class="tag">Python</span><span class="tag">PyTorch</span></div>
+      </article>
+      <article class="index-card">
+        <span class="index-card__no">№ 02 · 进行中</span>
+        <h2 class="index-card__title">{{项目名称}}</h2>
+        <p class="index-card__desc">{{一句话说明。}}</p>
+        <div class="index-card__foot"><span class="tag">Spring Boot</span></div>
+      </article>
+      <article class="index-card">
+        <span class="index-card__no">№ 03 · 已归档</span>
+        <h2 class="index-card__title">{{项目名称}}</h2>
+        <p class="index-card__desc">{{一句话说明。}}</p>
+        <div class="index-card__foot"><span class="tag">Vue</span><span class="tag">D3</span></div>
+      </article>
+      <article class="index-card">
+        <span class="index-card__no">№ 04 · 实验性</span>
+        <h2 class="index-card__title">{{项目名称}}</h2>
+        <p class="index-card__desc">{{一句话说明。}}</p>
+        <div class="index-card__foot"><span class="tag">Rust</span></div>
+      </article>
+    </div>
   </main>
-
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>

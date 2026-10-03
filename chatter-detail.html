@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
-<title>{{杂谈标题}} · xingyub's blog</title>
-<meta name="description" content="{{杂谈摘要}}">
+<meta name="theme-color" content="#f7f4ec">
+<title>源石结晶与目标蛋白结合的猜想 · xingyub's blog</title>
+<meta name="description" content="一次跑模型时的脑洞记录。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -18,133 +18,61 @@
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="">
-
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
   <div data-shell="header"></div>
+  <main class="sheet">
+    <div class="split">
+      <article>
+        <header class="article__head" data-slot="chatter-head">
+          <div class="article__meta">
+            <span>№ 003</span><span>2026-03-25 03:00</span><span>杂谈</span>
+          </div>
+          <h1 class="article__title">源石结晶与目标蛋白结合的猜想</h1>
+          <p class="article__standfirst">纯属脑洞，没有实验依据。写下来只是不想让它跑掉。</p>
+        </header>
 
-  <main class="page">
+        <div class="prose" data-slot="chatter-body">
+          <p>今天在跑 MolGTC 模型的图神经网络筛选时，看着那些小分子的拓扑结构，突然串台到了泰拉大陆的源石病机制。</p>
+          <p>如果把源石结晶过程视作一种极端暴烈的<strong>分子自组装</strong>行为，它在感染者体内的增殖会不会类似于某种不可逆的激酶靶点结合？就像我们针对 STAT3 或者 JAK2 寻找抑制剂一样，罗德岛的矿石病抑制剂，本质上可能就是一种能与源石活性位点产生极强亲和力的「竞争性拮抗剂」。</p>
+          <blockquote><p>物理规律在不同维度的宇宙中或许殊途同归。</p></blockquote>
+          <p>晚点把这周的 GROMACS 跑完，要是收敛得好，周末开两把肉鸽奖励一下自己。</p>
+          <p class="mt-5"><span class="tag"># 明日方舟</span> <span class="tag"># 学术脑洞</span> <span class="tag"># 日常</span></p>
+        </div>
+      </article>
 
-    <!-- 封面图 -->
-    <div class="cover" data-slot="chatter-cover">
-      <img src="assets/img/placeholder.svg" alt="{{图片描述}}">
+      <aside class="margin-col">
+        <div class="margin-note" data-slot="author-note">
+          <p class="margin-note__title">作者</p>
+          <p><strong>{{作者名}}</strong></p>
+          <p>{{作者一句话简介}}</p>
+        </div>
+        <div class="margin-note" data-slot="recent-note">
+          <p class="margin-note__title">近期杂谈</p>
+          <div class="facts">
+            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">03-18</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">03-11</span></div>
+          </div>
+        </div>
+      </aside>
     </div>
-
-    <div class="grid-12 mt-lg">
-
-      <!-- 正文 -->
-      <div class="col-8">
-        <article class="card">
-          <div class="article">
-
-            <header class="article__head" data-slot="chatter-head">
-              <div class="badge-row">
-                <span class="badge">✨ {{心情}}</span>
-                <span class="badge badge--soft">#{{标签一}}</span>
-                <span class="badge badge--soft">#{{标签二}}</span>
-              </div>
-              <h1 class="article__title">{{杂谈标题}}</h1>
-              <div class="article__meta">
-                <span>{{YYYY-MM-DD HH:mm:ss}}</span>
-              </div>
-            </header>
-
-            <div class="prose" data-slot="chatter-body">
-              <p>{{杂谈正文段落。杂谈比文章更随意，短句、碎念、脑洞都放这里。}}</p>
-              <p>{{正文段落。}}</p>
-              <blockquote><p>{{一句结论 / 一句吐槽}}</p></blockquote>
-            </div>
-
-          </div>
-        </article>
-      </div>
-
-      <!-- 侧栏 -->
-      <div class="col-4 sidebar">
-
-        <article class="card author" data-slot="author-card">
-          <div class="card__body">
-            <img class="author__avatar" src="assets/img/placeholder.svg" alt="{{作者名}}">
-            <h3 class="author__name">{{作者名}}</h3>
-            <p class="author__bio">{{作者一句话简介}}</p>
-          </div>
-        </article>
-
-        <!-- 日历：标记有记录的日期 -->
-        <article class="card" data-slot="calendar">
-          <div class="card__body">
-            <div class="calendar__head">
-              <span>{{YYYY}} 年 {{MM}} 月</span>
-              <span style="color:var(--fg-faint);font-size:12px;">‹ ›</span>
-            </div>
-            <div class="calendar__grid">
-              <span class="calendar__dow">一</span><span class="calendar__dow">二</span><span class="calendar__dow">三</span>
-              <span class="calendar__dow">四</span><span class="calendar__dow">五</span><span class="calendar__dow">六</span>
-              <span class="calendar__dow">日</span>
-              <span class="calendar__day">1</span><span class="calendar__day">2</span><span class="calendar__day">3</span>
-              <span class="calendar__day">4</span><span class="calendar__day">5</span><span class="calendar__day">6</span>
-              <span class="calendar__day has-post">7</span>
-              <span class="calendar__day is-today">8</span><span class="calendar__day">9</span><span class="calendar__day">10</span>
-              <span class="calendar__day">11</span><span class="calendar__day">12</span><span class="calendar__day">13</span>
-              <span class="calendar__day">14</span>
-              <span class="calendar__day">15</span><span class="calendar__day">16</span><span class="calendar__day">17</span>
-              <span class="calendar__day">18</span><span class="calendar__day">19</span><span class="calendar__day">20</span>
-              <span class="calendar__day">21</span>
-              <span class="calendar__day">22</span><span class="calendar__day">23</span><span class="calendar__day">24</span>
-              <span class="calendar__day">25</span><span class="calendar__day">26</span><span class="calendar__day">27</span>
-              <span class="calendar__day">28</span>
-              <span class="calendar__day">29</span><span class="calendar__day">30</span><span class="calendar__day">31</span>
-            </div>
-          </div>
-        </article>
-
-        <article class="card" data-slot="recent-records">
-          <div class="card__body">
-            <span class="card-label">Recent Records</span>
-            <div class="rec-list">
-              <a class="rec" href="chatter-detail.html">
-                <span class="rec__title">{{杂谈标题}}</span>
-                <span class="rec__date">{{YYYY-MM-DD}}</span>
-              </a>
-              <a class="rec" href="chatter-detail.html">
-                <span class="rec__title">{{杂谈标题}}</span>
-                <span class="rec__date">{{YYYY-MM-DD}}</span>
-              </a>
-            </div>
-          </div>
-        </article>
-
-      </div>
-    </div>
-
   </main>
-
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>

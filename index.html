@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta name="theme-color" content="#f8fafc">
-<title>{{页面标题}} · xingyub's blog</title>
-<meta name="description" content="{{页面描述}}">
+<meta name="theme-color" content="#f7f4ec">
+<title>xingyub's blog</title>
+<meta name="description" content="一个做计算化学的人写下的东西：分子动力学、图神经网络，以及一些与科研无关的碎念。">
 <script>
-  // 提前设主题：样式应用前就写好 data-theme，避免深色用户闪一次浅色
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
   try {
     var t = localStorage.getItem("skeleton-theme");
     if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -17,199 +17,91 @@
 </script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
-<!-- data-route 决定导航高亮；data-splash="on" 开启启动屏；data-floats="off" 关闭浮动控件 -->
-<body data-route="/" data-splash="on">
-
+<body data-route="/">
 <noscript>
   <div class="noscript-bar">
     <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
-    <a href="projects.html">项目</a>
     <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
     <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
     <a href="music.html">音乐</a>
     <a href="tree.html">灵境</a>
-    <a href="moments.html">说说</a>
-    <a href="chatter.html">杂谈</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
   </div>
 </noscript>
-
-<!-- ===== 背景层：光晕 + 磨砂遮罩 + 底部渐变 ===== -->
-<div class="bg-layer" aria-hidden="true">
-  <div class="bg-layer__orb bg-layer__orb--a"></div>
-  <div class="bg-layer__orb bg-layer__orb--b"></div>
-  <div class="bg-layer__orb bg-layer__orb--c"></div>
-  <div class="bg-layer__veil"></div>
-</div>
-<div class="bg-layer__wave" aria-hidden="true"></div>
-
 <div class="shell">
-
-  <!-- ===== 顶栏（由 shell.js 挂载） ===== -->
   <div data-shell="header"></div>
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 00 · 目录</span>
+      <h1 class="folio__title">一个做计算化学的人<br>写下的东西</h1>
+      <p class="folio__desc">分子动力学、图神经网络，以及一些与科研无关的碎念。左边是最近放进来的记录，右边是这里还有什么。</p>
+      <hr class="folio__rule">
+    </section>
 
-  <main class="page">
+    <a class="lead-entry" href="post.html" data-slot="lead-entry">
+      <div class="lead-entry__meta">
+        <span>№ 001</span><span>2026-03-26</span><span>学术 / 深度学习</span>
+      </div>
+      <h2 class="lead-entry__title">多靶点激酶抑制剂筛选：从虚拟到现实的漫长征途</h2>
+      <p class="lead-entry__excerpt">一篇超长的技术记录，详细阐述了在 STAT3/JAK2 抑制剂研发过程中，如何使用图神经网络和分子动力学进行多尺度模拟。</p>
+    </a>
 
-    <!-- 搜索 -->
-    <div class="search" data-slot="home-search">
-      <span class="search__icon" aria-hidden="true">⌕</span>
-      <input class="search__input" type="search" placeholder="搜索文章、杂谈、照片…" aria-label="搜索文章、杂谈、照片…">
-    </div>
-
-    <div class="stack">
-
-      <!-- ===== 第 1 屏：个人卡 + 音乐播放器 ===== -->
-      <section class="grid-12">
-
-        <!-- 个人卡 -->
-        <div class="col-7 stack">
-          <article class="card" data-slot="profile-card">
-            <div class="card__body">
-              <div class="profile">
-                <div class="profile__avatar" data-slot="profile-avatar">头</div>
-                <div class="fill">
-                  <h1 class="profile__name" data-slot="profile-name">{{昵称}}</h1>
-                  <p class="profile__bio" data-slot="profile-tagline">{{一句话简介}}</p>
-                </div>
-              </div>
-
-              <div class="spread mt-lg">
-                <div class="stats" data-slot="profile-stats">
-                  <div class="stat">
-                    <div class="stat__value">0</div>
-                    <div class="stat__label">文章</div>
-                  </div>
-                  <div class="stat-divider"></div>
-                  <div class="stat">
-                    <div class="stat__value">0</div>
-                    <div class="stat__label">杂谈</div>
-                  </div>
-                  <div class="stat-divider"></div>
-                  <div class="stat">
-                    <div class="stat__value">0</div>
-                    <div class="stat__label">照片</div>
-                  </div>
-                </div>
-
-                <!-- 社交图标来自 shell.js 的 SITE.socials，改配置即可，不用改这里 -->
-                <div data-shell="socials"></div>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <!-- 音乐播放器 -->
-        <div class="col-5 stack">
-          <article class="card" data-slot="music-player">
-            <div class="card__body">
-              <div class="player">
-                <div class="player__art">♪</div>
-                <span class="player__title">No Music Available</span>
-                <span class="player__hint">请检查播放列表或网络连接</span>
-                <div class="player__bar"><span></span></div>
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- ===== 第 2 屏：精选文章 + 相册入口 + 最新杂谈 + 主题卡 ===== -->
-      <section class="grid-12">
-
-        <!-- 精选文章（大图） -->
-        <div class="col-4 stack">
-          <article class="media-card media-card--tall" data-slot="featured-post">
-            <div class="media-card__img"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-            <div class="media-card__scrim"></div>
-            <div class="media-card__body">
-              <div class="badge-row">
-                <span class="badge">Latest Insight</span>
-                <span class="badge badge--ghost">{{YYYY.MM.DD HH:mm}}</span>
-              </div>
-              <h2 class="media-card__title">{{精选文章标题}}</h2>
-              <p class="media-card__desc">{{精选文章摘要}}</p>
-            </div>
-            <div class="media-card__body" style="position:absolute;right:0;bottom:0;left:auto;padding:16px;">
-              <div class="dots">
-                <button class="dots__item" type="button" aria-label="第 1 张"></button>
-                <button class="dots__item is-active" type="button" aria-label="第 2 张"></button>
-                <button class="dots__item" type="button" aria-label="第 3 张"></button>
-              </div>
-            </div>
-          </article>
-        </div>
-
-        <div class="col-8 stack">
-
-          <!-- 相册入口（通栏大图） -->
-          <a class="media-card media-card--xl" href="photowall.html" data-slot="album-entry">
-            <div class="media-card__img"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-            <div class="media-card__scrim"></div>
-            <div class="media-card__body">
-              <h3 class="media-card__title">{{相册名称}}</h3>
-              <p class="media-card__desc">{{相册描述}}</p>
+    <div class="split">
+      <div>
+        <p class="section-mark">§ 01 · 最近收录</p>
+        <div class="catalog" data-slot="catalog">
+          <a class="entry" href="post.html">
+            <div class="entry__meta"><span class="entry__no">№ 002</span><span>2026-03-24</span></div>
+            <div>
+              <h3 class="entry__title">GROMACS 2025 分子动力学模拟初探</h3>
+              <p class="entry__excerpt">记录一下基础的模拟设置过程：体系构建、力场选择、能量最小化，以及跑完之后怎么提取 RMSD 与 RMSF。</p>
             </div>
           </a>
-
-          <div class="grid-12">
-
-            <!-- 最新杂谈 -->
-            <div class="col-8">
-              <a class="media-card" href="chatter-detail.html" data-slot="latest-chatter">
-                <div class="media-card__img"><img src="assets/img/placeholder.svg" alt="{{图片描述}}"></div>
-                <div class="media-card__scrim media-card__scrim--left"></div>
-                <div class="media-card__body">
-                  <div class="badge-row">
-                    <span class="badge">Records</span>
-                    <span class="badge badge--ghost">{{YYYY.MM.DD HH:mm}}</span>
-                  </div>
-                  <h3 class="media-card__title">{{杂谈标题}}</h3>
-                  <p class="media-card__desc">{{杂谈摘要}}</p>
-                </div>
-              </a>
+          <a class="entry" href="chatter-detail.html">
+            <div class="entry__meta"><span class="entry__no">№ 003</span><span>2026-03-25</span></div>
+            <div>
+              <h2 class="entry__title">源石结晶与目标蛋白结合的猜想</h2>
+              <p class="entry__excerpt">跑图神经网络筛选时看着那些小分子的拓扑结构，突然串台到了源石病机制。纯属脑洞，没有实验依据。</p>
             </div>
-
-            <!-- 主题切换卡 -->
-            <div class="col-4">
-              <!-- button 内只允许 phrasing content，标题/描述用 span 而非 h3/p -->
-              <button class="card theme-card" type="button" data-theme-toggle data-slot="theme-card" style="width:100%;height:100%;">
-                <span class="theme-card__orb">🌸</span>
-                <span class="theme-card__title">夜间模式</span>
-                <span class="theme-card__desc">流萤飞舞的深空</span>
-              </button>
+          </a>
+          <a class="entry" href="post.html">
+            <div class="entry__meta"><span class="entry__no">№ 004</span><span>2026-03-22</span></div>
+            <div>
+              <h3 class="entry__title">用 GNN 做分子性质预测时的三个坑</h3>
+              <p class="entry__excerpt">数据泄漏、原子序数编码、以及批归一化在小批量下的方差估计。踩过才知道。</p>
             </div>
-          </div>
+          </a>
         </div>
-      </section>
+        <p class="mt-5"><a class="btn" href="timeline.html">查看全部归档 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 12h15M13 6l6 6-6 6"/></svg></a></p>
+      </div>
 
-      <!-- ===== 第 3 屏：运行状态条 ===== -->
-      <section class="card" data-slot="status-bar">
-        <div class="card__body" style="padding:0;">
-          <div class="statusbar">
-            <div class="statusbar__clock" data-clock>00:00:00</div>
-            <div class="statusbar__meta fill">
-              <span class="statusbar__item">
-                <span class="pulse"></span>
-                系统已稳定运行：<strong>{{运行时长}}</strong>
-              </span>
-              <span class="chip">Next.js 15</span>
-              <span class="chip">React 19</span>
-              <span class="chip">Tailwind 4</span>
-            </div>
-            <a class="statusbar__item" href="#">萌ICP备00000000号</a>
-          </div>
+      <aside class="margin-col">
+        <div class="margin-note" data-slot="about-note">
+          <p class="margin-note__title">关于这里</p>
+          <p>专注于计算化学、人工智能与软件工程的交叉应用。文章偏长，杂谈偏短，两边都随手写。</p>
+          <p><a class="btn" href="about.html">完整简介</a></p>
         </div>
-      </section>
 
+        <div class="margin-note" data-slot="contact-note">
+          <p class="margin-note__title">联系</p>
+          <div data-shell="socials"></div>
+        </div>
+
+        <div class="margin-note" data-slot="theme-note">
+          <p class="margin-note__title">夜间模式</p>
+          <p>是「关掉台灯」，不是「赛博朋克」。</p>
+          <button class="btn" type="button" data-theme-toggle>切换</button>
+        </div>
+      </aside>
     </div>
   </main>
-
-  <!-- ===== 页脚（由 shell.js 挂载） ===== -->
-  <div data-shell="footer"></div>
+  <div data-shell="colophon"></div>
 </div>
-
 <script src="assets/js/shell.js"></script>
 </body>
 </html>
