@@ -104,7 +104,7 @@ const tpl = {
   </div>`,
 
   splash: () => `
-  <div class="splash" data-splash>
+  <div class="splash" data-splash-screen>
     <div class="splash__ring"></div>
     <h1 class="splash__name">${SITE.name}</h1>
     <p class="splash__status">INITIALIZING SYSTEM</p>
@@ -206,7 +206,9 @@ function setupScroll() {
 }
 
 function setupSplash() {
-  const splash = document.querySelector("[data-splash]");
+  // 注意用 data-splash-screen 而不是 [data-splash]：body 上有 data-splash="on" 这个开关，
+  // 用 [data-splash] 会先命中 body，导致 is-done 加到 body 上、启动屏永远不消失。
+  const splash = document.querySelector("[data-splash-screen]");
   if (!splash) return;
   const hide = () => splash.classList.add("is-done");
   window.addEventListener("load", () => setTimeout(hide, 700));
