@@ -31,6 +31,7 @@
     <a href="tree.html">灵境</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
+    <a href="skeleton.html">骨架屏</a>
   </div>
 </noscript>
 <div class="shell">
@@ -43,37 +44,44 @@
       <hr class="folio__rule">
     </section>
 
-    <div class="split">
-      <div>
-        <p class="section-mark">§ 06.1 · 曲目</p>
-        <div class="catalog" data-slot="track-list">
-          <div class="entry">
-            <div class="entry__meta"><span class="entry__no">01</span><span>4:12</span></div>
-            <div>
-              <h2 class="entry__title">{{曲名}}</h2>
-              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
-            </div>
+    <div class="toolbar" data-slot="toolbar">
+      <label class="field field--icon toolbar__search">
+        <span class="field__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
+        <input type="search" placeholder="搜索曲目" aria-label="搜索曲目">
+      </label>
+      <div class="chips" data-slot="chips"><button class="chip is-active" type="button" data-chip>全部</button><button class="chip" type="button" data-chip>纯音乐</button><button class="chip" type="button" data-chip>游戏 OST</button><button class="chip" type="button" data-chip>循环最多</button></div>
+    </div>
+
+    <p class="section-mark">§ 06.1 · 曲目</p>
+
+    <div class="split mt-4">
+      <div class="catalog" data-slot="track-list">
+        <div class="entry">
+          <div class="entry__meta"><span class="entry__no">01</span><span>4:12</span></div>
+          <div>
+            <h2 class="entry__title">{{曲名}}</h2>
+            <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
           </div>
-          <div class="entry">
-            <div class="entry__meta"><span class="entry__no">02</span><span>3:48</span></div>
-            <div>
-              <h2 class="entry__title">{{曲名}}</h2>
-              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
-            </div>
+        </div>
+        <div class="entry">
+          <div class="entry__meta"><span class="entry__no">02</span><span>3:48</span></div>
+          <div>
+            <h2 class="entry__title">{{曲名}}</h2>
+            <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
           </div>
-          <div class="entry">
-            <div class="entry__meta"><span class="entry__no">03</span><span>5:30</span></div>
-            <div>
-              <h2 class="entry__title">{{曲名}}</h2>
-              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
-            </div>
+        </div>
+        <div class="entry">
+          <div class="entry__meta"><span class="entry__no">03</span><span>5:30</span></div>
+          <div>
+            <h2 class="entry__title">{{曲名}}</h2>
+            <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
           </div>
-          <div class="entry">
-            <div class="entry__meta"><span class="entry__no">04</span><span>2:56</span></div>
-            <div>
-              <h2 class="entry__title">{{曲名}}</h2>
-              <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
-            </div>
+        </div>
+        <div class="entry">
+          <div class="entry__meta"><span class="entry__no">04</span><span>2:56</span></div>
+          <div>
+            <h2 class="entry__title">{{曲名}}</h2>
+            <p class="entry__excerpt">{{艺术家}} · {{专辑}}</p>
           </div>
         </div>
       </div>
@@ -81,7 +89,7 @@
       <aside class="margin-col">
         <div class="margin-note" data-slot="music-note">
           <p class="margin-note__title">播放器</p>
-          <p>原站有常驻播放器。骨架里只留了曲目单——真接了音频再把它加回来。</p>
+          <p>原站有常驻播放器。骨架里只留了曲目单 —— 真接了音频再把它加回来。</p>
         </div>
       </aside>
     </div>

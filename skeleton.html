@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta name="theme-color" content="#f7f4ec">
+<title>骨架屏参考 · xingyub's blog</title>
+<meta name="description" content="加载占位组件的形状参考与用法。">
+<script>
+  // 样式表之前就定好主题，避免深色用户闪一次浅色
+  try {
+    var t = localStorage.getItem("skeleton-theme");
+    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    document.documentElement.dataset.theme = t;
+  } catch (e) {}
+</script>
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/skeleton">
+<noscript>
+  <div class="noscript-bar">
+    <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
+    <a href="index.html">首页</a>
+    <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
+    <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
+    <a href="music.html">音乐</a>
+    <a href="tree.html">灵境</a>
+    <a href="friends.html">友链</a>
+    <a href="about.html">关于</a>
+    <a href="skeleton.html">骨架屏</a>
+  </div>
+</noscript>
+<div class="shell">
+  <div data-shell="header"></div>
+  <main class="sheet">
+    <section class="folio" data-slot="folio">
+      <span class="folio__num">§ 10 · 骨架屏</span>
+      <h1 class="folio__title">加载占位</h1>
+      <p class="folio__desc">每个骨架的形状和它对应的真实组件一致 —— 数据到位时切换不跳动。本页每块 1.6 秒后自动还原成真实内容。</p>
+      <hr class="folio__rule">
+    </section>
+
+    <p class="section-mark">§ 10.1 · 目录行 entry:4</p>
+
+    <div class="mt-4" data-skeleton="entry:4" data-skeleton-hold="1600" data-slot="sk-entry-demo">
+      <a class="entry" href="post.html">
+        <div class="entry__meta"><span class="entry__no">№ 001</span><span>2026-03-26</span></div>
+        <div>
+          <h2 class="entry__title">多靶点激酶抑制剂筛选：从虚拟到现实的漫长征途</h2>
+          <p class="entry__excerpt">真实内容：跑图神经网络筛选时看着那些小分子的拓扑结构。</p>
+        </div>
+      </a>
+      <a class="entry" href="post.html">
+        <div class="entry__meta"><span class="entry__no">№ 002</span><span>2026-03-24</span></div>
+        <div>
+          <h2 class="entry__title">GROMACS 2025 分子动力学模拟初探</h2>
+          <p class="entry__excerpt">真实内容：记录基础的模拟设置过程。</p>
+        </div>
+      </a>
+    </div>
+
+    <p class="section-mark">§ 10.2 · 索引卡 card:3</p>
+
+    <div class="mt-4" data-skeleton="card:3" data-skeleton-hold="1600" data-slot="sk-card-demo">
+      <div class="card-grid">
+        <article class="index-card">
+          <span class="index-card__no">№ 01</span>
+          <h2 class="index-card__title">真实卡片标题</h2>
+          <p class="index-card__desc">真实内容：一句话说明它解决什么问题。</p>
+          <div class="index-card__foot"><span class="tag">Python</span></div>
+        </article>
+        <article class="index-card">
+          <span class="index-card__no">№ 02</span>
+          <h2 class="index-card__title">真实卡片标题</h2>
+          <p class="index-card__desc">真实内容。</p>
+          <div class="index-card__foot"><span class="tag">Rust</span></div>
+        </article>
+      </div>
+    </div>
+
+    <p class="section-mark">§ 10.3 · 图版 plate:3</p>
+
+    <div class="mt-4" data-skeleton="plate:3" data-skeleton-hold="1600" data-slot="sk-plate-demo">
+      <div class="card-grid">
+        <a class="plate" href="#">
+          <div class="plate__frame"><img src="assets/img/placeholder.svg" alt="真实图版"></div>
+          <div class="plate__caption"><h2 class="plate__title">真实相册名</h2><span class="plate__date">2026.01</span></div>
+        </a>
+      </div>
+    </div>
+
+    <p class="section-mark">§ 10.4 · 正文 prose:8</p>
+
+    <div class="mt-4" data-skeleton="prose:8" data-skeleton-hold="1600" data-slot="sk-prose-demo">
+      <div class="prose">
+        <p>真实内容：在现代药物研发中，计算化学已经成为不可或缺的一环。随着靶点结构的解析和算力的提升，我们不再像盲人摸象一样进行高通量筛选。</p>
+      </div>
+    </div>
+
+    <div class="blank mt-12" data-slot="sk-usage">
+      <p class="blank__title">怎么用</p>
+      <p class="blank__desc">给容器加 data-skeleton="entry:4"，脚本会在载入时渲染 4 行骨架；数据到位后调用 Skeleton.clear(el) 还原真实内容。本页的 data-skeleton-hold="1600" 只是为了让预览能看见效果，正式页面不要带它。</p>
+    </div>
+  </main>
+  <div data-shell="colophon"></div>
+</div>
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

@@ -31,6 +31,7 @@
     <a href="tree.html">灵境</a>
     <a href="friends.html">友链</a>
     <a href="about.html">关于</a>
+    <a href="skeleton.html">骨架屏</a>
   </div>
 </noscript>
 <div class="shell">
@@ -43,15 +44,18 @@
       <hr class="folio__rule">
     </section>
 
-    <div class="split">
-      <div>
-        <div class="blank blank--tall" data-slot="canvas-stage">
-          <p class="blank__title">Canvas / WebGL 挂载区</p>
-          <p class="blank__desc">在此挂载可视化实例。骨架里只是一块等高的留白，没有跑任何渲染循环。</p>
-        </div>
+    <p class="section-mark">§ 07.1 · 画布</p>
 
-        <p class="section-mark">§ 07.1 · 参数</p>
-        <div class="chips" data-slot="scene-chips" class="mb-5">
+    <div class="blank blank--tall mt-4" data-slot="canvas-stage">
+      <p class="blank__title">Canvas / WebGL 挂载区</p>
+      <p class="blank__desc">在此挂载可视化实例。骨架里只是一块等高的留白，没有跑任何渲染循环。</p>
+    </div>
+
+    <p class="section-mark">§ 07.2 · 参数</p>
+
+    <div class="split mt-4">
+      <div>
+        <div class="chips mb-5" data-slot="scene-chips">
           <button class="chip is-active" type="button" data-chip>布局</button>
           <button class="chip" type="button" data-chip>配色</button>
           <button class="chip" type="button" data-chip>数据源</button>

@@ -27,6 +27,7 @@ const SITE = {
     { label: "灵境", href: "tree.html", route: "/tree" },
     { label: "友链", href: "friends.html", route: "/friends" },
     { label: "关于", href: "about.html", route: "/about" },
+    { label: "骨架屏", href: "skeleton.html", route: "/skeleton" },
   ],
 
   socials: [
@@ -182,7 +183,7 @@ function syncThemeIcons() {
     b.setAttribute("aria-label", dark ? "切换到浅色主题" : "切换到深色主题");
   });
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", dark ? "#16140e" : "#f7f4ec");
+  if (meta) meta.setAttribute("content", dark ? "#131312" : "#f7f4ec");
 }
 
 function setupTheme() {
@@ -291,9 +292,83 @@ function setupChips() {
   });
 }
 
+/* -------------------------------------------------------------------------
+   骨架屏
+   -------------------------------------------------------------------------
+   形状与真实组件一一对应：目录行骨架和 .entry 同栅格，索引卡骨架和
+   .index-card 同盒模型 —— 数据到位时切换不会跳动。
+   通用转圈圈等于没做：用户看不出「将要出现的是什么」。
+
+   用法：
+     <div data-skeleton="entry:4">   ...真实内容...   </div>
+     数据到位后调用 Skeleton.clear(el) 还原真实内容。
+     预览用：再加 data-skeleton-hold="1200"，1.2 秒后自动还原。
+   ------------------------------------------------------------------------- */
+const SK_TPL = {
+  entry: (n) => Array.from({ length: n }, () => `
+    <div class="sk-entry">
+      <div class="sk-entry__meta"><span class="sk sk-meta"></span><span class="sk sk-meta"></span></div>
+      <div class="sk-entry__body">
+        <span class="sk sk-title"></span>
+        <span class="sk sk-line"></span>
+        <span class="sk sk-line sk-line--mid"></span>
+      </div>
+    </div>`).join(""),
+
+  card: (n) => `<div class="card-grid">${Array.from({ length: n }, () => `
+    <div class="sk-card">
+      <span class="sk sk-meta"></span>
+      <span class="sk sk-title"></span>
+      <span class="sk sk-line"></span>
+      <span class="sk sk-line sk-line--short"></span>
+    </div>`).join("")}</div>`,
+
+  plate: (n) => `<div class="card-grid">${Array.from({ length: n }, () => `
+    <div class="sk-plate">
+      <span class="sk sk-media"></span>
+      <span class="sk sk-line sk-line--short"></span>
+    </div>`).join("")}</div>`,
+
+  prose: (n) => `<div class="sk-prose">${Array.from({ length: n }, () => `
+    <span class="sk sk-line"></span>`).join("")}</div>`,
+
+  line: (n) => Array.from({ length: n }, () => `<span class="sk sk-line"></span>`).join(""),
+};
+
+const Skeleton = {
+  /** 把 el 的内容换成骨架，原始内容先存起来 */
+  show(el, variant = "entry", count = 4) {
+    if (!el) return;
+    const build = SK_TPL[variant] || SK_TPL.entry;
+    if (!el.dataset.skeletonBackup) {
+      el.dataset.skeletonBackup = el.innerHTML;
+    }
+    el.setAttribute("aria-busy", "true");
+    el.innerHTML = build(count);
+  },
+
+  /** 还原原始内容 */
+  clear(el) {
+    if (!el || !el.dataset.skeletonBackup) return;
+    el.innerHTML = el.dataset.skeletonBackup;
+    delete el.dataset.skeletonBackup;
+    el.removeAttribute("aria-busy");
+  },
+};
+
+function setupSkeletons() {
+  document.querySelectorAll("[data-skeleton]").forEach((el) => {
+    const [variant, count] = String(el.dataset.skeleton).split(":");
+    Skeleton.show(el, variant, Number(count) || 4);
+
+    const hold = Number(el.dataset.skeletonHold);
+    if (hold > 0) setTimeout(() => Skeleton.clear(el), hold);
+  });
+}
+
 // 逐项初始化并各自兜底：任何一个环节失败都不影响其余交互。
 function boot() {
-  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips].forEach((fn) => {
+  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSkeletons].forEach((fn) => {
     try { fn(); } catch (err) { console.warn("[skeleton]", fn.name, err); }
   });
 }
