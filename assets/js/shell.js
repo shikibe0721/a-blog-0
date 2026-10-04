@@ -14,7 +14,22 @@
 const SITE = {
   name: "shikibe's blog",
   latin: "notes",            // 品牌右侧的等宽小标
-  tagline: "记录 · 随笔 · 收藏",
+  tagline: "欢迎来到我的博客",
+
+  // 首页那句轮换的标语。点「换一句」按顺序走，不做随机 ——
+  // 随机容易连着抽到同一条，看起来像没反应。
+  greetings: [
+    "今天也是元气满满的一天！✨",
+    "Ciallo～(∠・ω< )⌒☆",
+    "慢慢来，比较快 🐢",
+    "代码写不出来就先摸会儿鱼 🐟",
+    "每一个 Bug 都是成长的机会 💪",
+    "今天的你比昨天更厉害了一点 📈",
+    "喝杯水，休息一下再继续 ☕",
+    "保持好奇，保持热爱 🔥",
+    "你已经很棒了，别忘了夸夸自己 🌟",
+    "前端的路很长，但风景很好 🏞️",
+  ],
 
   nav: [
     { label: "首页", href: "index.html", route: "/" },
@@ -29,11 +44,15 @@ const SITE = {
     { label: "关于", href: "about.html", route: "/about" },
   ],
 
-  // 站点的对外入口。全部是占位，填真实地址即可（详见 README）。
+  // 站点的对外入口。由 shell.js 渲染成关于页与首页侧栏的事实表。
+  // handle 是「看得见的那一半」—— 只给一个外链图标的话，
+  // 访客根本不知道要联系的是哪个账号，还得点进去才知道。
   socials: [
-    { label: "GitHub", href: "#" },
-    { label: "Email", href: "#" },
-    { label: "RSS", href: "#" },
+    { label: "Telegram", href: "https://t.me/Shikibe0721", handle: "@Shikibe0721" },
+    { label: "GitHub", href: "https://github.com/shikibe0721", handle: "@shikibe0721" },
+    { label: "X", href: "https://x.com/Shikibe_MayuX", handle: "@Shikibe_MayuX" },
+    { label: "WhatsApp", href: "https://wa.me/8618121434090", handle: "+86 181 2143 4090" },
+    { label: "Email", href: "mailto:shikibe0721@gmail.com", handle: "shikibe0721@gmail.com" },
   ],
 
   colophon: {
@@ -159,10 +178,19 @@ const tpl = {
   socials: () => `
   <div class="facts" data-slot="socials">
     ${SITE.socials
-      .map(
-        (s) => `<div class="facts__row"><span class="facts__k">${esc(s.label)}</span>` +
-          `<a class="facts__v" href="${safeUrl(s.href)}" target="_blank" rel="noopener noreferrer">${icon("external", 13)}<span class="sr-only">（新窗口打开）</span></a></div>`
-      )
+      .map((s) => {
+        // 只有 http(s) 才开新窗口 —— mailto: 加 target="_blank" 没有意义，
+        // 有些邮件客户端会因此开出一个空白标签页。
+        const isHttp = /^https?:/i.test(String(s.href));
+        const ext = isHttp ? ' target="_blank" rel="noopener noreferrer"' : "";
+        return (
+          `<div class="facts__row"><span class="facts__k">${esc(s.label)}</span>` +
+          `<a class="facts__v" href="${safeUrl(s.href)}"${ext}>` +
+          `${esc(s.handle || s.label)}${icon("external", 12)}` +
+          (isHttp ? `<span class="sr-only">（新窗口打开）</span>` : "") +
+          `</a></div>`
+        );
+      })
       .join("")}
   </div>`,
 
@@ -349,6 +377,49 @@ function setupSlotMode() {
 }
 
 /* -------------------------------------------------------------------------
+   首页标语轮换
+   -------------------------------------------------------------------------
+   原站用的是 Typed.js（CDN 打字机效果）。这里没有照搬，两个原因：
+     1. CSP 是 script-src 'self'，不允许外链脚本 —— 引 CDN 就得放宽 CSP，
+        而放宽 CSP 换一个打字机动效不值得。
+     2. 打字机的逐字跳动和本站克制的材质风格冲突：一句话在屏幕上跳十几下，
+        读者会先注意到「在动」而不是「写了什么」。
+
+   改成用户点一下才换、只做交叉淡入。用 WAAPI 而不是 CSS 类切换 ——
+   连续点的时候 WAAPI 会从当前值重定向，CSS 过渡在这里要多写一个状态类。
+   只在首页存在目标节点时启动，其余页面直接返回。
+   ------------------------------------------------------------------------- */
+function setupGreeting() {
+  const el = document.querySelector("[data-greeting]");
+  if (!el) return;
+  const btn = document.querySelector("[data-greeting-next]");
+  const lines = SITE.greetings || [];
+  if (!lines.length) return;
+
+  // 首屏随机起一句，之后按顺序走
+  let i = Math.floor(Math.random() * lines.length);
+  el.textContent = lines[i];
+
+  if (!btn) return;
+  const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches ?? false;
+
+  btn.addEventListener("click", () => {
+    i = (i + 1) % lines.length;
+    // 减少动效时直接换字，不做淡入淡出
+    if (reduce || !el.animate) { el.textContent = lines[i]; return; }
+
+    el.animate([{ opacity: 1 }, { opacity: 0 }], {
+      duration: 120, easing: "ease", fill: "forwards",
+    }).finished.then(() => {
+      el.textContent = lines[i];
+      el.animate([{ opacity: 0 }, { opacity: 1 }], {
+        duration: 180, easing: "cubic-bezier(0.23, 1, 0.32, 1)", fill: "forwards",
+      });
+    });
+  });
+}
+
+/* -------------------------------------------------------------------------
    筛选标签
    ------------------------------------------------------------------------- */
 function setupChips() {
@@ -458,7 +529,7 @@ function setupSkeletons() {
 
 // 逐项初始化并各自兜底：任何一个环节失败都不影响其余交互。
 function boot() {
-  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSearch, setupSkeletons].forEach((fn) => {
+  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSearch, setupSkeletons, setupGreeting].forEach((fn) => {
     try { fn(); } catch (err) { console.warn("[skeleton]", fn.name, err); }
   });
 }

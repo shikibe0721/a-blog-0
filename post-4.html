@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<meta name="color-scheme" content="light dark">
+<title>My Fourth Blog Post · shikibe's blog</title>
+<meta name="description" content="This post will show up on its own!">
+<script src="assets/js/theme-init.js"></script>
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="">
+<a class="skip-link" href="#main">跳到主内容</a>
+<noscript>
+  <div class="noscript-bar">
+    <strong>shikibe's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
+    <a href="index.html">首页</a>
+    <a href="timeline.html">归档</a>
+    <a href="chatter.html">杂谈</a>
+    <a href="photowall.html">照片墙</a>
+    <a href="projects.html">项目</a>
+    <a href="moments.html">说说</a>
+    <a href="music.html">音乐</a>
+    <a href="tree.html">灵境</a>
+    <a href="friends.html">友链</a>
+    <a href="about.html">关于</a>
+  </div>
+</noscript>
+<div class="shell">
+  <div data-shell="header"></div>
+  <main id="main" class="sheet">
+    <header class="article__head" data-slot="post-head">
+      <div class="article__meta">
+        <span>№ 004</span><span>2022-08-08</span><span>Astro Learner</span>
+      </div>
+      <h1 class="article__title">My Fourth Blog Post</h1>
+      <p class="article__standfirst">This post will show up on its own!</p>
+    </header>
+
+    <div class="split">
+      <p class="section-mark">§ 01 · 正文</p>
+      <div class="prose" data-slot="post-body">
+        <p>This post should show up with my other blog posts, because <code>import.meta.glob()</code> is returning a list of all my posts in order to create my list.</p>
+        <p class="mt-5"><span class="tag"># astro</span> <span class="tag"># successes</span></p>
+      </div>
+
+      <aside class="margin-col">
+        <div class="margin-note" data-slot="author-note">
+          <p class="margin-note__title">作者</p>
+          <p><strong>Astro Learner</strong></p>
+          <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
+        </div>
+
+        <div class="margin-note" data-slot="related-note">
+          <p class="margin-note__title">其它记录</p>
+          <div class="facts">
+            <div class="facts__row"><a class="facts__k" href="post-1.html">blog1,先看this</a><span class="facts__v num">2026-08-19</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-3.html">My Third Blog Post</a><span class="facts__v num">2022-07-15</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-2.html">My Second Blog Post</a><span class="facts__v num">2022-07-08</span></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </main>
+  <div data-shell="colophon"></div>
+</div>
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

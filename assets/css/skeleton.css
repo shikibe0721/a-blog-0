@@ -1556,13 +1556,39 @@ html[data-theme="dark"] .chip.is-active { color: #000; }
   font-size: var(--t-small);
 }
 .facts__row:last-child { border-bottom: 0; }
-.facts__k { color: var(--ink-3); flex: 0 0 auto; }
+.facts__k {
+  color: var(--ink-3);
+  /* ⚠️ 必须是 0 1 auto，不能是 0 0 auto。
+     键通常是一篇文章的标题（可以换行），值是日期或计数（不该断）。
+     写成不可缩的话，长标题会把右侧的日期挤到第二行，
+     「2022-07-08」就变成「2022-07-」+「08」两行。 */
+  flex: 0 1 auto;
+  min-width: 0;
+}
 .facts__v {
   color: var(--ink);
   text-align: right;
   /* 长值（URL / 长标题）不设 min-width:0 会把左侧的键挤出容器 */
   min-width: 0;
   overflow-wrap: anywhere;
+}
+/* 日期与计数整块换行 —— 它们一旦断行就读不出来了。
+   ⚠️ 这条必须配合上面 .facts__k 的可缩一起用：只把值锁成 nowrap、
+   却让键不可缩的话，两边都放不下就轮到容器横向溢出。 */
+.facts__v.num { white-space: nowrap; }
+
+/* 社交行的值 = 账号 + 外链图标。
+   图标默认贴基线，看起来会比文字低半格 —— 往下压 2px 让它视觉居中。 */
+.facts__v svg { vertical-align: -2px; }
+/* 值本身是链接时给一点可点的反馈。图标已经在暗示「外链」，
+   所以这里不用整块高亮，下划线 + 轻微变色就够了。 */
+a.facts__v {
+  transition: color var(--dur-fast) var(--ease);
+}
+a.facts__v:hover {
+  color: var(--ink-2);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 /* 长串兜底：全站凡是可能装「用户填进来的文本」的地方，都要能断开。

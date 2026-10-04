@@ -9,7 +9,7 @@
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
 <title>shikibe's blog</title>
-<meta name="description" content="文章、杂谈、照片与收藏都在这里。">
+<meta name="description" content="这个博客记录了我的点点滴滴：折腾 AI、以及一些奇奇怪怪的想法。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,8 +35,9 @@
   <main id="main" class="sheet">
     <section class="folio" data-slot="folio">
       <span class="folio__num"><span aria-hidden="true">§</span> 00 · 目录</span>
-      <h1 class="folio__title">一个自用的记录本</h1>
-      <p class="folio__desc">文章、杂谈、照片与收藏都在这里。下面是最近收录的记录。</p>
+      <h1 class="folio__title">欢迎来到我的博客 👋</h1>
+      <p class="folio__desc" data-greeting>今天也是元气满满的一天！✨</p>
+      <p class="mt-5"><button class="btn btn--ghost" type="button" data-greeting-next>换一句</button></p>
       <hr class="folio__rule">
     </section>
 
@@ -50,15 +51,41 @@
     <p class="section-mark">§ 01 · 最近收录</p>
 
     <div class="split mt-4">
-      <div class="blank" data-slot="catalog">
-        <p class="blank__title">暂无记录</p>
-        <p class="blank__desc">还没有收录任何文章或杂谈。写下第一篇后，它会出现在这里。</p>
+      <div class="catalog" data-slot="catalog">
+        <a class="entry" href="post-1.html">
+          <div class="entry__meta"><span class="entry__no">№ 001</span><span>2026-08-19</span></div>
+          <div>
+            <h2 class="entry__title">blog1,先看this</h2>
+            <p class="entry__excerpt">This is the first post of my blog.</p>
+          </div>
+        </a>
+        <a class="entry" href="post-4.html">
+          <div class="entry__meta"><span class="entry__no">№ 004</span><span>2022-08-08</span></div>
+          <div>
+            <h2 class="entry__title">My Fourth Blog Post</h2>
+            <p class="entry__excerpt">This post will show up on its own!</p>
+          </div>
+        </a>
+        <a class="entry" href="post-3.html">
+          <div class="entry__meta"><span class="entry__no">№ 003</span><span>2022-07-15</span></div>
+          <div>
+            <h2 class="entry__title">My Third Blog Post</h2>
+            <p class="entry__excerpt">I had some challenges, but asking in the community really helped!</p>
+          </div>
+        </a>
+        <a class="entry" href="post-2.html">
+          <div class="entry__meta"><span class="entry__no">№ 002</span><span>2022-07-08</span></div>
+          <div>
+            <h2 class="entry__title">My Second Blog Post</h2>
+            <p class="entry__excerpt">After learning some Astro, I couldn't stop!</p>
+          </div>
+        </a>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="about-note">
           <p class="margin-note__title">关于这里</p>
-          <p>一个自用的记录本。文章偏长，杂谈偏短。</p>
+          <p>这个博客记录了我的点点滴滴：折腾 AI、以及一些奇奇怪怪的想法。</p>
           <p><a class="btn btn--ghost" href="about.html">完整简介</a></p>
         </div>
         <div class="margin-note" data-slot="contact-note">

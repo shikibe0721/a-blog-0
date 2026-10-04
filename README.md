@@ -31,7 +31,11 @@ a-blog-0/
 ├── tree.html             灵境（可视化实验）
 ├── friends.html          友链
 ├── about.html            关于
-├── post.html             文章详情模板
+├── post.html             文章详情模板（空壳，给新文章抄）
+├── post-1.html           文章：blog1,先看this
+├── post-2.html           文章：My Second Blog Post
+├── post-3.html           文章：My Third Blog Post
+├── post-4.html           文章：My Fourth Blog Post
 ├── chatter-detail.html   杂谈详情模板
 ├── skeleton.html         骨架屏参考页
 ├── 404.html              未命中页（Cloudflare not_found_handling 用）
@@ -61,12 +65,14 @@ a-blog-0/
 | `/tree` | `tree.html` | 灵境 |
 | `/friends` | `friends.html` | 友链 |
 | `/about` | `about.html` | 关于 |
-| `/posts/:slug` | `post.html` | — |
+| `/posts/:slug` | `post.html` | — （空模板） |
+| `/posts/post-1` … `post-4` | `post-1.html` … `post-4.html` | — （已填内容） |
 | `/chatter/:slug` | `chatter-detail.html` | — |
 | — | `skeleton.html` | 骨架屏 |
 | — | `404.html` | 未命中 |
 
-> 页面间是普通 `<a>` 跳转，不含前端路由与数据请求。详情页现在是与具体内容无关的**模板**，填内容时复制一份改字段即可。
+> 页面间是普通 `<a>` 跳转，不含前端路由与数据请求。
+> `post.html` 是空模板，填新文章时复制它改字段；`post-1` … `post-4` 是已经填好的实例。
 
 ---
 
@@ -104,14 +110,24 @@ a-blog-0/
 const SITE = {
   name: "shikibe's blog",     // 报头站名
   latin: "notes",             // 站名右侧的等宽小标
-  tagline: "记录 · 随笔 · 收藏",
+  tagline: "欢迎来到我的博客",
+
+  greetings: [                // 首页那句轮换的标语（点「换一句」按顺序走）
+    "今天也是元气满满的一天！✨",
+    "Ciallo～(∠・ω< )⌒☆",
+    // ...
+  ],
 
   nav: [ /* 导航项：label / href / route */ ],
 
   socials: [                  // 边栏「联系」事实表
-    { label: "GitHub", href: "#" },
-    { label: "Email", href: "#" },
-    { label: "RSS", href: "#" },
+    // handle 是「看得见的那一半」：只给一个外链图标的话，
+    // 访客不知道要联系的是哪个账号，还得点进去才知道。
+    { label: "Telegram", href: "https://t.me/Shikibe0721", handle: "@Shikibe0721" },
+    { label: "GitHub",   href: "https://github.com/shikibe0721", handle: "@shikibe0721" },
+    { label: "X",        href: "https://x.com/Shikibe_MayuX", handle: "@Shikibe_MayuX" },
+    { label: "WhatsApp", href: "https://wa.me/8618121434090", handle: "+86 181 2143 4090" },
+    { label: "Email",    href: "mailto:shikibe0721@gmail.com", handle: "shikibe0721@gmail.com" },
   ],
 
   colophon: {
@@ -129,9 +145,12 @@ const SITE = {
 
 > `SITE` 里所有文本与 URL 都会过 `esc()` / `safeUrl()` 再拼进模板（见 §8）。
 
-### 5.2 列表页：把空状态换成条目
+> `socials` 里只有 `http(s)` 链接会加 `target="_blank"`。
+> `mailto:` 加新窗口没有意义 —— 有些邮件客户端会因此开出一个空白标签页。
 
-每个列表页当前都是一段空状态：
+### 5.2 列表页：条目怎么加
+
+首页与归档已经填好了（4 篇文章）。其余列表页还是空状态：
 
 ```html
 <div class="blank">
@@ -149,13 +168,22 @@ const SITE = {
 | 项目 / 友链 | 索引卡 | `.index-card` |
 | 照片墙 | 图版 | `.plate` |
 
+**列表按时间倒序**，`№` 是记录自己的编号（不是它在列表里的名次）——
+所以首页上会看到 `№ 001 · 2026-08-19` 排在 `№ 004 · 2022-08-08` 前面。
+编号是身份，排序是时间，两者不必一致。
+
 ### 5.3 详情页：复制模板改字段
 
-`post.html` 与 `chatter-detail.html` 是与内容无关的模板，正文里用 `{{...}}` 标出待填位置：
+`post.html` 与 `chatter-detail.html` 是与内容无关的空模板，正文里用 `{{...}}` 标出待填位置。
+已经填好的四篇（`post-1.html` … `post-4.html`）可以直接当范例抄：
 
 - `{{文章标题}}` / `{{导语}}` / `{{编号}}` / `{{YYYY-MM-DD}}`
 - 正文用标准 HTML：`<h2 id="sec-1">`、`<p>`、`<blockquote>`、`<pre><code>`、`<ul>`、`<table>`
 - 侧栏的「本篇目录」锚点要跟正文里的 `id` 对上
+- 标签用 `<span class="tag"># 标签</span>` 放在正文末尾
+
+> 短文章可以省掉封面图与「本篇目录」两栏 —— 没有图就不要放占位图，
+> 没有小节就不要给空目录。**空的结构比没有结构更糟。**
 
 > 图片一律用 `assets/img/placeholder.svg` 占位，`alt` 写清楚内容。
 > **不要用 `src=""`**（会让浏览器重新请求当前文档），**也不要让内容图 `alt` 留空**（屏幕阅读器会整段跳过）。
