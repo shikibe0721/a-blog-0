@@ -18,5 +18,8 @@
     // 默认值。本站链接全部写成 about.html 这种带后缀的形式，
     // 所以不会触发重定向，保持默认即可。
     "html_handling": "auto-trailing-slash"
-  }
+  },
+
+  // Workers Preview 要求存在 previews 配置块；纯静态站没有独立变量/绑定，留空即可。
+  "previews": {}
 }

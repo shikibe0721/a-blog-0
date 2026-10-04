@@ -406,41 +406,56 @@ Cloudflare 可以直接拉这个仓库，push 后自动部署。
 Dashboard → Workers & Pages → Create application
   → Import a repository → 选本仓库，生产分支 main
   → Worker 名称填 a-blog-0
-  → 构建命令：留空
-  → 部署命令：npx wrangler deploy
-  → 预览命令：npx wrangler versions upload
+  → Build command：留空（纯静态，无构建步骤）
+  → Deploy command：npx wrangler deploy
+  → Preview command：npx wrangler preview
+  → 打开「启用预览构建」
 ```
 
-#### ⚠️ 两个会让构建失败的默认值
+之后的行为：
 
-**1. Worker 名称必须与 `wrangler.jsonc` 的 `name` 完全一致。**
+- push 到 `main` → 部署到生产
+- push 到其他分支 → 创建**该分支独立的 Worker Preview**，有自己的 Preview URL、配置与资源隔离
+- Preview URL 永远指向该分支最新部署；每次部署另有固定 URL，可用于回看具体某次
 
-两边都是 `a-blog-0`。不一致时构建**直接失败，日志里看不出原因** ——
-官方文档只在一处备注提过一句，极易漏看。
+#### ⚠️ Worker Preview 与 Version URL 不是一回事
 
-> 注意区分：**模板名叫 `xingyub-skeleton`**（见本文件标题与目录结构），
-> **部署名是 `a-blog-0`**（与仓库同名）。这是两个不同的东西。
+这两个容易混，但用途不同：
 
-**2. 仪表板里的「预览命令」默认值 `npx wrangler preview` 是错的。**
+| | Worker Preview | Version URL |
+|---|---|---|
+| 命令 | `npx wrangler preview` | `npx wrangler versions upload` |
+| 用途 | **分支 / PR 隔离测试** | 测试某个已上传的版本 |
+| 配置与资源 | 独立的 Preview 配置，可指向隔离资源 | 沿用该版本已有配置，**不创建分支隔离环境** |
+| Workers Builds 的 Preview command | **用这个** | 不等价，不要拿来替代 |
 
-**这个命令不存在。** Wrangler v1 有 `preview`，v2 起已移除，v4 更没有。
-开着「启用预览构建」的话，每次推非 `main` 分支都会构建失败。
+`npx wrangler preview` **当前是有效命令**。它要求 Wrangler **4.135.0 或更高**，
+`package.json` 已把版本固定在 `4.135.0`。
 
-正确值：**`npx wrangler versions upload`**
-—— 它创建新版本但**不把流量切过去**，这正是「预览」该有的行为。
+#### Worker 名称必须与配置完全一致
+
+仪表板里的 Worker 名称必须与 `wrangler.jsonc` 的 `name` 完全一致，两边都是 `a-blog-0`。
+不一致会导致构建失败。
+
+> 注意区分：**模板名是 `xingyub-skeleton`**（本文件标题与目录结构里的项目名），
+> **部署名是 `a-blog-0`**（与仓库同名）。两个不同的名字。
 
 ### 本地部署
 
 ```bash
-npx wrangler deploy          # 直接上线
-npx wrangler dev             # 本地起服务，行为与线上一致
+npm install
+npm run dev       # 本地起服务，行为与线上一致
+npm run preview   # 创建当前分支的 Cloudflare Worker Preview
+npm run deploy    # 部署到生产
 ```
 
-或走 `package.json` 里的脚本：`npm run deploy` / `npm run dev` / `npm run preview`。
-
 > `package.json` 里**没有构建脚本** —— 这个站零构建。
-> 那个文件存在的唯一目的是声明 `wrangler` 版本：
-> Workers Builds 会读它，否则就用默认版本，**同一份代码在不同时间构建可能跑在不同 wrangler 上**。
+> 那个文件存在的两个目的：固定 Wrangler 版本（Workers Builds 会读它，
+> 否则用默认版本，同一份代码在不同时间构建可能跑在不同 Wrangler 上），
+> 以及提供上面这三个脚本。
+
+> `wrangler.jsonc` 里的 `previews` 块是 **Worker Preview 要求的**，可以留空。
+> 本站没有 Preview 专属的变量或绑定，所以就是空的。
 
 ### `_headers` 是必须的，不是锦上添花
 
