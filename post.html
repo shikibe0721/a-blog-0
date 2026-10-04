@@ -4,14 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.workers.dev http://127.0.0.1:* http://localhost:*; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
 <title>文章 · shikibe's blog</title>
-<meta name="description" content="文章详情页模板。">
+<meta name="description" content="文章正文。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
+<link rel="stylesheet" href="assets/css/blog.css">
 </head>
 <body data-route="">
 <a class="skip-link" href="#main">跳到主内容</a>
@@ -32,72 +33,58 @@
 </noscript>
 <div class="shell">
   <div data-shell="header"></div>
-  <main id="main" class="sheet">
-    <header class="article__head" data-slot="post-head">
-      <div class="article__meta">
-        <span>№ {{编号}}</span><span>{{YYYY-MM-DD}}</span><span>约 {{N}} 分钟</span><span>{{分类}}</span>
-      </div>
-      <h1 class="article__title">{{文章标题}}</h1>
-      <p class="article__standfirst">{{导语：用一句话说明这篇文章讲什么。}}</p>
-    </header>
+  <main id="main" class="sheet" data-post-page>
 
-    <div class="plate__frame plate__frame--wide mb-10" data-slot="post-cover">
-      <img src="assets/img/placeholder.svg" alt="封面图">
+    <!-- ① 读取中。结构照着真实排版的节奏摆，内容到位时不会整页跳动。 -->
+    <div class="post-state" data-post-loading>
+      <div class="post-state__line post-state__line--title"></div>
+      <div class="post-state__line post-state__line--lead"></div>
+      <div class="post-state__line post-state__line--body"></div>
+      <div class="post-state__line post-state__line--short"></div>
+      <p class="sr-only" role="status">正在读取文章</p>
     </div>
 
-    <div class="split">
-      <p class="section-mark">§ 01 · 正文</p>
-      <div class="prose" data-slot="post-body">
-        <h2 id="sec-1">{{一级小节标题}}</h2>
-        <p>{{正文段落。}}</p>
+    <!-- ② 读到了 -->
+    <div data-post-ready hidden>
+      <header class="article__head" data-slot="post-head">
+        <div class="article__meta" data-post-meta></div>
+        <h1 class="article__title" data-post-title></h1>
+        <p class="article__standfirst" data-post-standfirst></p>
+      </header>
 
-        <h3>{{二级小节标题}}</h3>
-        <p>支持<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>、以及<a href="#">链接</a>。</p>
+      <div class="split">
+        <p class="section-mark">§ 01 · 正文</p>
+        <div class="prose" data-post-body></div>
 
-        <blockquote><p>{{引用块内容。}}</p></blockquote>
+        <aside class="margin-col" data-post-aside>
+          <div class="margin-note" data-slot="author-note">
+            <p class="margin-note__title">作者</p>
+            <p><strong data-post-author></strong></p>
+            <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
+          </div>
 
-        <h2 id="sec-2">{{一级小节标题}}</h2>
-        <pre><code>{{代码块}}</code></pre>
-        <ul>
-          <li>{{列表项}}</li>
-          <li>{{列表项}}</li>
-        </ul>
-        <table>
-          <thead><tr><th>{{表头}}</th><th>{{表头}}</th></tr></thead>
-          <tbody>
-            <tr><td>{{单元格}}</td><td>{{单元格}}</td></tr>
-            <tr><td>{{单元格}}</td><td>{{单元格}}</td></tr>
-          </tbody>
-        </table>
+          <div class="margin-note" data-slot="related-note">
+            <p class="margin-note__title">其它记录</p>
+            <div class="facts" data-post-related>
+              <div class="facts__row"><a class="facts__k" href="timeline.html">全部归档</a></div>
+            </div>
+          </div>
+        </aside>
       </div>
-
-      <aside class="margin-col">
-        <div class="margin-note" data-slot="author-note">
-          <p class="margin-note__title">作者</p>
-          <p><strong>{{作者名}}</strong></p>
-          <p>{{一句话简介}}</p>
-        </div>
-
-        <div class="margin-note" data-slot="toc-note">
-          <p class="margin-note__title">本篇目录</p>
-          <div class="facts">
-            <div class="facts__row"><span class="facts__k">01</span><a class="facts__v" href="#sec-1">{{小节标题}}</a></div>
-            <div class="facts__row"><span class="facts__k">02</span><a class="facts__v" href="#sec-2">{{小节标题}}</a></div>
-          </div>
-        </div>
-
-        <div class="margin-note" data-slot="related-note">
-          <p class="margin-note__title">相关</p>
-          <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="post.html">{{相关文章标题}}</a><span class="facts__v num">{{YYYY-MM-DD}}</span></div>
-            <div class="facts__row"><a class="facts__k" href="post.html">{{相关文章标题}}</a><span class="facts__v num">{{YYYY-MM-DD}}</span></div>
-          </div>
-        </div>
-      </aside>
     </div>
+
+    <!-- ③ 没读到。静态兜底必须自解释，不能让访客面对一片空白。
+         用 --tall 变体：整页级的空状态居中放在一块玻璃里，
+         比「左上角一行小字 + 一片黑」更像一个刻意的状态。 -->
+    <div class="blank blank--tall" data-post-empty hidden>
+      <p class="blank__title" data-empty-title>没有这篇文章</p>
+      <p class="blank__desc" data-empty-desc></p>
+    </div>
+
   </main>
   <div data-shell="colophon"></div>
 </div>
 <script src="assets/js/shell.js"></script>
+<script src="assets/js/blog-api.js"></script>
 </body>
 </html>

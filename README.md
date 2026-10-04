@@ -31,23 +31,32 @@ a-blog-0/
 ├── tree.html             灵境（可视化实验）
 ├── friends.html          友链
 ├── about.html            关于
-├── post.html             文章详情模板（空壳，给新文章抄）
-├── post-1.html           文章：blog1,先看this
-├── post-2.html           文章：My Second Blog Post
-├── post-3.html           文章：My Third Blog Post
-├── post-4.html           文章：My Fourth Blog Post
+├── admin.html            在线写作后台（登录后改文章 / 发布 / 删除）
+├── post.html             文章阅读页 —— 按 ?slug= 从接口取内容
+├── post-1.html           文章：blog1,先看this（静态，可导入后台）
+├── post-2.html           文章：My Second Blog Post（静态，可导入后台）
+├── post-3.html           文章：My Third Blog Post（静态，可导入后台）
+├── post-4.html           文章：My Fourth Blog Post（静态，可导入后台）
 ├── chatter-detail.html   杂谈详情模板
 ├── skeleton.html         骨架屏参考页
 ├── 404.html              未命中页（Cloudflare not_found_handling 用）
 ├── worst-case.html       最坏数据压测夹具（不部署，见 .assetsignore）
 └── assets/
     ├── css/skeleton.css       设计令牌 + 玻璃材质 + 组件层（约 1500 行）
+    ├── css/blog.css           动态渲染的少量补充（[hidden] 修正、加载/空状态）
+    ├── css/admin.css          后台专用（只在 admin.html 加载）
     ├── js/shell.js            站点配置 + 外壳挂载 + 图标集 + 交互
     ├── js/theme-init.js       首屏主题预设（避免闪烁）
+    ├── js/blog-api.js         接口客户端 + 安全 markdown 渲染 + 页面注水
+    ├── js/admin.js            后台逻辑（登录 / 列表 / 编辑器 / 发布）
+    ├── seed/posts.json        现有 4 篇的种子数据，供后台一键导入
     └── img/
         ├── favicon.svg        站标（玻璃胶囊 + 墨色书签）
         └── placeholder.svg    图片占位
 ```
+
+> 接口那一侧（Cloudflare Worker + KV）是**另一个仓库**：`a-blog-0-api`。
+> 两个 Worker 各管各的，静态站挂了不影响后台，后台挂了前台仍有静态兜底。见 §5.5 与 §9.6。
 
 ---
 
@@ -65,14 +74,16 @@ a-blog-0/
 | `/tree` | `tree.html` | 灵境 |
 | `/friends` | `friends.html` | 友链 |
 | `/about` | `about.html` | 关于 |
-| `/posts/:slug` | `post.html` | — （空模板） |
-| `/posts/post-1` … `post-4` | `post-1.html` … `post-4.html` | — （已填内容） |
+| `/posts/:slug` | `post.html?slug=…` | — （在线文章，从接口读） |
+| — | `post-1.html` … `post-4.html` | — （静态文章，可导入后台） |
 | `/chatter/:slug` | `chatter-detail.html` | — |
+| — | `admin.html` | 后台（页脚有入口，`noindex`） |
 | — | `skeleton.html` | 骨架屏 |
 | — | `404.html` | 未命中 |
 
-> 页面间是普通 `<a>` 跳转，不含前端路由与数据请求。
-> `post.html` 是空模板，填新文章时复制它改字段；`post-1` … `post-4` 是已经填好的实例。
+> 页面间是普通 `<a>` 跳转。**首页与归档会在运行时向接口取一次文章列表**，
+> 拿到内容就替换掉静态条目，拿不到就什么都不做 —— 静态 HTML 里的条目就是兜底。
+> 所以「双击 index.html 就能看」这条承诺仍然成立，只是看到的会是静态那份。
 
 ---
 
@@ -172,15 +183,23 @@ const SITE = {
 所以首页上会看到 `№ 001 · 2026-08-19` 排在 `№ 004 · 2022-08-08` 前面。
 编号是身份，排序是时间，两者不必一致。
 
-### 5.3 详情页：复制模板改字段
+### 5.3 详情页：两条路
 
-`post.html` 与 `chatter-detail.html` 是与内容无关的空模板，正文里用 `{{...}}` 标出待填位置。
-已经填好的四篇（`post-1.html` … `post-4.html`）可以直接当范例抄：
+**推荐走后台。** `admin.html` 里新建一篇、填标题和正文、点保存，前台立刻就有 ——
+不用碰任何文件，不用重新部署。详见 §5.5。
 
-- `{{文章标题}}` / `{{导语}}` / `{{编号}}` / `{{YYYY-MM-DD}}`
-- 正文用标准 HTML：`<h2 id="sec-1">`、`<p>`、`<blockquote>`、`<pre><code>`、`<ul>`、`<table>`
-- 侧栏的「本篇目录」锚点要跟正文里的 `id` 对上
+`post.html` 现在是**阅读页**，不是模板：它按 `?slug=` 从接口取内容渲染。
+访问时不带 slug（或 slug 不存在）会显示一个明确的空状态，而不是一片空白。
+
+想手写静态页也可以 —— `post-1.html` … `post-4.html` 就是四份填好的范例：
+
+- 结构照抄，正文用标准 HTML：`<h2>`、`<p>`、`<blockquote>`、`<pre><code>`、`<ul>`、`<table>`
+- 侧栏「本篇目录」的锚点要跟正文里的 `id` 对上
 - 标签用 `<span class="tag"># 标签</span>` 放在正文末尾
+- 手写页与在线文章可以共存，但**手写页不在接口里** ——
+  想让它出现在首页目录里，就在后台「导入」一次（见 §5.5）
+
+> `chatter-detail.html` 仍然是空模板，用 `{{...}}` 标出待填位置，没有接接口。
 
 > 短文章可以省掉封面图与「本篇目录」两栏 —— 没有图就不要放占位图，
 > 没有小节就不要给空目录。**空的结构比没有结构更糟。**
@@ -206,6 +225,52 @@ const SITE = {
 载入时脚本渲染 4 行骨架；数据到位后调用 `Skeleton.clear(el)` 还原真实内容。预览用 `data-skeleton-hold="1600"`，正式页面不要带它。
 
 演示页：**`skeleton.html`**（每块 1.6 秒后自动还原）。
+
+### 5.5 在线后台：在浏览器里写文章
+
+打开 **`admin.html`**（页脚也有入口），输一次管理密码，之后：
+
+| 操作 | 结果 |
+|---|---|
+| 新建文章 / 改标题 / 改正文 | 点「保存」写进 Workers KV |
+| 发布状态切到「已发布」 | 前台首页、归档、文章页刷新即可见 |
+| 「导入现有 4 篇」 | 把仓库里 `post-1` … `post-4` 的正文搬进在线存储，之后就能在后台改了 |
+| 「前台打开」 | 新标签页打开这篇的线上地址 |
+| 「删除」 | 从 KV 里移除，**不可撤销** |
+
+正文是 **Markdown**：`## 标题`、`**粗体**`、`*斜体*`、`` `代码` ``、`[链接](url)`、
+`- 列表`、`> 引用`、```` ```代码块``` ````。点「预览」可以在编辑器里就地看渲染结果。
+**不支持表格和图片** —— 半吊子支持比不支持更让人困惑。
+
+#### 它是怎么连上的
+
+```
+浏览器  admin.html ──fetch──▶  a-blog-0-api（Cloudflare Worker）
+                                    │
+                                    └─▶ Workers KV（文章存这儿）
+
+首页 / 归档 / post.html ──fetch──▶ 同一个接口，读已发布的文章
+                              └─ 拿不到就保留静态 HTML，什么都不做
+```
+
+**接口地址**写在 `assets/js/blog-api.js` 顶部：
+
+```js
+const DEFAULT_API_BASE = "https://a-blog-0-api.YOUR-SUBDOMAIN.workers.dev";
+```
+
+部署完 Worker 之后把它换成真实地址即可。也可以不改代码，在后台页展开
+「接口地址」填进去 —— 那个值存在浏览器 localStorage 里，只影响你自己这台设备，
+适合先试一下再决定要不要写进源码。
+
+#### 三件必须知道的事
+
+1. **密码只存在 Worker 里。** 页面这边登录后拿到的是一个 7 天有效的签名令牌
+   （`localStorage` 的 `blog-admin-token`）。令牌是**无状态**的 ——
+   服务端不存会话，改 `TOKEN_SECRET` 就等于把所有设备踢下线。
+2. **`ALLOWED_ORIGINS` 不要长期留 `*`。** 部署后改成静态站的确切地址（见 §9.6）。
+3. **未保存的改动会拦你。** 切文章、关页面、点退出都会问一句。
+   后台最容易出的不是报错，是「以为存了」。
 
 ---
 
@@ -551,6 +616,16 @@ font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'
 
 ## 9. 部署
 
+> 本站现在由**两个 Cloudflare Worker**组成：
+>
+> | Worker | 仓库 | 类型 |
+> |---|---|---|
+> | `a-blog-0` | 本仓库 | 纯静态资源托管（没有 `main`，零计费调用） |
+> | `a-blog-0-api` | `a-blog-0-api` | 有脚本 + KV 绑定，提供写作接口 |
+>
+> 下面 §9.1–§9.5 讲静态站这个；§9.6 讲接口那个。
+> **静态站不需要接口也能正常跑** —— 接口只是让「在线改文章」这件事成立。
+
 ### 9.1 Cloudflare Workers（推荐）
 
 纯静态站，**不需要写 Worker 脚本** —— 没有 `main` 字段就是纯资源托管，零计费调用。
@@ -649,7 +724,30 @@ Cloudflare 上用 `_headers` 补上完整版（多了 `frame-ancestors` 和几�
 | `immutable` + 一年 | 文件名带内容哈希 | ✗ 未做构建 |
 | `max-age=0, must-revalidate` | 无 | ✓ 现在用的 |
 
-### 9.6 其他托管
+### 9.6 第二个 Worker：`a-blog-0-api`
+
+代码在**另一个仓库** `a-blog-0-api`，部署步骤写在那边的 `README.md` 里。这里只说三件必须知道的事：
+
+**① 建好之后要回来改两处地址。**
+
+| 位置 | 改成 |
+|---|---|
+| `assets/js/blog-api.js` 的 `DEFAULT_API_BASE` | 新 Worker 的地址 |
+| `_headers` 里 `connect-src` 的 `https://*.workers.dev` | 建议收窄成那个 Worker 的确切地址 |
+
+**不改第一处，后台会提示「接口地址还没填」** —— 这是刻意的，避免你对着一个
+`YOUR-SUBDOMAIN` 的占位地址反复点登录却不知道为什么没反应。
+
+**② `connect-src` 不是可选项。** 少了它，`fetch` 会被浏览器直接拦掉，
+控制台报 `Refused to connect`，看起来像接口挂了，其实是 CSP 拦的。
+页面 `<meta>` 里那份比 `_headers` 多两个本地来源（`127.0.0.1` / `localhost`），
+是给本地联调用的；**两份 CSP 取交集，所以线上并不会因此放宽**。
+
+**③ 静态站和接口是解耦的。** 接口没部署、部署错了、或者临时挂了 ——
+首页和归档会安静地退回静态 HTML，文章页会显示「读不到这篇文章」。
+**没有一种失败会让整站变成空白。**
+
+### 9.7 其他托管
 
 同为纯静态，Netlify / Vercel / GitHub Pages / 任意对象存储都能直接放。
 注意它们的响应头配置文件名不同（Netlify 也叫 `_headers`，Vercel 用 `vercel.json`），
@@ -673,6 +771,16 @@ Cloudflare 上用 `_headers` 补上完整版（多了 `frame-ancestors` 和几�
 - **报头的导航收起依赖容器查询**（`@container`）。Chrome 105+ / Safari 16+ / Firefox 110+
   都支持；不支持的浏览器会走 `@media` 兜底，但那条在「大字号 + 宽视口」的组合下会漏判。
 - **`worst-case.html` 不部署**（列在 `.assetsignore` 里）。它是回归夹具，不是页面。
+- **在线文章依赖接口可用。** 接口挂了：首页/归档退回静态条目，文章页显示空状态。
+  文章页本身**没有静态兜底** —— 它的内容本来就不在 HTML 里。
+- **markdown 只支持一个子集**（见 §5.5）。没有表格、没有图片、没有脚注。
+  刻意如此：不支持就说清楚，比半吊子支持好。
+- **后台是单管理员单密码。** 没有多用户、没有角色、没有审计日志。
+  对一个人的博客够用，对多人协作不够 —— 那需要的是另一套东西。
+- **令牌存在 `localStorage`，有效期 7 天。** 共享设备上用完记得点「退出」。
+  真正吊销要换 Worker 的 `TOKEN_SECRET`（所有设备一起下线）。
+- **`assets/seed/posts.json` 会随站点一起部署。** 里面就是那 4 篇已公开的文章正文，
+  没有额外信息泄露；但要知道它是公开可读的。
 
 ---
 
@@ -697,3 +805,15 @@ python3 -m http.server 8000
 
 把系统字号调到 200%（或浏览器缩放 200%），再看一遍。
 **容器被内容撑破的问题，只有在这种条件下才暴露得出来** —— 默认字号下一切都正常。
+
+### 改了后台或接口之后
+
+后台那条链路（登录 → 编辑 → 发布 → 前台可见）横跨两个仓库，
+静态页面自己看不出来对不对。至少手工走一遍：
+
+1. `admin.html` 登录 → 新建一篇 → 状态选「已发布」→ 保存
+2. 打开首页，确认这篇出现在目录里、链接是 `post.html?slug=…`
+3. 打开那篇，确认标题 / 正文 / 标签都渲染了
+4. 把它改成「草稿」再保存，确认首页目录里**消失**、直连链接显示「没有这篇文章」
+
+接口那一侧的逻辑测试在 `a-blog-0-api` 仓库里（`npm test`，26 条断言，不需要联网）。

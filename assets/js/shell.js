@@ -171,6 +171,9 @@ const tpl = {
         ${esc(SITE.colophon.uptime)} · ${esc(SITE.colophon.stack.join(" / "))}
       </span>
       <a href="skeleton.html">骨架屏参考</a>
+      <!-- 后台入口。放在页脚而不是导航栏：它不是内容，
+           每天被访客点一次和每天被自己点十次，是两件不同的事。 -->
+      <a href="admin.html" rel="nofollow">后台</a>
       <a href="${safeUrl(SITE.colophon.icp.href)}">${esc(SITE.colophon.icp.label)}</a>
     </div>
   </footer>`,

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.workers.dev http://127.0.0.1:* http://localhost:*; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<meta name="color-scheme" content="light dark">
+<!-- 后台不该被搜索引擎收录。加 robots.txt 更彻底，但这条覆盖了「直接给链接」的情况。 -->
+<meta name="robots" content="noindex, nofollow">
+<title>后台 · shikibe's blog</title>
+<meta name="description" content="在线写作后台。">
+<script src="assets/js/theme-init.js"></script>
+<link rel="stylesheet" href="assets/css/skeleton.css">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body data-route="/admin">
+<a class="skip-link" href="#main">跳到主内容</a>
+<noscript>
+  <div class="noscript-bar">
+    <strong>后台需要脚本。</strong>这个页面靠 JS 调用接口读写文章，脚本不可用时无法工作。
+    直接访问：<a href="index.html">首页</a> <a href="timeline.html">归档</a>
+  </div>
+</noscript>
+<div class="shell">
+  <div data-shell="header"></div>
+  <main id="main" class="sheet admin">
+
+    <section class="folio" data-slot="folio">
+      <span class="folio__num"><span aria-hidden="true">§</span> 00 · 后台</span>
+      <h1 class="folio__title">在线写作</h1>
+      <p class="folio__desc">登录后可以直接改文章、发布、删除。发布是即时的 —— 前台刷新就能看到。</p>
+      <hr class="folio__rule">
+    </section>
+
+    <!-- 状态条：唯一一处会说话的界面。所有操作的反馈都落在这一行。 -->
+    <p class="admin__status" data-status role="status" aria-live="polite">正在初始化…</p>
+
+    <!-- ── 未登录 ───────────────────────────────────────────────────────── -->
+    <section class="admin__gate" data-gate hidden>
+      <form class="admin__card" data-login-form>
+        <p class="admin__card-title">登录</p>
+        <label class="afield">
+          <span class="afield__label">管理密码</span>
+          <input type="password" name="password" autocomplete="current-password" required placeholder="部署时设置的 ADMIN_PASSWORD">
+        </label>
+        <p class="admin__hint">密码是部署 <code>a-blog-0-api</code> 时用 <code>wrangler secret put ADMIN_PASSWORD</code> 设的那个值。它只存在 Worker 里，页面这边只拿到一个 7 天有效的令牌。</p>
+        <p class="mt-5"><button class="btn btn--solid" type="submit">登录</button></p>
+      </form>
+
+      <details class="admin__card admin__settings">
+        <summary>接口地址</summary>
+        <p class="admin__hint">默认值写在 <code>assets/js/blog-api.js</code> 顶部。这里填的会存在本机浏览器里，只影响你自己这台设备。</p>
+        <label class="afield">
+          <span class="afield__label">API Base</span>
+          <input type="url" name="apiBase" inputmode="url" placeholder="https://a-blog-0-api.xxxx.workers.dev">
+        </label>
+        <p>
+          <button class="btn btn--ghost" type="button" data-api-save>保存地址</button>
+          <button class="btn btn--ghost" type="button" data-api-test>测试连通</button>
+        </p>
+      </details>
+    </section>
+
+    <!-- ── 已登录 ───────────────────────────────────────────────────────── -->
+    <section class="admin__app" data-app hidden>
+      <div class="admin__bar">
+        <button class="btn btn--solid" type="button" data-new>新建文章</button>
+        <button class="btn btn--ghost" type="button" data-reload>刷新列表</button>
+        <button class="btn btn--ghost" type="button" data-import>导入现有 4 篇</button>
+        <span class="admin__spacer"></span>
+        <span class="admin__count num" data-count></span>
+        <button class="btn btn--ghost" type="button" data-logout>退出</button>
+      </div>
+
+      <div class="admin__grid">
+        <aside class="admin__list" data-list aria-label="文章列表"></aside>
+
+        <div class="admin__editor" data-editor hidden>
+          <form data-editor-form novalidate>
+            <div class="admin__row">
+              <label class="afield afield--grow">
+                <span class="afield__label">标题</span>
+                <input type="text" name="title" maxlength="200" required autocomplete="off">
+              </label>
+              <label class="afield">
+                <span class="afield__label">slug</span>
+                <input type="text" name="slug" maxlength="80" autocomplete="off" spellcheck="false"
+                       placeholder="留空自动生成" pattern="[A-Za-z0-9][A-Za-z0-9._-]*">
+              </label>
+            </div>
+
+            <div class="admin__row">
+              <label class="afield">
+                <span class="afield__label">日期</span>
+                <input type="date" name="date">
+              </label>
+              <label class="afield">
+                <span class="afield__label">作者</span>
+                <input type="text" name="author" maxlength="60" autocomplete="off">
+              </label>
+              <label class="afield afield--grow">
+                <span class="afield__label">标签（逗号分隔）</span>
+                <input type="text" name="tags" autocomplete="off" placeholder="随笔, 折腾">
+              </label>
+            </div>
+
+            <label class="afield">
+              <span class="afield__label">摘要</span>
+              <input type="text" name="excerpt" maxlength="500" autocomplete="off" placeholder="一句话说明这篇讲什么。会显示在目录和搜索结果里。">
+            </label>
+
+            <div class="admin__panes">
+              <label class="afield afield--body">
+                <span class="afield__label">正文（Markdown）</span>
+                <textarea name="body" rows="20" spellcheck="false" placeholder="## 小标题&#10;&#10;正文段落。支持 **粗体**、*斜体*、`代码`、[链接](https://example.com)。"></textarea>
+              </label>
+              <div class="afield afield--body" data-preview-wrap hidden>
+                <span class="afield__label">预览</span>
+                <div class="admin__preview prose" data-preview></div>
+              </div>
+            </div>
+
+            <p class="admin__hint">
+              支持的语法：<code>## 标题</code> <code>**粗体**</code> <code>*斜体*</code> <code>`代码`</code>
+              <code>[链接](url)</code> <code>- 列表</code> <code>&gt; 引用</code> <code>```代码块```</code>。
+              不支持表格和图片 —— 半吊子支持比不支持更让人困惑。
+            </p>
+
+            <div class="admin__bar admin__bar--sticky">
+              <button class="btn btn--solid" type="submit" data-save>保存</button>
+              <button class="btn btn--ghost" type="button" data-toggle-preview aria-pressed="false">预览</button>
+              <button class="btn btn--ghost" type="button" data-open>前台打开</button>
+              <span class="admin__spacer"></span>
+              <label class="admin__status-select">
+                <span class="sr-only">发布状态</span>
+                <select name="status">
+                  <option value="draft">草稿（前台看不到）</option>
+                  <option value="published">已发布</option>
+                </select>
+              </label>
+              <button class="btn btn--danger" type="button" data-delete>删除</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="blank" data-editor-empty>
+          <p class="blank__title">还没有选中文章</p>
+          <p class="blank__desc">左边挑一篇，或者点上面的「新建文章」。第一次用建议先点「导入现有 4 篇」，把仓库里那几篇搬进来。</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+  <div data-shell="colophon"></div>
+</div>
+<script src="assets/js/shell.js"></script>
+<script src="assets/js/blog-api.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

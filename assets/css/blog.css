@@ -1,0 +1,92 @@
+/* ==========================================================================
+   shikibe's blog / assets/css/blog.css
+
+   只在「会向接口取内容」的页面上加载（index / timeline / post）。
+   后台页有自己的一份 admin.css。
+
+   这里刻意保持很小：全站设计系统在 skeleton.css 里，
+   这份文件只补「静态页面里原本不存在、但动态渲染会产生的状态」。
+   ========================================================================== */
+
+/* -------------------------------------------------------------------------
+   1. [hidden] 必须真的能藏住
+   -------------------------------------------------------------------------
+   skeleton.css 里没有 [hidden] 规则，而 .split / .card-grid 这些类
+   显式声明了 display。属性选择器和类选择器权重相同（0,1,0），
+   谁在后面谁赢 —— 所以只靠 HTML 的 hidden 属性会失效。
+   这里用 !important 明确兜住：hidden 的语义就是「不要渲染」。
+   ------------------------------------------------------------------------- */
+[hidden] { display: none !important; }
+
+/* -------------------------------------------------------------------------
+   2. 文章页的三种状态
+   -------------------------------------------------------------------------
+   加载中 → 读到了 → 没读到。三段都在 HTML 里，靠 hidden 切换，
+   不用 JS 生成结构 —— 这样即使脚本只跑了一半，页面也不会是空白。
+   ------------------------------------------------------------------------- */
+.post-state {
+  padding: var(--s10) 0;
+}
+
+/* 加载中的三条占位线。形状照着真实排版的节奏走：
+   标题一行、导语一行、正文两行 —— 内容到位时不会整页跳动。 */
+.post-state__line {
+  height: 0.75rem;
+  margin-bottom: var(--s3);
+  border-radius: var(--r-pill);
+  background: var(--track);
+}
+
+.post-state__line--title { height: 1.75rem; width: min(28rem, 70%); margin-bottom: var(--s5); }
+.post-state__line--lead { width: min(34rem, 88%); }
+.post-state__line--body { width: 100%; }
+.post-state__line--short { width: min(24rem, 62%); }
+
+/* 加载中的呼吸。减少动效偏好下不动。 */
+@media (prefers-reduced-motion: no-preference) {
+  .post-state__line {
+    animation: post-pulse 1.4s var(--ease) infinite;
+  }
+}
+@keyframes post-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.45; }
+}
+
+/* -------------------------------------------------------------------------
+   3. 文章页侧栏的补充
+   ------------------------------------------------------------------------- */
+/* 后台登录后才出现「编辑这篇」。放在侧栏底部，不抢正文的注意力。 */
+[data-post-aside] { display: flex; flex-direction: column; gap: var(--s5); }
+
+/* 标签在正文页的元信息行里，比列表页更小一档 */
+.article__meta .tag { font-size: var(--t-micro); }
+
+/* -------------------------------------------------------------------------
+   4. 目录 / 账本注水后的入场
+   -------------------------------------------------------------------------
+   只在「确实替换了内容」时才会带上 data-hydrated，
+   所以静态兜底的内容不会莫名其妙动一下。
+   ------------------------------------------------------------------------- */
+[data-hydrated] > * {
+  animation: entry-in var(--dur-enter) var(--ease-out) both;
+}
+[data-hydrated] > *:nth-child(1) { animation-delay: 0ms; }
+[data-hydrated] > *:nth-child(2) { animation-delay: var(--stagger); }
+[data-hydrated] > *:nth-child(3) { animation-delay: calc(var(--stagger) * 2); }
+[data-hydrated] > *:nth-child(4) { animation-delay: calc(var(--stagger) * 3); }
+[data-hydrated] > *:nth-child(n + 5) { animation-delay: calc(var(--stagger) * 4); }
+
+@keyframes entry-in {
+  from { opacity: 0; transform: translateY(0.5rem); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-hydrated] > * { animation: none; }
+}
+
+/* 打印时不要把状态占位线印出来 */
+@media print {
+  .post-state { display: none; }
+}

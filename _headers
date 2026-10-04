@@ -6,12 +6,27 @@
 # 最典型的就是 frame-ancestors（防点击劫持）。见下面 /* 那段。
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.workers.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
   X-Frame-Options: DENY
   Cross-Origin-Opener-Policy: same-origin
+
+# ⚠️ connect-src 是这次新增的，别的指令一个都没动。
+#
+# 没有它的时候，connect-src 会回落到 default-src 'self' ——
+# 于是页面里 fetch 到 a-blog-0-api 的请求会被浏览器直接拦掉，
+# 控制台报「Refused to connect」，而且看起来像是接口挂了。
+#
+# 现在放行的是 https://*.workers.dev（整个 workers.dev 域）。
+# 够用，但比需要的宽 —— 部署完 a-blog-0-api 之后，把这一项换成
+# 那个 Worker 的确切地址更紧，例如：
+#     connect-src 'self' https://a-blog-0-api.<你的子域>.workers.dev
+#
+# 页面 <meta> 里的 CSP 比这里多两个本地来源（127.0.0.1 / localhost），
+# 那是给本地联调用的。两份 CSP 会取交集，所以线上并不会因此放宽 ——
+# 这正是「响应头里写严格版、meta 里写宽松版」这个组合成立的原因。
 
 # ⚠️ 不要给 /assets/* 设 max-age=31536000, immutable。
 #
