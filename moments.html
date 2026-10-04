@@ -4,17 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" content="#f7f4ec">
 <title>说说 · xingyub's blog</title>
 <meta name="description" content="一句话也算一条。没有标题，没有摘要。">
-<script>
-  // 样式表之前就定好主题，避免深色用户闪一次浅色
-  try {
-    var t = localStorage.getItem("skeleton-theme");
-    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = t;
-  } catch (e) {}
-</script>
+<script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/moments">
@@ -38,17 +32,17 @@
   <div data-shell="header"></div>
   <main id="main" class="sheet">
     <section class="folio" data-slot="folio">
-      <span class="folio__num">§ 05 · 说说</span>
+      <span class="folio__num"><span aria-hidden="true">§</span> 05 · 说说</span>
       <h1 class="folio__title">说说</h1>
       <p class="folio__desc">一句话也算一条。没有标题，没有摘要，发完就走。</p>
       <hr class="folio__rule">
     </section>
 
     <div class="toolbar" data-slot="toolbar">
-      <label class="field field--icon toolbar__search">
+      <form class="toolbar__search" role="search"><label class="field field--icon">
         <span class="field__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
         <input type="search" placeholder="搜索说说" aria-label="搜索说说">
-      </label>
+      </label></form>
     </div>
 
     <p class="section-mark">§ 05.1 · 全部说说</p>

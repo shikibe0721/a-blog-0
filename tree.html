@@ -4,17 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" content="#f7f4ec">
 <title>灵境 · xingyub's blog</title>
 <meta name="description" content="放可视化实验的地方：力导向图、分子构象。">
-<script>
-  // 样式表之前就定好主题，避免深色用户闪一次浅色
-  try {
-    var t = localStorage.getItem("skeleton-theme");
-    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = t;
-  } catch (e) {}
-</script>
+<script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/tree">
@@ -38,7 +32,7 @@
   <div data-shell="header"></div>
   <main id="main" class="sheet">
     <section class="folio" data-slot="folio">
-      <span class="folio__num">§ 07 · 灵境</span>
+      <span class="folio__num"><span aria-hidden="true">§</span> 07 · 灵境</span>
       <h1 class="folio__title">灵境</h1>
       <p class="folio__desc">放可视化实验的地方：力导向图、分子构象、以及一些不知道该怎么归类的东西。</p>
       <hr class="folio__rule">

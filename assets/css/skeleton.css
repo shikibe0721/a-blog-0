@@ -158,7 +158,10 @@ html[data-theme="dark"] {
 /* 跳转到主内容。每页第一个可聚焦元素 —— 键盘用户不必逐个 Tab 过 10 项导航。
    平时在视口外，聚焦时滑入。 */
 .skip-link {
-  position: absolute;
+  /* 必须是 fixed 而不是 absolute：
+     absolute 相对文档定位，页面滚动后再聚焦，它会出现在文档顶部（已经滚过去了），
+     等于看不见。fixed 才始终贴在视口顶部。 */
+  position: fixed;
   left: var(--s3);
   top: calc(-1 * var(--s16));
   z-index: var(--z-skip);
@@ -289,7 +292,7 @@ hr { border: 0; border-top: 1px solid var(--rule); margin: 0; }
   letter-spacing: -0.01em;
   white-space: nowrap;
 }
-.masthead__brand i {
+.masthead__brand span {
   font-style: normal;
   font-family: var(--mono);
   font-size: var(--t-micro);

@@ -4,17 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" content="#f7f4ec">
 <title>骨架屏参考 · xingyub's blog</title>
 <meta name="description" content="加载占位组件的形状参考与用法。">
-<script>
-  // 样式表之前就定好主题，避免深色用户闪一次浅色
-  try {
-    var t = localStorage.getItem("skeleton-theme");
-    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = t;
-  } catch (e) {}
-</script>
+<script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="/skeleton">
@@ -38,7 +32,7 @@
   <div data-shell="header"></div>
   <main id="main" class="sheet">
     <section class="folio" data-slot="folio">
-      <span class="folio__num">§ 10 · 骨架屏</span>
+      <span class="folio__num"><span aria-hidden="true">§</span> 10 · 骨架屏</span>
       <h1 class="folio__title">加载占位</h1>
       <p class="folio__desc">每个骨架的形状和它对应的真实组件一致 —— 数据到位时切换不跳动。本页每块 1.6 秒后自动还原成真实内容。</p>
       <hr class="folio__rule">

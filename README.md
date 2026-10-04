@@ -289,10 +289,52 @@ function esc(v) {
 el.innerHTML = entries.map((e) => `<h2>${esc(e.title)}</h2>`).join("");
 ```
 
+### URL 必须过 `safeUrl()`，不能只过 `esc()`
+
+`esc()` 转义的是 HTML 实体，**对协议毫无作用** ——
+`<a href="javascript:alert(1)">` 转义完还是可点击执行。所以进 `href` 的值走 `safeUrl()`：
+
+```js
+function safeUrl(v) {
+  const url = String(v ?? "").trim();
+  const colon = url.indexOf(":"), slash = url.indexOf("/");
+  // 没有 scheme，或冒号在第一个斜杠之后 = 相对路径 / 锚点 / 查询串
+  if (colon === -1 || (slash !== -1 && colon > slash)) return esc(url);
+  if (/^(https?|mailto|tel):/i.test(url)) return esc(url);
+  return "#";   // javascript: / data: / vbscript: … 一律降级
+}
+```
+
+判定规则是「**看 scheme 位置**」而不是「看前缀像不像」：`index.html` 没有冒号所以放行，
+`https://x.com` 冒号在斜杠前所以查白名单，`javascript:x` 冒号在斜杠前且不在白名单所以拦截。
+
+### CSP
+
+13 页都带了：
+
+```
+default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:;
+font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'
+```
+
+**没有 `'unsafe-inline'`** —— 代价是页面里不能有任何内联脚本、内联 `<style>`、`style="..."` 属性、`on*` 事件属性。
+这也是为什么主题预设拆成了 `assets/js/theme-init.js` 而不是内联在 `<head>`。
+
+> ⚠️ **`frame-ancestors` 在 `<meta>` 里会被静默忽略**（它只在 HTTP 响应头里生效）。
+> 需要防嵌入（点击劫持）的话，必须在服务器响应头里加，`<meta>` 加不了。
+
 ### 外链必须带 `rel="noopener noreferrer"`
 
 `target="_blank"` 的链接会让新页面拿到 `window.opener`，可被反向导航（tabnabbing）。
 `SITE.socials` 的渲染已经带上了。友链页填真实外链时照做。
+
+### `localStorage` 的值必须过白名单
+
+`localStorage` 是可被改写的存储。主题值在写进 `dataset.theme` 之前会校验：
+
+```js
+["light", "dark"].includes(saved) ? saved : (prefersDark() ? "dark" : "light")
+```
 
 ### 锚点与选择器
 

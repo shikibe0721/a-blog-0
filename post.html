@@ -4,17 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" content="#f7f4ec">
 <title>多靶点激酶抑制剂筛选 · xingyub's blog</title>
 <meta name="description" content="使用图神经网络和分子动力学进行多尺度模拟的技术记录。">
-<script>
-  // 样式表之前就定好主题，避免深色用户闪一次浅色
-  try {
-    var t = localStorage.getItem("skeleton-theme");
-    if (!t) t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-    document.documentElement.dataset.theme = t;
-  } catch (e) {}
-</script>
+<script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
 <body data-route="">
@@ -52,7 +46,7 @@
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="post-body">
-        <h2>引言与背景</h2>
+        <h2 id="sec-1">引言与背景</h2>
         <p>在现代药物研发中，计算化学已经成为不可或缺的一环。随着靶点结构的解析和算力的提升，我们不再像盲人摸象一样进行高通量筛选。</p>
 
         <h3>三阴性乳腺癌的困境</h3>
@@ -63,7 +57,7 @@
 
         <blockquote><p>{{引用块内容。}}</p></blockquote>
 
-        <h2>方法</h2>
+        <h2 id="sec-2">方法</h2>
         <p>支持<strong>加粗</strong>、<em>斜体</em>、<code>行内代码</code>、以及<a href="#">链接</a>。</p>
         <pre><code>{{代码块占位}}
 $ gmx mdrun -deffnm md_0_1</code></pre>
@@ -90,8 +84,8 @@ $ gmx mdrun -deffnm md_0_1</code></pre>
         <div class="margin-note" data-slot="toc-note">
           <p class="margin-note__title">本篇目录</p>
           <div class="facts">
-            <div class="facts__row"><span class="facts__k">01</span><a class="facts__v" href="#">引言与背景</a></div>
-            <div class="facts__row"><span class="facts__k">02</span><a class="facts__v" href="#">方法</a></div>
+            <div class="facts__row"><span class="facts__k">01</span><a class="facts__v" href="#sec-1">引言与背景</a></div>
+            <div class="facts__row"><span class="facts__k">02</span><a class="facts__v" href="#sec-2">方法</a></div>
           </div>
         </div>
 

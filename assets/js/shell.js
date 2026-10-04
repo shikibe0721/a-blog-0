@@ -81,6 +81,22 @@ function esc(value) {
     .replace(/'/g, "&#39;");
 }
 
+/* URL 白名单。
+   esc() 只转义 HTML 实体，对协议毫无作用 ——
+   `<a href="javascript:alert(1)">` 点击就会执行，转义救不了。
+   凡是进 href 的值，先过 safeUrl()。 */
+function safeUrl(value) {
+  const url = String(value ?? "").trim();
+  const colon = url.indexOf(":");
+  const slash = url.indexOf("/");
+  // 没有 scheme，或冒号出现在第一个斜杠之后 = 相对路径 / 锚点 / 查询串，安全
+  if (colon === -1 || (slash !== -1 && colon > slash)) return esc(url);
+  // 有 scheme：只放行这几种
+  if (/^(https?|mailto|tel):/i.test(url)) return esc(url);
+  // 其余（javascript: / data: / vbscript: …）一律降级为 #，绝不进 href
+  return "#";
+}
+
 /** 渲染一个图标：icon("search", 16) */
 function icon(name, size = 18) {
   const path = ICON[name];
@@ -100,11 +116,11 @@ const tpl = {
   <header class="masthead" data-masthead>
     <div class="masthead__inner">
       <a class="masthead__brand" href="index.html" data-slot="brand">
-        ${esc(SITE.name)}<i>${esc(SITE.latin)}</i>
+        ${esc(SITE.name)}<span>${esc(SITE.latin)}</span>
       </a>
       <nav class="masthead__nav" aria-label="站内导航" data-slot="nav">
         ${SITE.nav
-          .map((n) => `<a href="${esc(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
+          .map((n) => `<a href="${safeUrl(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
           .join("")}
       </nav>
       <div class="masthead__tools">
@@ -119,7 +135,7 @@ const tpl = {
   <div class="drawer" id="site-drawer" data-drawer role="dialog" aria-modal="true" aria-label="站内导航">
     <button class="iconbtn drawer__close" type="button" data-drawer-close aria-label="关闭菜单">${icon("close")}</button>
     ${SITE.nav
-      .map((n) => `<a href="${esc(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
+      .map((n) => `<a href="${safeUrl(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
       .join("")}
   </div>`,
 
@@ -132,7 +148,7 @@ const tpl = {
         ${esc(SITE.colophon.uptime)} · ${esc(SITE.colophon.stack.join(" / "))}
       </span>
       <a href="skeleton.html">骨架屏参考</a>
-      <a href="${esc(SITE.colophon.icp.href)}">${esc(SITE.colophon.icp.label)}</a>
+      <a href="${safeUrl(SITE.colophon.icp.href)}">${esc(SITE.colophon.icp.label)}</a>
     </div>
   </footer>`,
 
@@ -141,7 +157,7 @@ const tpl = {
     ${SITE.socials
       .map(
         (s) => `<div class="facts__row"><span class="facts__k">${esc(s.label)}</span>` +
-          `<a class="facts__v" href="${esc(s.href)}" target="_blank" rel="noopener noreferrer">${icon("external", 13)}<span class="sr-only">（新窗口打开）</span></a></div>`
+          `<a class="facts__v" href="${safeUrl(s.href)}" target="_blank" rel="noopener noreferrer">${icon("external", 13)}<span class="sr-only">（新窗口打开）</span></a></div>`
       )
       .join("")}
   </div>`,
@@ -208,7 +224,10 @@ function syncThemeIcons() {
 }
 
 function setupTheme() {
-  document.documentElement.dataset.theme = store.get("skeleton-theme") || (prefersDark() ? "dark" : "light");
+  // localStorage 是可被改写的存储，值必须过白名单再写进 dataset
+  const saved = store.get("skeleton-theme");
+  document.documentElement.dataset.theme =
+    ["light", "dark"].includes(saved) ? saved : (prefersDark() ? "dark" : "light");
   syncThemeIcons();
 
   document.addEventListener("click", (e) => {
@@ -300,7 +319,15 @@ function setupScroll() {
    骨架模式：按 G 描边所有 data-slot
    ------------------------------------------------------------------------- */
 function setupSlotMode() {
-  const toggle = () => document.documentElement.classList.toggle("show-slots");
+  const sync = () => {
+    const on = document.documentElement.classList.contains("show-slots");
+    document.querySelectorAll("[data-slot-toggle]").forEach((b) => b.setAttribute("aria-pressed", String(on)));
+  };
+  const toggle = () => {
+    document.documentElement.classList.toggle("show-slots");
+    sync();
+  };
+  sync();
   document.addEventListener("click", (e) => {
     if (e.target.closest("[data-slot-toggle]")) toggle();
   });
@@ -316,11 +343,28 @@ function setupSlotMode() {
    筛选标签
    ------------------------------------------------------------------------- */
 function setupChips() {
+  // 初始同步：HTML 里带 is-active 的那个要同时是 aria-pressed="true"
+  document.querySelectorAll("[data-chip]").forEach((b) =>
+    b.setAttribute("aria-pressed", String(b.classList.contains("is-active")))
+  );
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-chip]");
     if (!btn) return;
-    btn.closest(".chips")?.querySelectorAll("[data-chip]").forEach((b) => b.classList.remove("is-active"));
+    btn.closest(".chips")?.querySelectorAll("[data-chip]").forEach((b) => {
+      b.classList.remove("is-active");
+      b.setAttribute("aria-pressed", "false");
+    });
     btn.classList.add("is-active");
+    btn.setAttribute("aria-pressed", "true");
+  });
+}
+
+/* 搜索框包在 form[role=search] 里，回车会提交。
+   静态模板没有后端，这里拦下提交，避免刷新页面。
+   用 JS 拦而不是 onsubmit 内联属性 —— 内联属性会被 CSP 拦掉。 */
+function setupSearch() {
+  document.addEventListener("submit", (e) => {
+    if (e.target.matches('form[role="search"]')) e.preventDefault();
   });
 }
 
@@ -405,7 +449,7 @@ function setupSkeletons() {
 
 // 逐项初始化并各自兜底：任何一个环节失败都不影响其余交互。
 function boot() {
-  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSkeletons].forEach((fn) => {
+  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSearch, setupSkeletons].forEach((fn) => {
     try { fn(); } catch (err) { console.warn("[skeleton]", fn.name, err); }
   });
 }
