@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
+<link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
+<meta name="color-scheme" content="light dark">
+<title>最坏数据压测</title>
+<script src="assets/js/theme-init.js"></script>
+<link rel="stylesheet" href="assets/css/skeleton.css">
+</head>
+<body data-route="/">
+<a class="skip-link" href="#main">跳到主内容</a>
+<div class="shell">
+  <div data-shell="header"></div>
+  <main id="main" class="sheet">
+
+    <section class="folio">
+      <span class="folio__num">§ 99 · 压测</span>
+      <h1 class="folio__title">关于我把整个博客从纸墨朱砂风格推倒重做成液态玻璃这件事的一些零散记录和事后复盘</h1>
+      <p class="folio__desc">文章、杂谈、照片与收藏都在这里。下面是一段被刻意拉长的导语，用来测试导语在没有硬断行的情况下会不会把容器撑破，以及它的行高在长段落里是否依然舒适可读。</p>
+    </section>
+
+    <div class="toolbar">
+      <form class="toolbar__search" role="search"><label class="field field--icon">
+        <span class="field__icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></span>
+        <input type="search" placeholder="搜索全部记录" aria-label="搜索">
+      </label></form>
+      <div class="chips">
+        <button class="chip is-active" type="button">全部</button>
+        <button class="chip" type="button">这是一个非常长的标签名称用来测试胶囊会不会被撑破</button>
+        <button class="chip" type="button">杂谈</button>
+      </div>
+    </div>
+
+    <p class="section-mark">§ 99.1 · 目录行（超长标题 / 无空格英文串 / emoji / 中英泰越混排）</p>
+
+    <div class="catalog mt-4">
+      <a class="entry" href="#">
+        <div class="entry__meta"><span class="entry__no">№ 001</span><span>2026-10-04</span></div>
+        <div>
+          <h2 class="entry__title">关于我把整个博客从纸墨朱砂风格推倒重做成液态玻璃这件事的一些零散记录和事后复盘</h2>
+          <p class="entry__excerpt">这是一段被刻意拉长的摘要，用来测试摘要在中文长句下是否会溢出卡片边界，以及行高在三四行时是否仍然舒适。</p>
+        </div>
+      </a>
+      <a class="entry" href="#">
+        <div class="entry__meta"><span class="entry__no">№ 002</span><span>2026-10-04</span></div>
+        <div>
+          <h2 class="entry__title">a-very-long-unbroken-english-slug-without-any-spaces-at-all-0123456789abcdefghij</h2>
+          <p class="entry__excerpt">https://example.com/2026/10/04/a-really-long-path-segment/another/deeply/nested/path/that/keeps/going/and/going/article.html</p>
+        </div>
+      </a>
+      <a class="entry" href="#">
+        <div class="entry__meta"><span class="entry__no">№ 003</span><span>2026-10-04</span></div>
+        <div>
+          <h2 class="entry__title">🎨✨ 用 emoji 开头的一篇 🚀🌊 还有 Nguyễn Thị Ngọc Bích 与 สรุปผลการดำเนินงาน</h2>
+          <p class="entry__excerpt">越南语的声调符号和泰文的高降部，会撑破行高偏紧的文本框。这条专门用来验它。</p>
+        </div>
+      </a>
+      <a class="entry" href="#">
+        <div class="entry__meta"><span class="entry__no">№ 1284</span><span>2026-10-04</span></div>
+        <div>
+          <h2 class="entry__title">Jo</h2>
+          <p class="entry__excerpt">最短的标题，配最长的邮箱：bartholomew.fitzgerald@northwind-industries-holdings.example.com</p>
+        </div>
+      </a>
+    </div>
+
+    <p class="section-mark">§ 99.2 · 账本行</p>
+    <div class="ledger mt-4">
+      <a class="ledger__row" href="#">
+        <span class="ledger__date">2026-10-04</span>
+        <span class="ledger__title">关于我把整个博客从纸墨朱砂风格推倒重做成液态玻璃这件事的一些零散记录</span>
+        <span class="ledger__leader" aria-hidden="true"></span>
+        <span class="ledger__tag">杂谈</span>
+      </a>
+      <a class="ledger__row" href="#">
+        <span class="ledger__date">2026-10-04</span>
+        <span class="ledger__title">Nguyễn Thị Ngọc Bích</span>
+        <span class="ledger__leader" aria-hidden="true"></span>
+        <span class="ledger__tag">#一个相当长的标签</span>
+      </a>
+    </div>
+
+    <p class="section-mark">§ 99.3 · 索引卡</p>
+    <div class="card-grid mt-4">
+      <article class="index-card">
+        <span class="index-card__no">№ 1284</span>
+        <h2 class="index-card__title">一个相当长的卡片标题用来测试卡片会不会被撑破</h2>
+        <p class="index-card__desc">描述里放一条长 URL：https://example.com/2026/10/04/deeply/nested/path/that/keeps/going/article.html 看它会不会把卡片顶宽。</p>
+        <div class="index-card__foot"><span class="tag">标签</span><span class="tag">#一个非常长的标签名称</span></div>
+      </article>
+      <article class="index-card">
+        <span class="index-card__no">№ 2</span>
+        <h2 class="index-card__title">Jo</h2>
+        <p class="index-card__desc">短标题 + 空描述旁边的最坏情况。</p>
+        <div class="index-card__foot"><span class="tag">标签</span></div>
+      </article>
+    </div>
+
+    <p class="section-mark">§ 99.4 · 事实表（超长值）</p>
+    <div class="split mt-4">
+      <div class="facts maxw-md">
+        <div class="facts__row"><span class="facts__k">站点地址</span><span class="facts__v">https://example.com/2026/10/04/a-really-long-path-segment/another/deeply/nested/path/article.html</span></div>
+        <div class="facts__row"><span class="facts__k">成员数</span><span class="facts__v num">1,284,930</span></div>
+        <div class="facts__row"><span class="facts__k">邮箱</span><span class="facts__v">bartholomew.fitzgerald@northwind-industries-holdings.example.com</span></div>
+      </div>
+      <aside class="margin-col">
+        <div class="margin-note">
+          <p class="margin-note__title">侧栏注（含长 URL）</p>
+          <p>一个自用的记录本。文章偏长，杂谈偏短。参考：https://example.com/a-really-long-path-segment/another/deeply/nested/path/article.html</p>
+        </div>
+      </aside>
+    </div>
+
+    <p class="section-mark">§ 99.5 · 正文（长 URL / 宽表格 / 长代码行）</p>
+    <div class="split mt-4">
+      <div class="prose">
+        <h2>一级小节标题</h2>
+        <p>正文里放一条长链接：<a href="#">https://example.com/2026/10/04/a-really-long-path-segment/another/deeply/nested/path/that/keeps/going/article.html</a></p>
+        <p>无空格英文串：a-very-long-unbroken-english-slug-without-any-spaces-at-all-0123456789abcdefghij</p>
+        <pre><code>const aVeryLongLineOfCode = "this is a deliberately long line of code to see whether the pre block scrolls instead of blowing out the article column width";</code></pre>
+        <table>
+          <thead><tr><th>表头一</th><th>表头二</th><th>一个相当长的表头名称</th><th>表头四</th></tr></thead>
+          <tbody>
+            <tr><td>单元格</td><td>单元格</td><td>https://example.com/a-really-long-path-segment/another/deeply/nested/path/article.html</td><td>单元格</td></tr>
+            <tr><td>1,284,930</td><td>0.000000001</td><td>NaN</td><td>—</td></tr>
+          </tbody>
+        </table>
+        <blockquote><p>引用块里也放一条长 URL：https://example.com/a-really-long-path-segment/another/deeply/nested/path/article.html</p></blockquote>
+      </div>
+      <aside class="margin-col">
+        <div class="margin-note">
+          <p class="margin-note__title">作者</p>
+          <p><strong>Nguyễn Thị Ngọc Bích</strong></p>
+          <p>bartholomew.fitzgerald@northwind-industries-holdings.example.com</p>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+  <div data-shell="colophon"></div>
+</div>
+<script src="assets/js/shell.js"></script>
+</body>
+</html>

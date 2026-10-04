@@ -223,9 +223,13 @@ function syncThemeIcons() {
     b.innerHTML = icon(dark ? "sun" : "moon");
     b.setAttribute("aria-label", dark ? "切换到浅色主题" : "切换到深色主题");
   });
-  const meta = document.querySelector('meta[name="theme-color"]');
-  // 与 skeleton.css 里的 --page 保持一致，否则移动端状态栏和页面底会差一档色
-  if (meta) meta.setAttribute("content", dark ? "#000000" : "#eef0f3");
+  // 页面上有两条 theme-color，按 prefers-color-scheme 分开（无 JS 时的默认）。
+  // 用户手动切换主题后，两条都要改写 —— 否则「系统浅色 + 手动深色」这个组合
+  // 会让状态栏和页面底差一档色。两条同写，浏览器取哪条都是对的。
+  // 取值与 skeleton.css 的 --page 保持一致。
+  document.querySelectorAll('meta[name="theme-color"]').forEach((m) => {
+    m.setAttribute("content", dark ? "#000000" : "#eef0f3");
+  });
 }
 
 function setupTheme() {
