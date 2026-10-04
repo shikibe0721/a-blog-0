@@ -1,6 +1,6 @@
 /* ==========================================================================
-   xingyub-skeleton / assets/js/shell.js
-   骨架模板的外壳脚本。四件事：
+   shikibe's blog / assets/js/shell.js
+   站点外壳脚本。四件事：
      1. SITE 配置 —— 站点级信息的唯一来源
      2. 挂载 masthead / colophon / tools 到 data-shell 占位节点
      3. 交互 —— 主题、抽屉（含焦点陷阱）、回顶、骨架模式
@@ -12,9 +12,9 @@
    ========================================================================== */
 
 const SITE = {
-  name: "xingyub's blog",
-  latin: "archive",          // 品牌右侧的等宽小标
-  tagline: "计算化学 · 机器学习 · 软件工程",
+  name: "shikibe's blog",
+  latin: "notes",            // 品牌右侧的等宽小标
+  tagline: "记录 · 随笔 · 收藏",
 
   nav: [
     { label: "首页", href: "index.html", route: "/" },
@@ -29,11 +29,11 @@ const SITE = {
     { label: "关于", href: "about.html", route: "/about" },
   ],
 
+  // 站点的对外入口。全部是占位，填真实地址即可（详见 README）。
   socials: [
     { label: "GitHub", href: "#" },
     { label: "Email", href: "#" },
     { label: "RSS", href: "#" },
-    { label: "Bilibili", href: "#" },
   ],
 
   colophon: {
@@ -41,7 +41,7 @@ const SITE = {
     built: "手写 HTML / CSS",
     uptime: "运行 0 天",
     stack: ["Noto Serif SC", "IBM Plex Mono"],
-    icp: { label: "萌ICP备00000000号", href: "#" },
+    icp: { label: "备案号待填", href: "#" },
   },
 };
 

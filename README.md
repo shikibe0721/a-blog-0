@@ -1,7 +1,8 @@
-# xingyub-skeleton — 网页骨架模板 ·「档案室」
+# shikibe's blog
 
-从 **xingyub.com** 的页面结构反推出来的通用骨架模板，经过一轮整体重做。
-只保留「路由 / 分区 / 组件壳 / 视觉令牌」，业务内容全部是 `{{占位}}`。
+一个纯静态的个人博客。手写 HTML / CSS，没有构建步骤，双击 `index.html` 就能预览。
+
+当前站点内容已清空 —— 各列表页显示空状态，等你往里填。站点级信息（站名、导航、社交）集中在一个 `SITE` 对象里。
 
 ---
 
@@ -9,41 +10,15 @@
 
 1. 双击 `index.html` 直接预览（纯静态，无需构建、无需联网）。
 2. 按 **`G`** 键或点报头右侧的网格按钮 → 打开**骨架模式**：所有可填充区域会描边并标出 `data-slot` 名称。
-3. 按槽位替换 `{{...}}` 文本、把 `src` 与 `alt` 补上，即得到自己的站点。
-4. 改站点级信息（站名、导航、社交、页脚）只需动 `assets/js/shell.js` 顶部的 `SITE` 对象。
+3. 改站点级信息（站名、导航、社交、页脚）只需动 `assets/js/shell.js` 顶部的 `SITE` 对象。
+4. 往各列表页里填内容：把空状态（`.blank`）换成真实条目即可，组件类都已经备好。
 
 ---
 
-## 2. 设计方向：为什么长这样
-
-### 领域探查
-
-**Domain**：手稿纸、索引卡片、档案盒、实验记录本、分子结构式、标本切片、目录页与页码。
-**Color world**：稿纸米白、蓝黑墨水、铅笔石墨灰、**朱砂批注红**、牛皮纸档案盒、打字机色带墨。
-
-### 签名元素：卡片目录
-
-每条记录是一行「**编号 + 日期 + 标题 + 摘要**」，靠顶部一条发丝线分隔，**不是漂浮的卡片**。
-整站读起来是一条连续的目录，而不是一堆并列的盒子。放大版就是首页的头条。
-
-### 被替换掉的默认值
-
-| 默认做法 | 本模板 |
-|---|---|
-| indigo→purple→pink 渐变光晕 | 稿纸米白单色，**零渐变** |
-| 玻璃拟态铺满（`backdrop-filter`） | 实色纸面 + 发丝边框 |
-| emoji 当图标（🌸🐱♪⌕） | 内联 SVG，统一 1.5px 描边 |
-| 24px 大圆角 + 胶囊徽章 | **3px 小圆角** + 方角标签 |
-| 启动屏 / 吉祥物 / 粒子画布 | 全部删除 |
-| 居中对称、卡片等宽平铺 | 左内容 + 右边栏，**非对称** |
-| 阴影表达层级 | **borders-only**，全程一种深度策略 |
-
----
-
-## 3. 目录结构
+## 2. 目录结构
 
 ```
-xingyub-skeleton/
+a-blog-0/
 ├── index.html            首页（目录）
 ├── timeline.html         归档（账本式点线索引）
 ├── chatter.html          杂谈
@@ -51,16 +26,17 @@ xingyub-skeleton/
 ├── projects.html         项目
 ├── moments.html          说说
 ├── music.html            音乐
-├── tree.html             灵境
+├── tree.html             灵境（可视化实验）
 ├── friends.html          友链
 ├── about.html            关于
-├── post.html             文章详情
-├── chatter-detail.html   杂谈详情
+├── post.html             文章详情模板
+├── chatter-detail.html   杂谈详情模板
 ├── skeleton.html         骨架屏参考页
 ├── 404.html              未命中页（Cloudflare not_found_handling 用）
 └── assets/
     ├── css/skeleton.css       设计令牌 + 组件层（约 700 行）
     ├── js/shell.js            站点配置 + 外壳挂载 + 图标集 + 交互
+    ├── js/theme-init.js       首屏主题预设（避免闪烁）
     └── img/
         ├── favicon.svg        站标（朱砂书签）
         └── placeholder.svg    图片占位
@@ -68,9 +44,9 @@ xingyub-skeleton/
 
 ---
 
-## 4. 站点地图（对照原站路由）
+## 3. 站点地图
 
-| 原站路由 | 模板文件 | 导航名 |
+| 路由 | 文件 | 导航名 |
 |---|---|---|
 | `/` | `index.html` | 首页 |
 | `/timeline` | `timeline.html` | 归档 |
@@ -87,9 +63,11 @@ xingyub-skeleton/
 | — | `skeleton.html` | 骨架屏 |
 | — | `404.html` | 未命中 |
 
+> 页面间是普通 `<a>` 跳转，不含前端路由与数据请求。详情页现在是与具体内容无关的**模板**，填内容时复制一份改字段即可。
+
 ---
 
-## 5. 页面语法（每页一致）
+## 4. 页面语法（每页一致）
 
 固定的五段结构，不允许自由发挥 —— 页面之间不一致是「看不出逻辑」的主因：
 
@@ -105,7 +83,7 @@ xingyub-skeleton/
 | 页面类型 | 结构 |
 |---|---|
 | 列表页（归档 / 杂谈 / 照片墙 / 项目 / 说说 / 音乐 / 友链） | folio → toolbar → mark → 内容 |
-| 首页 | folio → toolbar → 头条 → mark → 内容 + 边栏 |
+| 首页 | folio → toolbar → mark → 内容 + 边栏 |
 | 工具页（灵境 / 骨架屏） | folio → mark → 内容 |
 | 详情页（文章 / 杂谈详情） | article-head → mark → 正文 + 边栏 |
 
@@ -113,7 +91,72 @@ xingyub-skeleton/
 
 ---
 
-## 6. 骨架屏
+## 5. 往里填内容
+
+### 5.1 站点级信息：只改 `SITE`
+
+`assets/js/shell.js` 顶部的 `SITE` 是站点级信息的唯一来源：
+
+```js
+const SITE = {
+  name: "shikibe's blog",     // 报头站名
+  latin: "notes",             // 站名右侧的等宽小标
+  tagline: "记录 · 随笔 · 收藏",
+
+  nav: [ /* 导航项：label / href / route */ ],
+
+  socials: [                  // 边栏「联系」事实表
+    { label: "GitHub", href: "#" },
+    { label: "Email", href: "#" },
+    { label: "RSS", href: "#" },
+  ],
+
+  colophon: {
+    copyright: "© 2026 {{站点名}}",   // {{站点名}} 会被替换成 SITE.name
+    built: "手写 HTML / CSS",
+    uptime: "运行 0 天",
+    stack: ["Noto Serif SC", "IBM Plex Mono"],
+    icp: { label: "备案号待填", href: "#" },
+  },
+};
+```
+
+改完这里，报头、页脚、边栏、抽屉菜单会一起更新。**不需要逐页去改。**
+
+> `SITE` 里所有文本与 URL 都会过 `esc()` / `safeUrl()` 再拼进模板（见 §8）。
+
+### 5.2 列表页：把空状态换成条目
+
+每个列表页当前都是一段空状态：
+
+```html
+<div class="blank">
+  <p class="blank__title">暂无记录</p>
+  <p class="blank__desc">还没有收录任何文章或杂谈。写下第一篇后，它会出现在这里。</p>
+</div>
+```
+
+替换成对应组件即可：
+
+| 页面 | 组件 | 类 |
+|---|---|---|
+| 首页 / 杂谈 / 说说 / 音乐 | 目录行 | `.entry`（`.entry__meta` + `.entry__title` + `.entry__excerpt`） |
+| 归档 | 账本行 | `.ledger__row`（日期 + 标题 + 点线 + 标签） |
+| 项目 / 友链 | 索引卡 | `.index-card` |
+| 照片墙 | 图版 | `.plate` |
+
+### 5.3 详情页：复制模板改字段
+
+`post.html` 与 `chatter-detail.html` 是与内容无关的模板，正文里用 `{{...}}` 标出待填位置：
+
+- `{{文章标题}}` / `{{导语}}` / `{{编号}}` / `{{YYYY-MM-DD}}`
+- 正文用标准 HTML：`<h2 id="sec-1">`、`<p>`、`<blockquote>`、`<pre><code>`、`<ul>`、`<table>`
+- 侧栏的「本篇目录」锚点要跟正文里的 `id` 对上
+
+> 图片一律用 `assets/img/placeholder.svg` 占位，`alt` 写清楚内容。
+> **不要用 `src=""`**（会让浏览器重新请求当前文档），**也不要让内容图 `alt` 留空**（屏幕阅读器会整段跳过）。
+
+### 5.4 骨架屏
 
 每个骨架的形状和它对应的真实组件**一一对应** —— 目录行骨架和 `.entry` 同栅格，索引卡骨架和 `.index-card` 同盒模型，数据到位时切换不跳动。通用转圈圈等于没做：用户看不出「将要出现的是什么」。
 
@@ -134,7 +177,7 @@ xingyub-skeleton/
 
 ---
 
-## 7. 全站共用外壳
+## 6. 全站共用外壳
 
 `<div data-shell="header">` / `<div data-shell="colophon">` / `<div data-shell="socials">` 是挂载点，由 `shell.js` 注入。
 
@@ -144,7 +187,7 @@ xingyub-skeleton/
 | 移动端 | `drawer` | ≤960px 显示菜单按钮；`Esc` 关闭、**焦点陷阱**、滚动锁、焦点归还 |
 | 页脚 | `colophon` | 版本记录页写法：版权 / 构建 / 运行时长 / 技术栈 / 备案 |
 | 边栏 | `socials` | 由 `SITE.socials` 渲染成事实表 |
-| 工具条 | `tools` | 左下：只有「回顶」一个按钮，滚动 400px 后整条出现（不是隐藏其中一个按钮——那样会留下空槽位） |
+| 工具条 | `tools` | 左下：只有「回顶」一个按钮，滚动 400px 后整条出现 |
 
 `body` 属性开关：
 
@@ -168,11 +211,11 @@ xingyub-skeleton/
 
 ---
 
-## 8. 设计令牌
+## 7. 设计系统
+
+### 7.1 令牌
 
 令牌命名刻意避开 `--gray-700` / `--surface-2` 这类通用名。读到变量名就知道这是什么产品。
-
-### 颜色
 
 | 令牌 | 浅色 | 深色 | 用途 |
 |---|---|---|---|
@@ -189,12 +232,12 @@ xingyub-skeleton/
 
 **深色不是把浅色反过来，是另起一套。** 三条经验：
 
-1. **底色不要用暖黄褐。** 第一版 `#16140e` 色相 45°、饱和度 36%，屏幕上读作「脏棕」。现在 `#131312` 饱和度 5%。
-2. **表面步进要够。** 第一版底→卡亮度比只有 1.07:1，层级等于不存在；现在 1.11:1。
+1. **底色不要用暖黄褐。** 屏幕上读作「脏棕」。现在 `#131312` 饱和度 5%。
+2. **表面步进要够。** 底→卡亮度比要 ≥ 1.11:1，否则层级等于不存在。
 3. **暗底上高饱和暖色会发光。** 朱砂从饱和 60% 降到 51%。
-4. **纸纹要压得更低。** 同样的绝对噪声在低亮度背景上会显成脏点：浅色 2.4% → 深色 1.4%。
+4. **纸纹要压得更低。** 浅色 2.4% → 深色 1.4%。
 
-### 对比度基线（WCAG AA，正文 ≥4.5:1）
+### 7.2 对比度基线（WCAG AA，正文 ≥4.5:1）
 
 改色前先对一遍这张表：
 
@@ -208,7 +251,7 @@ xingyub-skeleton/
 
 装饰发丝（`--rule`）刻意只有 1.25:1 —— 栏线不该是你第一眼看到的东西。
 
-### 字体
+### 7.3 字体与间距
 
 两个族，分工明确，**没有第三个**：
 
@@ -217,32 +260,21 @@ xingyub-skeleton/
 | `--serif` | Noto Serif SC / Songti SC | 标题、正文、导航 |
 | `--mono` | IBM Plex Mono / SF Mono | 日期、编号、标签、代码、页脚 |
 
-### 间距 / 圆角 / 动效
-
 - 间距基数 **4px**：`--s1` 4 · `--s2` 8 · `--s3` 12 · `--s4` 16 · `--s5` 20 · `--s6` 24 · `--s8` 32 · `--s10` 40 · `--s12` 48 · `--s16` 64 · `--s20` 80 · `--s24` 96
 - 圆角：`--r-xs` 2px · `--r-sm` 3px · `--r-md` 5px —— **小**
-- 缓动：`--ease`（状态变化）· `--ease-out`（入场）
-- 时长：`--dur-fast` 120 · `--dur` 180 · `--dur-slow` 260 · `--dur-enter` 200ms
+- 动效：`--ease` / `--ease-out`；时长 `--dur-fast` 120 · `--dur` 180 · `--dur-slow` 260 · `--dur-enter` 200ms
 
-### 入场动画
+### 7.4 入场动画
 
-正文按块**淡入 + 8px 上浮**，整段 200ms 走完。`--stagger` 40ms 依次错开，
-只给前四块排延迟（更靠后的内容在首屏之外，排了也看不到）。
-
-```css
-.sheet > * { animation: enter var(--dur-enter) var(--ease-out) both; }
-.sheet > *:nth-child(2) { animation-delay: var(--stagger); }
-```
+正文按块**淡入 + 8px 上浮**，整段 200ms 走完。`--stagger` 40ms 依次错开，只给前四块排延迟。
 
 三个刻意的选择：
 
 - **不用缩放、不用模糊。** 那是「弹出来」的观感，和纸的质感冲突 —— 纸是落下来的。
 - **报头与页脚只做淡入，不做位移。** 顶栏滑一下会让人觉得整个页面在抖。
-- **`prefers-reduced-motion` 下保留 80ms 淡入。** 完全无动效会让「页面已就绪」这个信号消失；要的是少动，不是不动。同时留了一条兜底规则把所有动效压到不可感知，防止以后新增动效时漏掉这一步。
+- **`prefers-reduced-motion` 下保留 80ms 淡入。** 要的是少动，不是不动。
 
----
-
-## 9. 核心组件
+### 7.5 核心组件
 
 | 组件 | 类 | 用途 |
 |---|---|---|
@@ -264,11 +296,11 @@ xingyub-skeleton/
 
 ---
 
-## 10. 安全约定
+## 8. 安全约定
 
 模板本身没有后端，但有几条边界必须在往里填内容时守住。
 
-### 配置值一律走 `esc()`
+### 8.1 配置值一律走 `esc()`
 
 `SITE` 里的文本和 URL 会直接拼进模板字符串。`shell.js` 已经把所有插值点包了转义：
 
@@ -282,7 +314,7 @@ function esc(v) {
 
 **自己加新的配置项时，照做。** 一个 `&` 就能破坏页面结构；如果 `SITE` 的值来自 CMS 或用户输入，那就是直接的 XSS。
 
-### `Skeleton.show()` 不转义
+### 8.2 `Skeleton.show()` 不转义
 
 `Skeleton.show(el, variant, count)` 只渲染内置的形状模板，是安全的。
 **但如果你接了真实数据**（比如把接口返回的标题填进骨架），必须自己转义：
@@ -291,7 +323,7 @@ function esc(v) {
 el.innerHTML = entries.map((e) => `<h2>${esc(e.title)}</h2>`).join("");
 ```
 
-### URL 必须过 `safeUrl()`，不能只过 `esc()`
+### 8.3 URL 必须过 `safeUrl()`，不能只过 `esc()`
 
 `esc()` 转义的是 HTML 实体，**对协议毫无作用** ——
 `<a href="javascript:alert(1)">` 转义完还是可点击执行。所以进 `href` 的值走 `safeUrl()`：
@@ -307,10 +339,9 @@ function safeUrl(v) {
 }
 ```
 
-判定规则是「**看 scheme 位置**」而不是「看前缀像不像」：`index.html` 没有冒号所以放行，
-`https://x.com` 冒号在斜杠前所以查白名单，`javascript:x` 冒号在斜杠前且不在白名单所以拦截。
+判定规则是「**看 scheme 位置**」而不是「看前缀像不像」：`index.html` 没有冒号所以放行，`https://x.com` 冒号在斜杠前所以查白名单，`javascript:x` 冒号在斜杠前且不在白名单所以拦截。
 
-### CSP
+### 8.4 CSP
 
 13 页都带了：
 
@@ -325,12 +356,12 @@ font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'
 > ⚠️ **`frame-ancestors` 在 `<meta>` 里会被静默忽略**（它只在 HTTP 响应头里生效）。
 > 需要防嵌入（点击劫持）的话，必须在服务器响应头里加，`<meta>` 加不了。
 
-### 外链必须带 `rel="noopener noreferrer"`
+### 8.5 外链必须带 `rel="noopener noreferrer"`
 
 `target="_blank"` 的链接会让新页面拿到 `window.opener`，可被反向导航（tabnabbing）。
-`SITE.socials` 的渲染已经带上了。友链页填真实外链时照做。
+`SITE.socials` 的渲染已经带上了。填真实外链时照做。
 
-### `localStorage` 的值必须过白名单
+### 8.6 `localStorage` 的值必须过白名单
 
 `localStorage` 是可被改写的存储。主题值在写进 `dataset.theme` 之前会校验：
 
@@ -338,40 +369,16 @@ font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'
 ["light", "dark"].includes(saved) ? saved : (prefersDark() ? "dark" : "light")
 ```
 
-### 锚点与选择器
+### 8.7 锚点与选择器
 
 - 属性选择器拼接已改用 `CSS.escape()` —— route 里若含引号或反斜杠，直接拼进 `querySelector` 会抛 `SyntaxError`
 - `[id]` 上设了 `scroll-margin-top`，锚点跳转不会被吸顶报头盖住
 
 ---
 
-## 11. 已知边界
+## 9. 部署
 
-- 页面间为普通 `<a>` 跳转，不含前端路由与数据请求。
-- 灵境页的可视化区（`canvas-stage`）只留了一块等高留白，没有跑渲染循环。
-- 图片占位统一用 `assets/img/placeholder.svg`，`alt` 写成 `{{图片描述}}`。
-  **不要用 `src=""`**（会让浏览器重新请求当前文档），**也不要让内容图 `alt` 留空**（屏幕阅读器会整段跳过）。
-- 外壳依赖脚本：脚本不可用时靠每页的 `<noscript>` 静态导航兜底，但那只是应急。
-- 瀑布流已从杂谈页移除（CSS 多列会打乱键盘 Tab 顺序），改为目录行。
-- 首屏主题由 `<head>` 内联脚本在样式表之前设好，无闪烁。
-  ⚠️ 内联脚本与严格 CSP 冲突。要上 CSP 就把这段挪到独立文件，或用 nonce。
-- 触摸设备上控件自动提到 44px（`@media (pointer: coarse)`），桌面保持 36px。
-- 已带基础打印样式（`@media print`）：去掉纸纹、报头、工具条，强制浅色，外链附 URL。
-
----
-
-## 12. 改这个模板时的四条自检
-
-1. **换色测试** —— 把配色换成 slate + blue，如果看起来没差多少，说明颜色是默认值不是选择。
-2. **眯眼测试** —— 模糊看，还能分出正文区、导航、主行动吗？层级太平就会糊成一片。
-3. **签名测试** —— 能指出五个具体的签名元素吗？（本项目：目录行、账本点线、`§` 编号、边栏旁注、图版计数）
-4. **令牌测试** —— 把 CSS 变量名念出来。念着像某个产品，还是像在填模板？
-
----
-
-## 13. 部署
-
-### Cloudflare Workers（推荐）
+### 9.1 Cloudflare Workers（推荐）
 
 纯静态站，**不需要写 Worker 脚本** —— 没有 `main` 字段就是纯资源托管，零计费调用。
 
@@ -387,7 +394,7 @@ wrangler deploy
 |---|---|
 | `wrangler.jsonc` | `assets.directory: "."` + `not_found_handling: "404-page"` |
 | `.assetsignore` | 排除 `.git` / `wrangler.jsonc` / `README.md` 等不该上传的文件 |
-| `_headers` | 真实 HTTP 响应头（见下） |
+| `_headers` | 真实 HTTP 响应头（见 §9.4） |
 | `404.html` | 未命中时返回，带真正的 404 状态码 |
 
 > **为什么站点留在仓库根目录而不是挪进 `public/`**：README 承诺「双击 index.html 即可预览」。
@@ -398,7 +405,7 @@ wrangler deploy
 > 它不会被 git 跟踪，但**会被 `wrangler deploy` 整个上传到 CDN**。
 > 加依赖或换工具链时，两份清单都要过一遍。
 
-### 从 GitHub 自动部署（Workers Builds）
+### 9.2 从 GitHub 自动部署（Workers Builds）
 
 Cloudflare 可以直接拉这个仓库，push 后自动部署。
 
@@ -420,8 +427,6 @@ Dashboard → Workers & Pages → Create application
 
 #### ⚠️ Worker Preview 与 Version URL 不是一回事
 
-这两个容易混，但用途不同：
-
 | | Worker Preview | Version URL |
 |---|---|---|
 | 命令 | `npx wrangler preview` | `npx wrangler versions upload` |
@@ -437,10 +442,7 @@ Dashboard → Workers & Pages → Create application
 仪表板里的 Worker 名称必须与 `wrangler.jsonc` 的 `name` 完全一致，两边都是 `a-blog-0`。
 不一致会导致构建失败。
 
-> 注意区分：**模板名是 `xingyub-skeleton`**（本文件标题与目录结构里的项目名），
-> **部署名是 `a-blog-0`**（与仓库同名）。两个不同的名字。
-
-### 本地部署
+### 9.3 本地部署
 
 ```bash
 npm install
@@ -450,14 +452,11 @@ npm run deploy    # 部署到生产
 ```
 
 > `package.json` 里**没有构建脚本** —— 这个站零构建。
-> 那个文件存在的两个目的：固定 Wrangler 版本（Workers Builds 会读它，
-> 否则用默认版本，同一份代码在不同时间构建可能跑在不同 Wrangler 上），
-> 以及提供上面这三个脚本。
+> 那个文件存在的两个目的：固定 Wrangler 版本（Workers Builds 会读它），以及提供上面这三个脚本。
 
 > `wrangler.jsonc` 里的 `previews` 块是 **Worker Preview 要求的**，可以留空。
-> 本站没有 Preview 专属的变量或绑定，所以就是空的。
 
-### `_headers` 是必须的，不是锦上添花
+### 9.4 `_headers` 是必须的，不是锦上添花
 
 有些 CSP 指令**只在响应头里生效**，写进 `<meta>` 会被浏览器静默忽略 ——
 最典型的就是 `frame-ancestors`（防点击劫持）。
@@ -465,22 +464,41 @@ npm run deploy    # 部署到生产
 页面里的 `<meta>` CSP 保留着，是给 `file://` 本地预览和其他托管用的；
 Cloudflare 上用 `_headers` 补上完整版（多了 `frame-ancestors` 和几个安全响应头）。
 
-### ⚠️ 缓存：没有内容哈希就不能 immutable
+### 9.5 ⚠️ 缓存：没有内容哈希就不能 immutable
 
 `_headers` 里**故意没有**给 `/assets/*` 设 `max-age=31536000, immutable`。
 
 因为文件名里**没有内容哈希** —— `skeleton.css` 就是 `skeleton.css`，每次改版覆盖同一路径。
 设成一年不可变，老访客会永远拿到旧样式，而且**重新部署也修不好**（浏览器根本不回源问）。
 
-| 方案 | 前提 | 本模板 |
+| 方案 | 前提 | 本站 |
 |---|---|---|
 | `immutable` + 一年 | 文件名带内容哈希 | ✗ 未做构建 |
 | `max-age=0, must-revalidate` | 无 | ✓ 现在用的 |
 
-要开 immutable 得先加一步构建给文件名加哈希。现在这套靠 ETag 回源校验，命中 304 很便宜。
-
-### 其他托管
+### 9.6 其他托管
 
 同为纯静态，Netlify / Vercel / GitHub Pages / 任意对象存储都能直接放。
 注意它们的响应头配置文件名不同（Netlify 也叫 `_headers`，Vercel 用 `vercel.json`），
 但 `frame-ancestors` 那条无论在哪都必须在响应头里加。
+
+---
+
+## 10. 已知边界
+
+- 页面间为普通 `<a>` 跳转，不含前端路由与数据请求。
+- 灵境页的可视化区（`canvas-stage`）只留了一块等高留白，没有跑渲染循环。
+- 图片占位统一用 `assets/img/placeholder.svg`，`alt` 写成图片描述。
+- 外壳依赖脚本：脚本不可用时靠每页的 `<noscript>` 静态导航兜底，但那只是应急。
+- 首屏主题由 `<head>` 内联脚本（`theme-init.js`）在样式表之前设好，无闪烁。
+- 触摸设备上控件自动提到 44px（`@media (pointer: coarse)`），桌面保持 36px。
+- 已带基础打印样式（`@media print`）：去掉纸纹、报头、工具条，强制浅色，外链附 URL。
+
+---
+
+## 11. 改这个站时的四条自检
+
+1. **换色测试** —— 把配色换成 slate + blue，如果看起来没差多少，说明颜色是默认值不是选择。
+2. **眯眼测试** —— 模糊看，还能分出正文区、导航、主行动吗？层级太平就会糊成一片。
+3. **签名测试** —— 能指出五个具体的签名元素吗？（本项目：目录行、账本点线、`§` 编号、边栏旁注、图版计数）
+4. **令牌测试** —— 把 CSS 变量名念出来。念着像某个产品，还是像在填模板？

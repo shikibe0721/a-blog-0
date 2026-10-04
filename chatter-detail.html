@@ -6,8 +6,8 @@
 <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'">
 <meta name="theme-color" content="#f7f4ec">
-<title>源石结晶与目标蛋白结合的猜想 · xingyub's blog</title>
-<meta name="description" content="一次跑模型时的脑洞记录。">
+<title>杂谈 · shikibe's blog</title>
+<meta name="description" content="杂谈详情页模板。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -15,7 +15,7 @@
 <a class="skip-link" href="#main">跳到主内容</a>
 <noscript>
   <div class="noscript-bar">
-    <strong>xingyub's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
+    <strong>shikibe's blog</strong>本站导航由脚本渲染，当前脚本不可用。可直接访问：
     <a href="index.html">首页</a>
     <a href="timeline.html">归档</a>
     <a href="chatter.html">杂谈</a>
@@ -33,33 +33,33 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="chatter-head">
       <div class="article__meta">
-        <span>№ 003</span><span>2026-03-25</span><span>杂谈</span>
+        <span>№ {{编号}}</span><span>{{YYYY-MM-DD}}</span><span>杂谈</span>
       </div>
-      <h1 class="article__title">源石结晶与目标蛋白结合的猜想</h1>
-      <p class="article__standfirst">纯属脑洞，没有实验依据。写下来只是不想让它跑掉。</p>
+      <h1 class="article__title">{{杂谈标题}}</h1>
+      <p class="article__standfirst">{{导语：一句话带过这条记录在讲什么。}}</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="chatter-body">
-        <p>今天在跑 MolGTC 模型的图神经网络筛选时，看着那些小分子的拓扑结构，突然串台到了泰拉大陆的源石病机制。</p>
-        <p>如果把源石结晶过程视作一种极端暴烈的<strong>分子自组装</strong>行为，它在感染者体内的增殖会不会类似于某种不可逆的激酶靶点结合？就像我们针对 STAT3 或者 JAK2 寻找抑制剂一样，罗德岛的矿石病抑制剂，本质上可能就是一种能与源石活性位点产生极强亲和力的「竞争性拮抗剂」。</p>
-        <blockquote><p>物理规律在不同维度的宇宙中或许殊途同归。</p></blockquote>
-        <p>晚点把这周的 GROMACS 跑完，要是收敛得好，周末开两把肉鸽奖励一下自己。</p>
-        <p class="mt-5"><span class="tag"># 明日方舟</span> <span class="tag"># 学术脑洞</span> <span class="tag"># 日常</span></p>
+        <p>{{正文段落。}}</p>
+        <p>{{正文段落。}}</p>
+        <blockquote><p>{{引用块内容。}}</p></blockquote>
+        <p>{{正文段落。}}</p>
+        <p class="mt-5"><span class="tag"># {{标签}}</span> <span class="tag"># {{标签}}</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
           <p><strong>{{作者名}}</strong></p>
-          <p>{{作者一句话简介}}</p>
+          <p>{{一句话简介}}</p>
         </div>
         <div class="margin-note" data-slot="recent-note">
           <p class="margin-note__title">近期杂谈</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">03-18</span></div>
-            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">03-11</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">{{MM-DD}}</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">{{MM-DD}}</span></div>
           </div>
         </div>
       </aside>
