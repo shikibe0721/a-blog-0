@@ -262,7 +262,46 @@ xingyub-skeleton/
 
 ---
 
-## 10. 已知边界
+## 10. 安全约定
+
+模板本身没有后端，但有几条边界必须在往里填内容时守住。
+
+### 配置值一律走 `esc()`
+
+`SITE` 里的文本和 URL 会直接拼进模板字符串。`shell.js` 已经把所有插值点包了转义：
+
+```js
+function esc(v) {
+  return String(v ?? "")
+    .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+```
+
+**自己加新的配置项时，照做。** 一个 `&` 就能破坏页面结构；如果 `SITE` 的值来自 CMS 或用户输入，那就是直接的 XSS。
+
+### `Skeleton.show()` 不转义
+
+`Skeleton.show(el, variant, count)` 只渲染内置的形状模板，是安全的。
+**但如果你接了真实数据**（比如把接口返回的标题填进骨架），必须自己转义：
+
+```js
+el.innerHTML = entries.map((e) => `<h2>${esc(e.title)}</h2>`).join("");
+```
+
+### 外链必须带 `rel="noopener noreferrer"`
+
+`target="_blank"` 的链接会让新页面拿到 `window.opener`，可被反向导航（tabnabbing）。
+`SITE.socials` 的渲染已经带上了。友链页填真实外链时照做。
+
+### 锚点与选择器
+
+- 属性选择器拼接已改用 `CSS.escape()` —— route 里若含引号或反斜杠，直接拼进 `querySelector` 会抛 `SyntaxError`
+- `[id]` 上设了 `scroll-margin-top`，锚点跳转不会被吸顶报头盖住
+
+---
+
+## 11. 已知边界
 
 - 页面间为普通 `<a>` 跳转，不含前端路由与数据请求。
 - 灵境页的可视化区（`canvas-stage`）只留了一块等高留白，没有跑渲染循环。
@@ -271,10 +310,13 @@ xingyub-skeleton/
 - 外壳依赖脚本：脚本不可用时靠每页的 `<noscript>` 静态导航兜底，但那只是应急。
 - 瀑布流已从杂谈页移除（CSS 多列会打乱键盘 Tab 顺序），改为目录行。
 - 首屏主题由 `<head>` 内联脚本在样式表之前设好，无闪烁。
+  ⚠️ 内联脚本与严格 CSP 冲突。要上 CSP 就把这段挪到独立文件，或用 nonce。
+- 触摸设备上控件自动提到 44px（`@media (pointer: coarse)`），桌面保持 36px。
+- 已带基础打印样式（`@media print`）：去掉纸纹、报头、工具条，强制浅色，外链附 URL。
 
 ---
 
-## 11. 改这个模板时的四条自检
+## 12. 改这个模板时的四条自检
 
 1. **换色测试** —— 把配色换成 slate + blue，如果看起来没差多少，说明颜色是默认值不是选择。
 2. **眯眼测试** —— 模糊看，还能分出正文区、导航、主行动吗？层级太平就会糊成一片。

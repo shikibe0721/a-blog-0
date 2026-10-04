@@ -116,8 +116,9 @@
 
   /* — 层级 — */
   --z-sticky: 50;
-  --z-drawer: 80;
   --z-tools: 60;
+  --z-drawer: 80;
+  --z-skip: 100;
 }
 
 html[data-theme="dark"] {
@@ -160,7 +161,7 @@ html[data-theme="dark"] {
   position: absolute;
   left: var(--s3);
   top: calc(-1 * var(--s16));
-  z-index: 999;
+  z-index: var(--z-skip);
   padding: var(--s2) var(--s3);
   border: 1px solid var(--vermilion);
   border-radius: var(--r-sm);
@@ -170,6 +171,11 @@ html[data-theme="dark"] {
   transition: top var(--dur) var(--ease-out);
 }
 .skip-link:focus { top: var(--s3); }
+
+/* 锚点跳转时目标不要被吸顶报头盖住。
+   报头高 60px，这里留出报头 + 一段呼吸距离。
+   ⚠️ 缺这条时，点文章页侧栏的目录链接，标题会被压在报头下面。 */
+[id] { scroll-margin-top: calc(var(--masthead-h) + var(--s5)); }
 *, *::before, *::after { box-sizing: border-box; }
 
 html {
@@ -1104,7 +1110,13 @@ body.drawer-open { overflow: hidden; }
 }
 .facts__row:last-child { border-bottom: 0; }
 .facts__k { color: var(--ink-3); flex: 0 0 auto; }
-.facts__v { color: var(--ink); text-align: right; }
+.facts__v {
+  color: var(--ink);
+  text-align: right;
+  /* 长值（URL / 长标题）不设 min-width:0 会把左侧的键挤出容器 */
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 
 /* --------------------------------------------------------------------------
    11. 浮动工具条
@@ -1279,8 +1291,56 @@ html.show-slots [data-slot]::after {
 }
 
 /* --------------------------------------------------------------------------
-   16. 响应式收尾
+   16. 打印
+   静态站也常被打印或另存为 PDF。不做处理的话会打出：纸纹噪点、
+   吸顶报头、浮动工具条、跳转链接，以及白底上的深色主题。
    -------------------------------------------------------------------------- */
+@media print {
+  :root,
+  html[data-theme="dark"] {
+    --paper: #ffffff;
+    --paper-raised: #ffffff;
+    --paper-sunk: #ffffff;
+    --ink: #000000;
+    --ink-2: #333333;
+    --ink-3: #555555;
+    --rule: #dddddd;
+    --rule-strong: #bbbbbb;
+    --control-line: #999999;
+    --vermilion: #8c2f1c;
+  }
+  body::before { display: none; }
+  .masthead,
+  .drawer,
+  .tools,
+  .skip-link,
+  .noscript-bar { display: none !important; }
+  .sheet { padding: 0; max-width: none; }
+  .entry,
+  .ledger__row,
+  .index-card,
+  .plate,
+  .margin-note { break-inside: avoid; }
+  a[href^="http"]::after {
+    content: " (" attr(href) ")";
+    font-size: 10px;
+    color: #555555;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   17. 响应式收尾
+   -------------------------------------------------------------------------- */
+/* 触摸设备：控件提到 44px。
+   Apple HIG 与 Material 的建议触达尺寸；36px 在手指上偏小。 */
+@media (pointer: coarse) {
+  :root {
+    --control-h: 44px;
+    --control-h-lg: 44px;
+  }
+  .tools .iconbtn { width: 40px; height: 40px; }
+}
+
 @media (max-width: 640px) {
   :root {
     --t-h1: 26px;
@@ -1288,6 +1348,9 @@ html.show-slots [data-slot]::after {
     --t-h3: 18px;
     --t-lead: 17px;
   }
+  /* iOS 上 font-size < 16px 的输入框，聚焦时会被自动放大，页面跟着错位。
+     移动端一律 16px。 */
+  .field input { font-size: 16px; }
   .sheet { padding: var(--s10) var(--s4) var(--s16); }
   .masthead__inner { padding: 0 var(--s4); }
   .colophon { padding: var(--s6) var(--s4) var(--s10); }

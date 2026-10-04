@@ -65,6 +65,22 @@ const ICON = {
   dot: '<circle cx="12" cy="12" r="3"/>',
 };
 
+/* -------------------------------------------------------------------------
+   转义
+   -------------------------------------------------------------------------
+   SITE 配置的值会直接拼进模板字符串。不转义的话，一个 & 或 < 就能破坏
+   页面结构；如果 SITE 的值来自 CMS / 用户输入，那就是直接的 XSS。
+   凡是配置里的文本与 URL，一律走 esc()。
+   ------------------------------------------------------------------------- */
+function esc(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 /** 渲染一个图标：icon("search", 16) */
 function icon(name, size = 18) {
   const path = ICON[name];
@@ -84,11 +100,11 @@ const tpl = {
   <header class="masthead" data-masthead>
     <div class="masthead__inner">
       <a class="masthead__brand" href="index.html" data-slot="brand">
-        ${SITE.name}<i>${SITE.latin}</i>
+        ${esc(SITE.name)}<i>${esc(SITE.latin)}</i>
       </a>
       <nav class="masthead__nav" aria-label="站内导航" data-slot="nav">
         ${SITE.nav
-          .map((n) => `<a href="${n.href}" data-route="${n.route}">${n.label}</a>`)
+          .map((n) => `<a href="${esc(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
           .join("")}
       </nav>
       <div class="masthead__tools">
@@ -103,20 +119,20 @@ const tpl = {
   <div class="drawer" id="site-drawer" data-drawer role="dialog" aria-modal="true" aria-label="站内导航">
     <button class="iconbtn drawer__close" type="button" data-drawer-close aria-label="关闭菜单">${icon("close")}</button>
     ${SITE.nav
-      .map((n) => `<a href="${n.href}" data-route="${n.route}">${n.label}</a>`)
+      .map((n) => `<a href="${esc(n.href)}" data-route="${esc(n.route)}">${esc(n.label)}</a>`)
       .join("")}
   </div>`,
 
   colophon: () => `
   <footer class="colophon" data-slot="colophon">
     <div class="colophon__inner">
-      <span>${SITE.colophon.copyright.replace("{{站点名}}", SITE.name)}</span>
-      <span>${SITE.colophon.built} · {{托管平台}}</span>
+      <span>${esc(SITE.colophon.copyright.replace("{{站点名}}", SITE.name))}</span>
+      <span>${esc(SITE.colophon.built)} · {{托管平台}}</span>
       <span data-slot="colophon-runtime">
-        ${SITE.colophon.uptime} · ${SITE.colophon.stack.join(" / ")}
+        ${esc(SITE.colophon.uptime)} · ${esc(SITE.colophon.stack.join(" / "))}
       </span>
       <a href="skeleton.html">骨架屏参考</a>
-      <a href="${SITE.colophon.icp.href}">${SITE.colophon.icp.label}</a>
+      <a href="${esc(SITE.colophon.icp.href)}">${esc(SITE.colophon.icp.label)}</a>
     </div>
   </footer>`,
 
@@ -124,8 +140,8 @@ const tpl = {
   <div class="facts" data-slot="socials">
     ${SITE.socials
       .map(
-        (s) => `<div class="facts__row"><span class="facts__k">${s.label}</span>` +
-          `<a class="facts__v" href="${s.href}">${icon("external", 13)}</a></div>`
+        (s) => `<div class="facts__row"><span class="facts__k">${esc(s.label)}</span>` +
+          `<a class="facts__v" href="${esc(s.href)}" target="_blank" rel="noopener noreferrer">${icon("external", 13)}<span class="sr-only">（新窗口打开）</span></a></div>`
       )
       .join("")}
   </div>`,
@@ -157,7 +173,9 @@ function mountShell() {
   const current = document.body.dataset.route;
   if (current) {
     document.querySelectorAll(".masthead__nav, .drawer").forEach((scope) => {
-      scope.querySelector(`[data-route="${current}"]`)?.setAttribute("aria-current", "page");
+      // CSS.escape：route 里若含引号或反斜杠，直接拼进选择器会抛 SyntaxError
+      const sel = `[data-route="${CSS.escape(current)}"]`;
+      scope.querySelector(sel)?.setAttribute("aria-current", "page");
     });
   }
 }
@@ -215,10 +233,16 @@ function setupDrawer() {
       (el) => el.offsetParent !== null
     );
 
+  // 抽屉是 aria-modal 的对话框，背景必须对辅助技术不可达。
+  // 只做焦点陷阱不够 —— 屏幕阅读器仍能用虚拟光标读到背景内容。
+  const backdrop = () =>
+    [document.querySelector(".masthead"), document.querySelector("main"), document.querySelector(".colophon")].filter(Boolean);
+
   const open = () => {
     drawer.classList.add("is-open");
     document.body.classList.add("drawer-open");
     trigger?.setAttribute("aria-expanded", "true");
+    backdrop().forEach((el) => el.setAttribute("inert", ""));
     focusables()[0]?.focus();
   };
 
@@ -227,6 +251,7 @@ function setupDrawer() {
     drawer.classList.remove("is-open");
     document.body.classList.remove("drawer-open");
     trigger?.setAttribute("aria-expanded", "false");
+    backdrop().forEach((el) => el.removeAttribute("inert"));
     if (wasOpen) trigger?.focus();
   };
 
