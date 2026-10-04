@@ -57,6 +57,7 @@ xingyub-skeleton/
 ├── post.html             文章详情
 ├── chatter-detail.html   杂谈详情
 ├── skeleton.html         骨架屏参考页
+├── 404.html              未命中页（Cloudflare not_found_handling 用）
 └── assets/
     ├── css/skeleton.css       设计令牌 + 组件层（约 700 行）
     ├── js/shell.js            站点配置 + 外壳挂载 + 图标集 + 交互
@@ -84,6 +85,7 @@ xingyub-skeleton/
 | `/posts/:slug` | `post.html` | — |
 | `/chatter/:slug` | `chatter-detail.html` | — |
 | — | `skeleton.html` | 骨架屏 |
+| — | `404.html` | 未命中 |
 
 ---
 
@@ -364,3 +366,57 @@ font-src 'self'; base-uri 'self'; form-action 'self'; object-src 'none'
 2. **眯眼测试** —— 模糊看，还能分出正文区、导航、主行动吗？层级太平就会糊成一片。
 3. **签名测试** —— 能指出五个具体的签名元素吗？（本项目：目录行、账本点线、`§` 编号、边栏旁注、图版计数）
 4. **令牌测试** —— 把 CSS 变量名念出来。念着像某个产品，还是像在填模板？
+
+---
+
+## 13. 部署
+
+### Cloudflare Workers（推荐）
+
+纯静态站，**不需要写 Worker 脚本** —— 没有 `main` 字段就是纯资源托管，零计费调用。
+
+```bash
+npm i -g wrangler
+wrangler login
+wrangler deploy
+```
+
+配置已经建好，开箱可用：
+
+| 文件 | 作用 |
+|---|---|
+| `wrangler.jsonc` | `assets.directory: "."` + `not_found_handling: "404-page"` |
+| `.assetsignore` | 排除 `.git` / `wrangler.jsonc` / `README.md` 等不该上传的文件 |
+| `_headers` | 真实 HTTP 响应头（见下） |
+| `404.html` | 未命中时返回，带真正的 404 状态码 |
+
+> **为什么站点留在仓库根目录而不是挪进 `public/`**：README 承诺「双击 index.html 即可预览」。
+> 挪进子目录会破坏这个用法。改用 `.assetsignore` 排除不该上传的文件，两边都保住。
+
+### `_headers` 是必须的，不是锦上添花
+
+有些 CSP 指令**只在响应头里生效**，写进 `<meta>` 会被浏览器静默忽略 ——
+最典型的就是 `frame-ancestors`（防点击劫持）。
+
+页面里的 `<meta>` CSP 保留着，是给 `file://` 本地预览和其他托管用的；
+Cloudflare 上用 `_headers` 补上完整版（多了 `frame-ancestors` 和几个安全响应头）。
+
+### ⚠️ 缓存：没有内容哈希就不能 immutable
+
+`_headers` 里**故意没有**给 `/assets/*` 设 `max-age=31536000, immutable`。
+
+因为文件名里**没有内容哈希** —— `skeleton.css` 就是 `skeleton.css`，每次改版覆盖同一路径。
+设成一年不可变，老访客会永远拿到旧样式，而且**重新部署也修不好**（浏览器根本不回源问）。
+
+| 方案 | 前提 | 本模板 |
+|---|---|---|
+| `immutable` + 一年 | 文件名带内容哈希 | ✗ 未做构建 |
+| `max-age=0, must-revalidate` | 无 | ✓ 现在用的 |
+
+要开 immutable 得先加一步构建给文件名加哈希。现在这套靠 ETag 回源校验，命中 304 很便宜。
+
+### 其他托管
+
+同为纯静态，Netlify / Vercel / GitHub Pages / 任意对象存储都能直接放。
+注意它们的响应头配置文件名不同（Netlify 也叫 `_headers`，Vercel 用 `vercel.json`），
+但 `frame-ancestors` 那条无论在哪都必须在响应头里加。

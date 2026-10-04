@@ -1,0 +1,33 @@
+# Cloudflare 会在部署时读取本文件并转成真实的 HTTP 响应头。
+# 它本身不会作为公开资源提供（已列入 .assetsignore）。
+#
+# 为什么需要这个文件，而不只是页面里的 <meta> CSP：
+# 有些指令**只能在响应头里生效**，写进 <meta> 会被浏览器静默忽略，
+# 最典型的就是 frame-ancestors（防点击劫持）。见下面 /* 那段。
+
+/*
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+  X-Frame-Options: DENY
+  Cross-Origin-Opener-Policy: same-origin
+
+# ⚠️ 不要给 /assets/* 设 max-age=31536000, immutable。
+#
+# 那些文件名里没有内容哈希 —— skeleton.css 就是 skeleton.css，
+# 每次改版都覆盖同一个路径。设成一年不可变，老访客会永远拿到旧样式，
+# 而且无法通过重新部署修复（浏览器根本不会回源问）。
+#
+# 要么给文件名加哈希（skeleton.abc123.css）再用 immutable，
+# 要么用下面这种「每次都回源校验」的策略 —— 有 ETag，命中 304 很便宜。
+
+/assets/*
+  Cache-Control: public, max-age=0, must-revalidate
+
+# HTML 同理，且更需要及时更新
+/*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/
+  Cache-Control: public, max-age=0, must-revalidate

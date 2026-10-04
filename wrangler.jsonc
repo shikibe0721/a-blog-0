@@ -1,0 +1,20 @@
+{
+  // Cloudflare Workers 静态资源配置
+  // 纯静态站不需要 main（Worker 脚本）—— 没有 main 就是纯资源托管，零计费调用。
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "xingyub-skeleton",
+  "compatibility_date": "2026-10-04",
+
+  "assets": {
+    // 站点就在仓库根目录（README 承诺「双击 index.html 即可预览」，
+    // 所以不挪到 public/ 子目录）。靠 .assetsignore 排除不该上传的文件。
+    "directory": ".",
+
+    // 未命中文件时用仓库根的 404.html，并返回真正的 404 状态码
+    "not_found_handling": "404-page",
+
+    // 默认值。本站链接全部写成 about.html 这种带后缀的形式，
+    // 所以不会触发重定向，保持默认即可。
+    "html_handling": "auto-trailing-slash"
+  }
+}

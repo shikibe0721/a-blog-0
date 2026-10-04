@@ -1,0 +1,17 @@
+# 不该上传到 CDN 的文件。
+# 格式与 .gitignore 相同，放在 assets.directory 的根目录。
+
+# 版本控制与部署配置
+.git
+.gitignore
+wrangler.jsonc
+wrangler.toml
+
+# 平台消费的配置文件（部署时读取，不作为公开资源）
+_headers
+_redirects
+.assetsignore
+
+# 文档
+README.md
+*.md
