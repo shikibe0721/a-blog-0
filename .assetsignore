@@ -15,3 +15,16 @@ _redirects
 # 文档
 README.md
 *.md
+
+# 依赖与本地状态
+# ⚠️ .gitignore 里忽略的不等于 .assetsignore 里忽略的 ——
+# 两份清单是独立的。如果本地跑过 npm i wrangler（没加 -g），
+# node_modules 会被整个上传到 CDN，几百 MB 的无用文件。
+node_modules
+.wrangler
+package.json
+package-lock.json
+
+# 系统
+.DS_Store
+Thumbs.db

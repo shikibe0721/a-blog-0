@@ -393,6 +393,11 @@ wrangler deploy
 > **为什么站点留在仓库根目录而不是挪进 `public/`**：README 承诺「双击 index.html 即可预览」。
 > 挪进子目录会破坏这个用法。改用 `.assetsignore` 排除不该上传的文件，两边都保住。
 
+> ⚠️ **`.gitignore` 和 `.assetsignore` 是两份独立清单，别以为一份管两件事。**
+> 比如 `node_modules/` 只在 `.gitignore` 里 —— 如果本地跑过 `npm i wrangler`（没加 `-g`），
+> 它不会被 git 跟踪，但**会被 `wrangler deploy` 整个上传到 CDN**。
+> 加依赖或换工具链时，两份清单都要过一遍。
+
 ### `_headers` 是必须的，不是锦上添花
 
 有些 CSP 指令**只在响应头里生效**，写进 `<meta>` 会被浏览器静默忽略 ——
