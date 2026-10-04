@@ -1,0 +1,14 @@
+{
+  "name": "a-blog-0",
+  "version": "0.0.0",
+  "private": true,
+  "description": "静态网页骨架模板。没有构建步骤 —— 这个文件存在的唯一目的是固定 wrangler 版本。",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "preview": "wrangler versions upload"
+  },
+  "devDependencies": {
+    "wrangler": "^4"
+  }
+}

@@ -398,6 +398,50 @@ wrangler deploy
 > 它不会被 git 跟踪，但**会被 `wrangler deploy` 整个上传到 CDN**。
 > 加依赖或换工具链时，两份清单都要过一遍。
 
+### 从 GitHub 自动部署（Workers Builds）
+
+Cloudflare 可以直接拉这个仓库，push 后自动部署。
+
+```
+Dashboard → Workers & Pages → Create application
+  → Import a repository → 选本仓库，生产分支 main
+  → Worker 名称填 a-blog-0
+  → 构建命令：留空
+  → 部署命令：npx wrangler deploy
+  → 预览命令：npx wrangler versions upload
+```
+
+#### ⚠️ 两个会让构建失败的默认值
+
+**1. Worker 名称必须与 `wrangler.jsonc` 的 `name` 完全一致。**
+
+两边都是 `a-blog-0`。不一致时构建**直接失败，日志里看不出原因** ——
+官方文档只在一处备注提过一句，极易漏看。
+
+> 注意区分：**模板名叫 `xingyub-skeleton`**（见本文件标题与目录结构），
+> **部署名是 `a-blog-0`**（与仓库同名）。这是两个不同的东西。
+
+**2. 仪表板里的「预览命令」默认值 `npx wrangler preview` 是错的。**
+
+**这个命令不存在。** Wrangler v1 有 `preview`，v2 起已移除，v4 更没有。
+开着「启用预览构建」的话，每次推非 `main` 分支都会构建失败。
+
+正确值：**`npx wrangler versions upload`**
+—— 它创建新版本但**不把流量切过去**，这正是「预览」该有的行为。
+
+### 本地部署
+
+```bash
+npx wrangler deploy          # 直接上线
+npx wrangler dev             # 本地起服务，行为与线上一致
+```
+
+或走 `package.json` 里的脚本：`npm run deploy` / `npm run dev` / `npm run preview`。
+
+> `package.json` 里**没有构建脚本** —— 这个站零构建。
+> 那个文件存在的唯一目的是声明 `wrangler` 版本：
+> Workers Builds 会读它，否则就用默认版本，**同一份代码在不同时间构建可能跑在不同 wrangler 上**。
+
 ### `_headers` 是必须的，不是锦上添花
 
 有些 CSP 指令**只在响应头里生效**，写进 `<meta>` 会被浏览器静默忽略 ——

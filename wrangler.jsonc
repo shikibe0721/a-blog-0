@@ -2,7 +2,9 @@
   // Cloudflare Workers 静态资源配置
   // 纯静态站不需要 main（Worker 脚本）—— 没有 main 就是纯资源托管，零计费调用。
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "xingyub-skeleton",
+  // ⚠️ 这个名字必须与 Cloudflare 仪表板里创建的 Worker 名称完全一致，
+  // 否则 Workers Builds 会直接失败，而且日志里看不出原因。
+  "name": "a-blog-0",
   "compatibility_date": "2026-10-04",
 
   "assets": {
