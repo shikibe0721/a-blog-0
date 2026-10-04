@@ -39,8 +39,12 @@ const SITE = {
   colophon: {
     copyright: "© 2026 {{站点名}}",
     built: "手写 HTML / CSS",
+    // ⚠️ 以前这里写的是字面量 "{{托管平台}}"，但模板里没有对应的替换逻辑，
+    //    于是 14 页页脚都在给访客显示这串大括号。现在它是一个真实的配置字段，
+    //    和「备案号待填」一样，填了就显示填的内容。
+    host: "托管平台待填",
     uptime: "运行 0 天",
-    stack: ["Noto Serif SC", "IBM Plex Mono"],
+    stack: ["SF Pro", "PingFang SC"],
     icp: { label: "备案号待填", href: "#" },
   },
 };
@@ -143,7 +147,7 @@ const tpl = {
   <footer class="colophon" data-slot="colophon">
     <div class="colophon__inner">
       <span>${esc(SITE.colophon.copyright.replace("{{站点名}}", SITE.name))}</span>
-      <span>${esc(SITE.colophon.built)} · {{托管平台}}</span>
+      <span>${esc(SITE.colophon.built)} · ${esc(SITE.colophon.host)}</span>
       <span data-slot="colophon-runtime">
         ${esc(SITE.colophon.uptime)} · ${esc(SITE.colophon.stack.join(" / "))}
       </span>
@@ -220,7 +224,8 @@ function syncThemeIcons() {
     b.setAttribute("aria-label", dark ? "切换到浅色主题" : "切换到深色主题");
   });
   const meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.setAttribute("content", dark ? "#131312" : "#f7f4ec");
+  // 与 skeleton.css 里的 --page 保持一致，否则移动端状态栏和页面底会差一档色
+  if (meta) meta.setAttribute("content", dark ? "#000000" : "#eef0f3");
 }
 
 function setupTheme() {

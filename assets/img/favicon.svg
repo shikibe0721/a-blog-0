@@ -1,5 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="3" fill="#F7F4EC"/>
-  <rect x="1.5" y="1.5" width="29" height="29" rx="2.5" fill="none" stroke="#E2DCCC"/>
-  <path d="M11 6h10v20l-5-4.2L11 26z" fill="#B4432B"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"
+     role="img" aria-label="shikibe's blog">
+  <!-- 玻璃胶囊 + 墨色书签。纯灰阶，无彩色。
+       不做 prefers-color-scheme 反转：标签栏底色明暗不可预测，
+       而「浅玻璃底 + 深墨标记 + 一圈中灰描边」在两种底色上都成立。 -->
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#e6e8ed"/>
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#g)"/>
+  <rect x="0.75" y="0.75" width="30.5" height="30.5" rx="8.25"
+        fill="none" stroke="#c8ccd4" stroke-width="1.5"/>
+  <path d="M11 9.6A3.6 3.6 0 0 1 14.6 6h2.8A3.6 3.6 0 0 1 21 9.6V26l-5-3.9-5 3.9z"
+        fill="#0b0b0d"/>
 </svg>
