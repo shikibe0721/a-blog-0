@@ -8,8 +8,8 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
-<title>杂谈 · shikibe's blog</title>
-<meta name="description" content="杂谈详情页模板。">
+<title>关于「写不出来」这件事 · shikibe's blog</title>
+<meta name="description" content="这篇卡在草稿里一个月，正文删了三次。后来我想明白了卡在哪。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,33 +35,48 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="chatter-head">
       <div class="article__meta">
-        <span>№ {{编号}}</span><span>{{YYYY-MM-DD}}</span><span>杂谈</span>
+        <span>№ 001</span><span>2026-08-14</span><span>杂谈</span>
       </div>
-      <h1 class="article__title">{{杂谈标题}}</h1>
-      <p class="article__standfirst">{{导语：一句话带过这条记录在讲什么。}}</p>
+      <h1 class="article__title">关于「写不出来」这件事</h1>
+      <p class="article__standfirst">这篇卡在草稿里一个月，正文删了三次。后来我想明白了卡在哪。</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="chatter-body">
-        <p>{{正文段落。}}</p>
-        <p>{{正文段落。}}</p>
-        <blockquote><p>{{引用块内容。}}</p></blockquote>
-        <p>{{正文段落。}}</p>
-        <p class="mt-5"><span class="tag"># {{标签}}</span> <span class="tag"># {{标签}}</span></p>
+        <p>这篇本来应该是一个月前就发出来的。它卡在草稿里，标题改了四次，正文删了三次。</p>
+        <p>写不出来的时候，我一般会做三件事，顺序固定。</p>
+
+        <h2>一、把它拆小</h2>
+        <p>「写一篇关于 AI 编程的文章」是个没法下手的任务 —— 它太大了，大到我不知道第一句该写什么。</p>
+        <p>改成「写下这三个月里最让我意外的那一件事」，就立刻能写了。所以我现在的做法是：先写一个具体的场景，写完再看它能不能长成一篇。长不成就当杂谈发出来。</p>
+
+        <h2>二、允许它烂</h2>
+        <p>我以前会在第一段卡两天，因为想找一个「正确的开头」。后来发现，开头好不好，得看结尾落在哪 —— 而结尾在写之前根本不知道。</p>
+        <p>所以现在第一段永远是临时的。允许它烂，允许它被整段删掉。删一段不心疼，是能写下去的前提。</p>
+
+        <h2>三、离开屏幕</h2>
+        <p>这个最有效，也最没技术含量。写不出来的时候，我会去洗个碗，或者下楼走一圈。很多卡住的地方其实不是「想不出来」，是「一直盯着同一个角度」。</p>
+
+        <blockquote><p>写不出来通常不是能力问题，是位置问题。换个位置，句子自己就出来了。</p></blockquote>
+
+        <h2>最后</h2>
+        <p>这篇文章真正写起来用了四十分钟，比它卡住的那一个月都短。所以现在我给自己立的规矩是：卡超过二十分钟，就换个做法，别硬写。</p>
+        <p class="mt-5"><span class="tag"># 写作</span> <span class="tag"># 拖延</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
-          <p><strong>{{作者名}}</strong></p>
-          <p>{{一句话简介}}</p>
+          <p><strong>Mayu</strong></p>
+          <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
         </div>
         <div class="margin-note" data-slot="recent-note">
           <p class="margin-note__title">近期杂谈</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">{{MM-DD}}</span></div>
-            <div class="facts__row"><a class="facts__k" href="chatter-detail.html">{{杂谈标题}}</a><span class="facts__v num">{{MM-DD}}</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter.html">凌晨三点的部署事故</a><span class="facts__v num">08-06</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter.html">为「摸鱼」辩护</a><span class="facts__v num">07-19</span></div>
+            <div class="facts__row"><a class="facts__k" href="chatter.html">猫踩了我的键盘</a><span class="facts__v num">06-28</span></div>
           </div>
         </div>
       </aside>

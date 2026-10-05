@@ -50,9 +50,34 @@
 
     <p class="section-mark">§ 04.1 · 全部项目</p>
 
-    <div class="blank" data-slot="project-blank">
-      <p class="blank__title">暂无项目</p>
-      <p class="blank__desc">还没有记录任何项目。第一个项目会出现在这里。</p>
+    <div class="card-grid mt-4" data-slot="project-grid">
+      <article class="index-card">
+        <span class="index-card__no">№ 01</span>
+        <h2 class="index-card__title">这个站本身</h2>
+        <p class="index-card__desc">你现在看到的这些东西。手写 HTML / CSS，没有构建步骤，零依赖，双击 index.html 就能打开。</p>
+        <div class="index-card__foot"><span class="tag">进行中</span><span class="tag">无依赖</span></div>
+      </article>
+
+      <article class="index-card">
+        <span class="index-card__no">№ 02</span>
+        <h2 class="index-card__title">写作接口</h2>
+        <p class="index-card__desc">一个 Cloudflare Worker 加一个 KV 命名空间，用来存文章。只有增删改查四件事，零 npm 依赖。</p>
+        <div class="index-card__foot"><span class="tag">进行中</span><span class="tag">Workers KV</span></div>
+      </article>
+
+      <article class="index-card">
+        <span class="index-card__no">№ 03</span>
+        <h2 class="index-card__title">在线写作后台</h2>
+        <p class="index-card__desc">登录之后在网页上直接改文章、发布、删除，不用再推一次仓库。接口连不上就自动退回静态内容。</p>
+        <div class="index-card__foot"><span class="tag">已上线</span><span class="tag">后台</span></div>
+      </article>
+
+      <article class="index-card">
+        <span class="index-card__no">№ 04</span>
+        <h2 class="index-card__title">骨架屏参考页</h2>
+        <p class="index-card__desc">把四种骨架形状和对应的真实组件摆在同一页，改样式的时候对着它调。不对外，只是我的草稿纸。</p>
+        <div class="index-card__foot"><span class="tag">实验性</span><span class="tag">工具</span></div>
+      </article>
     </div>
   </main>
   <div data-shell="colophon"></div>

@@ -8,8 +8,8 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
-<title>My Third Blog Post · shikibe's blog</title>
-<meta name="description" content="I had some challenges, but asking in the community really helped!">
+<title>和 AI 结对编程的三个月 · shikibe's blog</title>
+<meta name="description" content="它当然能写代码。真正的问题是，哪一部分不该让它写。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,32 +35,57 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="post-head">
       <div class="article__meta">
-        <span>№ 003</span><span>2022-07-15</span><span>Astro Learner</span>
+        <span>№ 003</span><span>2026-07-03</span><span>Mayu</span>
       </div>
-      <h1 class="article__title">My Third Blog Post</h1>
-      <p class="article__standfirst">I had some challenges, but asking in the community really helped!</p>
+      <h1 class="article__title">和 AI 结对编程的三个月</h1>
+      <p class="article__standfirst">它当然能写代码。真正的问题是，哪一部分不该让它写。</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="post-body">
-        <p>It wasn't always smooth sailing, but I'm enjoying building with Astro. And, the <a href="https://astro.build/chat">Discord community</a> is really friendly and helpful!</p>
-        <p class="mt-5"><span class="tag"># astro</span> <span class="tag"># learning in public</span> <span class="tag"># setbacks</span> <span class="tag"># community</span></p>
+        <p>这个站的代码，大概有七成是 AI 写的。三个月下来，我对「AI 能不能写代码」这个问题已经没什么兴趣了 —— 它当然能。有意思的是另一个问题：<strong>哪一部分不该让它写。</strong></p>
+
+        <h2>它擅长的</h2>
+        <ul>
+          <li><strong>样板。</strong>列表渲染、表单校验、正则、日期格式化，这类有标准答案的东西，它写得比我快，也比我全。</li>
+          <li><strong>一次性脚本。</strong>批量改文件名、把 JSON 转成另一种形状，写完就扔，不用考虑可维护性。</li>
+          <li><strong>翻译。</strong>把「这里要一个胶囊形状的标签，字号小一点，字距松一点」翻成 CSS。我描述，它落地，来回两三轮就对了。</li>
+          <li><strong>查漏。</strong>写完一段交互，让它找无障碍问题，它比我认真。</li>
+        </ul>
+
+        <h2>它不擅长的</h2>
+        <p>第一个是<strong>跨文件的一致性</strong>。它每次只看得到我给它的那一段。同一套设计令牌，A 文件里它写成 <code>--s4</code>，B 文件里它写成 <code>1rem</code>，两边都「对」，合起来就是错的。</p>
+        <p>第二个是<strong>看不见的约束</strong>。这个站的 CSP 是 <code>script-src 'self'</code>，不允许任何内联脚本。它给我写过三次 <code>onclick="..."</code>，每次都解释得很合理 —— 它不知道那条约束存在，除非我每次都告诉它。</p>
+        <p>第三个是<strong>自己和自己矛盾</strong>。同一轮对话里，它先在方案里写「不要用 grid」，二十分钟后又用 grid 写了一段。它不记得自己半小时前的主张。</p>
+
+        <h2>我现在的规矩</h2>
+        <ol>
+          <li>接口和数据结构我自己写。这是整个项目的骨架，不能由一段我不完全理解的代码定下来。</li>
+          <li>一次只给一个文件。给它整个仓库，它会开始猜。</li>
+          <li>改完必须能解释。解释不了就回退，重新问一遍。</li>
+          <li>报错时先问「你为什么这么写」，而不是「为什么跑不起来」。前者能挖出错误的假设，后者只会换来一层补丁。</li>
+        </ol>
+
+        <blockquote><p>三个月下来，我的角色从「打字的人」变成了「审稿的人」。写得更快了，但读得更多了。</p></blockquote>
+
+        <p>最后说一句实话：它让「我不会前端」这件事变得没那么致命，但也让「我不理解我自己的代码」变得更容易发生。这两件事同时成立，而且都得认。</p>
+        <p class="mt-5"><span class="tag"># ai</span> <span class="tag"># 工作流</span> <span class="tag"># 复盘</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
-          <p><strong>Astro Learner</strong></p>
+          <p><strong>Mayu</strong></p>
           <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
         </div>
 
         <div class="margin-note" data-slot="related-note">
           <p class="margin-note__title">其它记录</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="post-1.html">blog1,先看this</a><span class="facts__v num">2026-08-19</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-4.html">My Fourth Blog Post</a><span class="facts__v num">2022-08-08</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-2.html">My Second Blog Post</a><span class="facts__v num">2022-07-08</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-1.html">玻璃、棱镜与一次视觉重构</a><span class="facts__v num">2026-08-19</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-2.html">我把框架删了，改成手写 HTML</a><span class="facts__v num">2026-07-28</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-4.html">先把这个站搭起来</a><span class="facts__v num">2026-06-12</span></div>
           </div>
         </div>
       </aside>

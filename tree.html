@@ -9,7 +9,7 @@
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
 <title>灵境 · shikibe's blog</title>
-<meta name="description" content="放可视化实验的地方：力导向图，以及一些不知道该怎么归类的东西。">
+<meta name="description" content="放可视化实验的地方。现在还是空的 —— 第一个还没做出来。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -36,18 +36,18 @@
     <section class="folio" data-slot="folio">
       <span class="folio__num"><span aria-hidden="true">§</span> 07 · 灵境</span>
       <h1 class="folio__title">灵境</h1>
-      <p class="folio__desc">放可视化实验的地方：力导向图，以及一些不知道该怎么归类的东西。</p>
+      <p class="folio__desc">放可视化实验的地方。现在还是空的 —— 第一个还没做出来。</p>
       <hr class="folio__rule">
     </section>
 
     <p class="section-mark">§ 07.1 · 画布</p>
 
     <div class="blank blank--tall mt-4" data-slot="canvas-stage">
-      <p class="blank__title">Canvas / WebGL 挂载区</p>
-      <p class="blank__desc">在此挂载可视化实例。现在只是一块等高的留白，没有跑任何渲染循环。</p>
+      <p class="blank__title">这里还没有挂上东西</p>
+      <p class="blank__desc">这块位置留给第一个可视化实验。做出来了它就会出现在这里；在那之前，它就是一块留白 —— 不是加载失败，是真的还没有。</p>
     </div>
 
-    <p class="section-mark">§ 07.2 · 参数</p>
+    <p class="section-mark">§ 07.2 · 打算做成什么样</p>
 
     <div class="split mt-4">
       <div>
@@ -57,16 +57,17 @@
           <button class="chip" type="button" data-chip>数据源</button>
         </div>
         <div class="facts" data-slot="scene-facts">
-          <div class="facts__row"><span class="facts__k">{{参数名}}</span><span class="facts__v num">{{值}}</span></div>
-          <div class="facts__row"><span class="facts__k">{{参数名}}</span><span class="facts__v num">{{值}}</span></div>
-          <div class="facts__row"><span class="facts__k">{{参数名}}</span><span class="facts__v num">{{值}}</span></div>
+          <div class="facts__row"><span class="facts__k">布局</span><span class="facts__v">力导向</span></div>
+          <div class="facts__row"><span class="facts__k">节点上限</span><span class="facts__v num">120</span></div>
+          <div class="facts__row"><span class="facts__k">配色</span><span class="facts__v">跟随主题</span></div>
         </div>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="scene-note">
           <p class="margin-note__title">这一页在做什么</p>
-          <p>{{说明交互方式与数据来源。}}</p>
+          <p>打算放一张笔记之间的关联图：每个节点是一篇文章或一条杂谈，两个节点之间连一条边，表示它们提到过同一个概念。</p>
+          <p>还没开始写。想清楚了再做，比先画出来再想怎么用要好。</p>
         </div>
       </aside>
     </div>

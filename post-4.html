@@ -8,8 +8,8 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
-<title>My Fourth Blog Post · shikibe's blog</title>
-<meta name="description" content="This post will show up on its own!">
+<title>先把这个站搭起来 · shikibe's blog</title>
+<meta name="description" content="想写博客这件事我想了两年。这次我换了个做法。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,32 +35,52 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="post-head">
       <div class="article__meta">
-        <span>№ 004</span><span>2022-08-08</span><span>Astro Learner</span>
+        <span>№ 004</span><span>2026-06-12</span><span>Mayu</span>
       </div>
-      <h1 class="article__title">My Fourth Blog Post</h1>
-      <p class="article__standfirst">This post will show up on its own!</p>
+      <h1 class="article__title">先把这个站搭起来</h1>
+      <p class="article__standfirst">想写博客这件事我想了两年。这次我换了个做法。</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="post-body">
-        <p>This post should show up with my other blog posts, because <code>import.meta.glob()</code> is returning a list of all my posts in order to create my list.</p>
-        <p class="mt-5"><span class="tag"># astro</span> <span class="tag"># successes</span></p>
+        <p>这是这个站的第一篇文章，写在建站当天。</p>
+        <p>想写博客这件事我想了大概两年。每次都是先纠结用什么框架、用什么主题、部署到哪，纠结完就没有然后了。这次我换了个做法：<strong>先把它搭起来，丑也没关系。</strong></p>
+
+        <h2>为什么要写</h2>
+        <p>我平时的想法散在聊天记录、备忘录和浏览器书签里。同一个人问我同一个问题两次，我两次答得不一样 —— 因为第一次的答案找不到了。</p>
+        <p>写下来是为了<em>下次能找回来</em>。顺便，如果刚好有人搜到、刚好有用，那就是意外收获。</p>
+
+        <h2>怎么搭的</h2>
+        <p>托管用的是 Cloudflare 的静态资源托管，代码放在 GitHub 上。选它的理由很朴素：免费额度够用，推送就部署，没有服务器要管。</p>
+        <p>第一版用的是现成的主题，改了两天，越改越别扭 —— 每一个想调的地方都藏在别人的抽象里。第三周我推倒重写，从一个空目录开始，手写 HTML。</p>
+
+        <h2>给自己立的规矩</h2>
+        <ul>
+          <li>每篇至少写够五百字。写不到就说明这件事不值得单独成文，塞进杂谈里。</li>
+          <li>不写「今天学了个新东西」这种。要么写清楚学到了什么、怎么用，要么不写。</li>
+          <li>可以写得很烂，但不能写得像广告。</li>
+        </ul>
+
+        <blockquote><p>完美的第一版是不存在的。存在的只有「上线了」和「还在改」。</p></blockquote>
+
+        <p>所以这就是第一篇。现在回头看，内容干巴巴的，但它在。这比什么都重要。</p>
+        <p class="mt-5"><span class="tag"># 建站</span> <span class="tag"># cloudflare</span> <span class="tag"># 开始</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
-          <p><strong>Astro Learner</strong></p>
+          <p><strong>Mayu</strong></p>
           <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
         </div>
 
         <div class="margin-note" data-slot="related-note">
           <p class="margin-note__title">其它记录</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="post-1.html">blog1,先看this</a><span class="facts__v num">2026-08-19</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-3.html">My Third Blog Post</a><span class="facts__v num">2022-07-15</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-2.html">My Second Blog Post</a><span class="facts__v num">2022-07-08</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-1.html">玻璃、棱镜与一次视觉重构</a><span class="facts__v num">2026-08-19</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-2.html">我把框架删了，改成手写 HTML</a><span class="facts__v num">2026-07-28</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-3.html">和 AI 结对编程的三个月</a><span class="facts__v num">2026-07-03</span></div>
           </div>
         </div>
       </aside>

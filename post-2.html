@@ -8,8 +8,8 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
-<title>My Second Blog Post · shikibe's blog</title>
-<meta name="description" content="After learning some Astro, I couldn't stop!">
+<title>我把框架删了，改成手写 HTML · shikibe's blog</title>
+<meta name="description" content="一个没有构建步骤的博客，能走多远。以及我为它付了什么。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,32 +35,58 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="post-head">
       <div class="article__meta">
-        <span>№ 002</span><span>2022-07-08</span><span>Astro Learner</span>
+        <span>№ 002</span><span>2026-07-28</span><span>Mayu</span>
       </div>
-      <h1 class="article__title">My Second Blog Post</h1>
-      <p class="article__standfirst">After learning some Astro, I couldn't stop!</p>
+      <h1 class="article__title">我把框架删了，改成手写 HTML</h1>
+      <p class="article__standfirst">一个没有构建步骤的博客，能走多远。以及我为它付了什么。</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="post-body">
-        <p>After a successful first week learning Astro, I decided to try some more. I wrote and imported a small component from memory!</p>
-        <p class="mt-5"><span class="tag"># astro</span> <span class="tag"># blogging</span> <span class="tag"># learning in public</span> <span class="tag"># successes</span></p>
+        <p>这个博客最初是用 Astro 搭的。教程很顺，半小时跑起来，写文章只要丢一个 <code>.md</code> 进目录，剩下的交给构建。三个月后我把它删了，改成手写 HTML。</p>
+
+        <h2>为什么退回去</h2>
+        <p>不是因为 Astro 不好。是因为我每次想改一点东西，都要先回忆一遍「这个版本用的是哪套配置」。构建产物在 <code>dist/</code> 里，我想确认一个间距改对了没有，得先跑构建、再开预览、再看产物 —— 中间隔着三层我看不见的东西。</p>
+        <p>而我现在想要的是：改一行 CSS，刷新，看见结果。就这一步。</p>
+
+        <h2>没有构建步骤的代价</h2>
+        <p>代价很实在，我不想装作没有：</p>
+        <ul>
+          <li><strong>没有组件复用。</strong>报头和页脚在 14 个页面里各有一份 —— 不对，只有一份，是脚本挂上去的。这是我唯一保留的「组件」。</li>
+          <li><strong>站点级信息靠一个 JS 对象。</strong>站名、导航、社交链接集中在 <code>shell.js</code> 顶部的 <code>SITE</code> 里，改一处全站生效。改不了的地方就得逐页动手。</li>
+          <li><strong>没有 Markdown 管道。</strong>文章是 HTML 写的，标题、列表、代码块都手写标签。写的时候确实比 Markdown 慢。</li>
+          <li><strong>没有类型检查，没有 lint。</strong>写错了就是页面上看得见 —— 好处是它不会在构建阶段拦着我，坏处是它不会在构建阶段拦着我。</li>
+        </ul>
+
+        <h2>换来的东西</h2>
+        <ul>
+          <li><strong>双击就能打开。</strong>不用装 Node，不用联网，不用等构建。十年后这个目录还在，它就还能打开。</li>
+          <li><strong>没有依赖。</strong>零个 npm 包，也就没有「半年后装不回来」这种风险。</li>
+          <li><strong>看得见全部。</strong>页面上任何一个像素，都能追到某一行 CSS。中间没有编译产物挡着。</li>
+        </ul>
+
+        <blockquote><p>框架解决的是「很多人一起维护一个大项目」的问题。我一个人维护十几个静态页，那个问题不存在。</p></blockquote>
+
+        <h2>那什么时候该用框架</h2>
+        <p>如果我要写一百篇文章、要有评论、要多人协作、要每天发三篇 —— 我会立刻换回去。判断标准不是「框架先不先进」，是「我有没有它要解决的那个问题」。</p>
+        <p>现在没有。所以现在是手写。</p>
+        <p class="mt-5"><span class="tag"># 前端</span> <span class="tag"># 静态站</span> <span class="tag"># 取舍</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
-          <p><strong>Astro Learner</strong></p>
+          <p><strong>Mayu</strong></p>
           <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
         </div>
 
         <div class="margin-note" data-slot="related-note">
           <p class="margin-note__title">其它记录</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="post-1.html">blog1,先看this</a><span class="facts__v num">2026-08-19</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-4.html">My Fourth Blog Post</a><span class="facts__v num">2022-08-08</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-3.html">My Third Blog Post</a><span class="facts__v num">2022-07-15</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-1.html">玻璃、棱镜与一次视觉重构</a><span class="facts__v num">2026-08-19</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-3.html">和 AI 结对编程的三个月</a><span class="facts__v num">2026-07-03</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-4.html">先把这个站搭起来</a><span class="facts__v num">2026-06-12</span></div>
           </div>
         </div>
       </aside>

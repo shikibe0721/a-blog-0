@@ -8,8 +8,8 @@
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#eef0f3">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000000">
 <meta name="color-scheme" content="light dark">
-<title>blog1,先看this · shikibe's blog</title>
-<meta name="description" content="This is the first post of my blog.">
+<title>玻璃、棱镜与一次视觉重构 · shikibe's blog</title>
+<meta name="description" content="把整站换成液态玻璃之后，我删掉的东西比加上的多。">
 <script src="assets/js/theme-init.js"></script>
 <link rel="stylesheet" href="assets/css/skeleton.css">
 </head>
@@ -35,34 +35,55 @@
   <main id="main" class="sheet">
     <header class="article__head" data-slot="post-head">
       <div class="article__meta">
-        <span>№ 001</span><span>2026-08-19</span><span>一个傻逼</span>
+        <span>№ 001</span><span>2026-08-19</span><span>Mayu</span>
       </div>
-      <h1 class="article__title">blog1,先看this</h1>
-      <p class="article__standfirst">This is the first post of my blog.</p>
+      <h1 class="article__title">玻璃、棱镜与一次视觉重构</h1>
+      <p class="article__standfirst">把整站换成液态玻璃之后，我删掉的东西比加上的多。</p>
     </header>
 
     <div class="split">
       <p class="section-mark">§ 01 · 正文</p>
       <div class="prose" data-slot="post-body">
-        <p>Welcome to my <em>new blog</em>但是我在用AI开发出一个能够实时在网页上发或者改blog之前我应该不会动它了,其它几篇blog都是内置内容,跟我没关系</p>
-        <p>这个GitHub和cloudflare太他妈烦了,cf他妈每次我更新项目他妈都要我手动部署我真服了</p>
-        <p>如果有大佬看到了能不能教我前段啊,ai一堆bug,我用qwen写还要用grok修我操</p>
-        <p>还有有钱的傻逼可以加我tg之后给我寄一张10000$支票吗</p>
+        <p>这个站的第一版很丑，丑到我不好意思把链接发出去。灰底、蓝链接、默认样式的按钮，看起来像 2009 年某个内部系统的后台。我花了两个周末把它推倒重来，最后留下的东西比删掉的少得多。</p>
+
+        <h2>从「模糊」到「棱镜」</h2>
+        <p>一开始我按最常见的方式做玻璃：<code>backdrop-filter: blur(20px)</code> 加一层半透明白。结果是糊的 —— 整块面板的边缘消失了，和背景糊成一片，看起来更像「没渲染完」而不是「玻璃」。</p>
+        <p>真正让玻璃成立的其实不是模糊，是<strong>边</strong>。一块真实的玻璃，你能看见的是它的四边：上沿和左沿被光照亮，下沿和右沿压暗，中间还有一圈极淡的折射。所以我把结构拆成四层：</p>
+        <ul>
+          <li>四边棱线高光 —— 用 <code>inset</code> 的 1px 投影，两条亮两条暗，方向固定</li>
+          <li>内侧折射暗环 —— 再叠一层半径更大的 <code>inset</code>，软一点</li>
+          <li>45° 对角扫掠 —— 一条极淡的线性渐变，模拟光从左上来</li>
+          <li>投影 —— 最后才是让人「浮起来」的那一层</li>
+        </ul>
+        <p>模糊压到 8px 以下，边缘反而更清楚了。这件事我想了很久才想通：模糊负责「隔着东西看」，棱线负责「这是一块东西」。两件事不一样。</p>
+
+        <h2>删掉颜色</h2>
+        <p>第二件事是把强调色全删了。原来有蓝色的链接、绿色的标签、橙色的按钮，一个页面上四五种颜色互相抢。现在的配色是纯灰阶 —— <strong>强调色就是墨本身</strong>。需要突出的地方加粗、变大、或者多留一点空，而不是换个颜色。</p>
+        <p>副作用是层级必须靠排版撑起来。字号、字重、行距、留白，这四样里任何一样没排好，整页就塌成一片灰。这比加颜色难，但结果安静得多。</p>
+
+        <h2>踩过的坑</h2>
+        <p>深色模式下悬停会发脏。原因是我的悬停色写成了半透明白，叠在深灰底上变成了脏棕。改成两层同色系的极淡填充，问题消失。</p>
+        <p>还有一处是「双线夹空白」：两个相邻的玻璃块各自带边框，中间夹着 2px 间隙，视觉上出现两条平行线。后来统一改成相邻元素只保留一条边。</p>
+        <p>最后一个坑更隐蔽：空状态组件原本是按「众多区块里的一个空位」设计的，字号只有 11px。当整页都空的时候，它成了页面上唯一的内容，11px 的小字飘在中间，看起来像坏掉了。后来单独给了一个提级变体。</p>
+
+        <h2>结果</h2>
+        <p>改完之后，访问时长没什么变化，跳出率也没什么变化 —— 毕竟是个人博客，本来也没几个人看。但<em>我自己愿意点开它了</em>。这大概是这次重构唯一真实的收益。</p>
+        <p class="mt-5"><span class="tag"># css</span> <span class="tag"># 设计</span> <span class="tag"># 重构</span></p>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="author-note">
           <p class="margin-note__title">作者</p>
-          <p><strong>一个傻逼</strong></p>
+          <p><strong>Mayu</strong></p>
           <p>折腾 AI，以及一些奇奇怪怪的想法。</p>
         </div>
 
         <div class="margin-note" data-slot="related-note">
           <p class="margin-note__title">其它记录</p>
           <div class="facts">
-            <div class="facts__row"><a class="facts__k" href="post-4.html">My Fourth Blog Post</a><span class="facts__v num">2022-08-08</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-3.html">My Third Blog Post</a><span class="facts__v num">2022-07-15</span></div>
-            <div class="facts__row"><a class="facts__k" href="post-2.html">My Second Blog Post</a><span class="facts__v num">2022-07-08</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-2.html">我把框架删了，改成手写 HTML</a><span class="facts__v num">2026-07-28</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-3.html">和 AI 结对编程的三个月</a><span class="facts__v num">2026-07-03</span></div>
+            <div class="facts__row"><a class="facts__k" href="post-4.html">先把这个站搭起来</a><span class="facts__v num">2026-06-12</span></div>
           </div>
         </div>
       </aside>

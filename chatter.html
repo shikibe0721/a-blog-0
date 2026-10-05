@@ -48,21 +48,51 @@
       <div class="chips" data-slot="chips"><button class="chip is-active" type="button" data-chip>全部</button><button class="chip" type="button" data-chip>随笔</button><button class="chip" type="button" data-chip>日常</button></div>
     </div>
 
-    <p class="section-mark">§ 02.1 · 全部杂谈</p>
+    <p class="section-mark">§ 02.1 · 短的三条</p>
 
     <div class="split mt-4">
-      <div class="blank" data-slot="chatter-catalog">
-        <p class="blank__title">暂无杂谈</p>
-        <p class="blank__desc">还没有写下的片段。第一条杂谈会出现在这里。</p>
+      <div class="catalog" data-slot="chatter-catalog">
+        <article class="entry">
+          <div class="entry__meta"><span class="entry__no">№ 002</span><span>2026-08-06</span></div>
+          <div>
+            <h2 class="entry__title">凌晨三点的部署事故</h2>
+            <p class="entry__excerpt">为了改一个错别字，我在凌晨三点推了一次提交。构建卡在队列里，页面变成半新半旧 —— 首页是新的，归档还是旧的。刷新了二十遍才反应过来，是我自己开着两个标签页在互相看。</p>
+            <p class="entry__excerpt mt-5"><span class="tag"># 部署</span> <span class="tag"># 手滑</span></p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__meta"><span class="entry__no">№ 003</span><span>2026-07-19</span></div>
+          <div>
+            <h2 class="entry__title">为「摸鱼」辩护</h2>
+            <p class="entry__excerpt">有人问我一天写多少小时代码。我说不一定，有时候两小时，有时候十二小时 —— 但十二小时那天写出来的东西，第二天通常要重写一遍。真正有用的那部分，往往出现在我离开键盘去泡茶的路上。</p>
+            <p class="entry__excerpt mt-5"><span class="tag"># 摸鱼</span> <span class="tag"># 效率</span></p>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="entry__meta"><span class="entry__no">№ 004</span><span>2026-06-28</span></div>
+          <div>
+            <h2 class="entry__title">猫踩了我的键盘</h2>
+            <p class="entry__excerpt">我的猫对键盘有执念。今天它踩出一串 <code>jjjjjjjjjjjj</code>，正好落在编辑器的插入模式里。我盯着屏幕想了三秒，决定把这行留着 —— 反正这个文件本来也没人会看。</p>
+            <p class="entry__excerpt mt-5"><span class="tag"># 猫</span> <span class="tag"># 日常</span></p>
+          </div>
+        </article>
       </div>
 
       <aside class="margin-col">
         <div class="margin-note" data-slot="chatter-note">
           <p class="margin-note__title">计数</p>
           <div class="facts">
-            <div class="facts__row"><span class="facts__k">杂谈</span><span class="facts__v num">0</span></div>
-            <div class="facts__row"><span class="facts__k">标签</span><span class="facts__v num">0</span></div>
+            <div class="facts__row"><span class="facts__k">杂谈</span><span class="facts__v num">4</span></div>
+            <div class="facts__row"><span class="facts__k">标签</span><span class="facts__v num">6</span></div>
           </div>
+        </div>
+
+        <div class="margin-note" data-slot="chatter-long-note">
+          <p class="margin-note__title">长一点的那篇</p>
+          <p>有些片段写起来收不住，就单独给了一页。</p>
+          <p><a class="btn btn--ghost" href="chatter-detail.html">关于「写不出来」这件事</a></p>
         </div>
       </aside>
     </div>
