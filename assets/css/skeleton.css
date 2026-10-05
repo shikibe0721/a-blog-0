@@ -133,8 +133,13 @@
 
   /* — 玻璃的模糊：三档。小控件薄玻璃，大面板厚玻璃，浮层最厚 —
        ⚠️ backdrop-filter 很贵。不要给「可能有很多个」的元素加模糊，
-       列表行只给填充 + 棱边 + 投影，不给模糊。 — */
-  --blur: 3px;
+       列表行只给填充 + 棱边 + 投影，不给模糊。
+
+       ⚠️ 模糊只能「抹开背后已有的明暗」。背后是一块均匀的底时，
+       blur(4px) 和 blur(0px) 的像素输出完全一样 —— 玻璃看着像塑料，
+       不是因为模糊不够，而是因为背后没东西可抹。
+       所以深色主题下环境光必须给足（见 §2 的 body::before）。 */
+  --blur: 4px;
   --blur-panel: 16px;
   --blur-float: 24px;
 
@@ -181,23 +186,26 @@ html[data-theme="dark"] {
   --ink-3: #8a8a92;        /*  6.13:1 */
   --ink-4: #5a5a62;
 
-  --glass-fill: rgba(255, 255, 255, 0.06);
-  --glass-fill-hi: rgba(255, 255, 255, 0.10);
-  --glass-fill-lo: rgba(255, 255, 255, 0.03);
+  --glass-fill: rgba(255, 255, 255, 0.085);
+  --glass-fill-hi: rgba(255, 255, 255, 0.14);
+  --glass-fill-lo: rgba(255, 255, 255, 0.055);
 
-  --glass-edge: rgba(255, 255, 255, 0.14);
-  --rim-hi: rgba(255, 255, 255, 0.52);
-  --rim-hi-soft: rgba(255, 255, 255, 0.20);
+  /* 深色玻璃的立体感几乎全靠棱边 —— 填充再亮也只是一块灰，
+     真正让它「立起来」的是四条边上的高光。所以深色下的 --rim-hi
+     要比浅色更强，而不是更弱。 */
+  --glass-edge: rgba(255, 255, 255, 0.18);
+  --rim-hi: rgba(255, 255, 255, 0.62);
+  --rim-hi-soft: rgba(255, 255, 255, 0.26);
   --rim-dark: rgba(0, 0, 0, 0.55);
 
-  --sheen: rgba(255, 255, 255, 0.22);
+  --sheen: rgba(255, 255, 255, 0.26);
 
   --drop-1: 0 1px 2px rgba(0, 0, 0, 0.5);
   --drop-2: 0 10px 28px rgba(0, 0, 0, 0.5);
   --drop-3: 0 2px 6px rgba(0, 0, 0, 0.6), 0 24px 60px rgba(0, 0, 0, 0.62);
 
-  --hover: rgba(255, 255, 255, 0.07);
-  --track: rgba(255, 255, 255, 0.07);
+  --hover: rgba(255, 255, 255, 0.09);
+  --track: rgba(255, 255, 255, 0.10);
   --leader: rgba(255, 255, 255, 0.22);
 
   --focus: #ffffff;
@@ -257,11 +265,18 @@ body::before {
     radial-gradient(55rem 43.75rem at 96% 4%, rgba(206, 210, 220, 0.78) 0%, transparent 64%),
     radial-gradient(62.5rem 56.25rem at 46% 112%, rgba(198, 202, 214, 0.72) 0%, transparent 62%);
 }
+/* 深色的环境光必须比「看着舒服」更亮一点。
+   原因：模糊只能抹开背后已有的明暗。浅色主题背后是 95% 白 + 78% 灰蓝，
+   对比度本来就很足，玻璃一糊就出霜感；深色主题如果也把光压到 6%~13%，
+   背后就是一块均匀的黑 —— 此时 blur(24px) 与 blur(0) 的像素输出完全一致，
+   玻璃退化成一块平涂的深灰，也就是「根本不是液态玻璃」的观感。
+   这里把三团光提到能在页面顶部产生真实明暗过渡的量级，
+   让报头、卡片、输入框背后都有东西可折射。 */
 html[data-theme="dark"] body::before {
   background:
-    radial-gradient(68.75rem 47.5rem at 8% -12%, rgba(255, 255, 255, 0.13) 0%, transparent 62%),
-    radial-gradient(55rem 43.75rem at 96% 4%, rgba(255, 255, 255, 0.08) 0%, transparent 64%),
-    radial-gradient(62.5rem 56.25rem at 46% 112%, rgba(255, 255, 255, 0.06) 0%, transparent 62%);
+    radial-gradient(68.75rem 47.5rem at 8% -12%, rgba(255, 255, 255, 0.30) 0%, transparent 58%),
+    radial-gradient(55rem 43.75rem at 96% 4%, rgba(255, 255, 255, 0.20) 0%, transparent 60%),
+    radial-gradient(62.5rem 56.25rem at 46% 112%, rgba(255, 255, 255, 0.14) 0%, transparent 60%);
 }
 
 /* 噪点：抵掉大面积渐变的塑料感。深色下要压得更低 ——
@@ -275,7 +290,10 @@ body::after {
   opacity: 0.022;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-html[data-theme="dark"] body::after { opacity: 0.013; }
+/* 噪点在深色下仍要压得比浅色低（同样的绝对噪声在低亮度上会显成脏点），
+   但不能低到看不见 —— 它是背后唯一的「高频细节」，
+   而高频细节正是模糊唯一能产生视觉差异的东西。 */
+html[data-theme="dark"] body::after { opacity: 0.020; }
 
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; display: block; }
@@ -559,7 +577,11 @@ html[data-theme="dark"] ::selection { background: #f5f5f7; color: #000; }
 }
 
 /* 导航 = 分段控件（segmented control）的写法：
-   整体是一条凹下去的轨道，当前项是一枚浮起来的胶囊。 */
+   整体是一条凹下去的轨道，当前项是一枚浮起来的胶囊。
+
+   ⚠️ 轨道也必须吃模糊。它此前不在任何一档模糊名单里，只是一层平涂，
+   浅色下靠「白底上的浅灰」还能看出是条凹槽，深色下就直接消失了 ——
+   导航看起来像一排裸文字链接。 */
 .masthead__nav {
   display: flex;
   align-items: center;
@@ -569,8 +591,17 @@ html[data-theme="dark"] ::selection { background: #f5f5f7; color: #000; }
   border-radius: var(--r-pill);
   background: var(--track);
   box-shadow: inset 0 1px 2px rgba(11, 11, 13, 0.07);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+  backdrop-filter: blur(var(--blur)) saturate(180%);
 }
-html[data-theme="dark"] .masthead__nav { box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.45); }
+/* 深色下 7% 白的轨道压在 14% 白的报头上，差值小到看不出边界。
+   补一条内描边把凹槽切出来，再让轨道自己的填充比报头暗一档。 */
+html[data-theme="dark"] .masthead__nav {
+  background: rgba(0, 0, 0, 0.22);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 1px 2px rgba(0, 0, 0, 0.45);
+}
 
 .masthead__nav a {
   position: relative;
@@ -594,13 +625,13 @@ html[data-theme="dark"] .masthead__nav { box-shadow: inset 0 1px 2px rgba(0, 0, 
     var(--drop-1);
 }
 html[data-theme="dark"] .masthead__nav a[aria-current="page"] {
-  background: rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.20);
 }
 
 /* 悬停只改颜色和底色 —— 不涉及位移，所以不需要指针门控 */
 .masthead__nav a:hover { color: var(--ink); background: var(--hover); }
 .masthead__nav a[aria-current="page"]:hover { background: var(--glass-fill-hi); }
-html[data-theme="dark"] .masthead__nav a[aria-current="page"]:hover { background: rgba(255, 255, 255, 0.18); }
+html[data-theme="dark"] .masthead__nav a[aria-current="page"]:hover { background: rgba(255, 255, 255, 0.24); }
 
 .masthead__tools {
   display: flex;
@@ -1255,6 +1286,14 @@ html[data-theme="dark"] .btn--solid:hover { color: #000; }
 }
 .btn--ghost::before,
 .btn--ghost::after { display: none; }
+
+/* 深色下 ghost 按钮完全透明 = 一个看不见的控件
+   （首页那句「换一句」就是它）。给一层最薄的玻璃，
+   只到「看得出这里有个按钮」为止，不改变 ghost 的语义。 */
+html[data-theme="dark"] .btn--ghost {
+  border-color: var(--glass-edge);
+  background: var(--glass-fill-lo);
+}
 .btn--ghost:hover {
   border-color: var(--glass-edge);
   background: var(--glass-fill);
@@ -1353,11 +1392,32 @@ html[data-theme="dark"] .chip.is-active { color: #000; }
   transition:
     color var(--dur-fast) var(--ease),
     background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease),
     transform var(--dur-press) var(--ease-out);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+  backdrop-filter: blur(var(--blur)) saturate(180%);
 }
 .iconbtn:hover { color: var(--ink); background: var(--hover); }
 .iconbtn:active { transform: scale(0.92); }
 .iconbtn svg { width: 1.0625rem; height: 1.0625rem; }
+
+/* 深色下按钮不能是裸的：报头本身只有 14% 白，一枚浅灰字形浮在上面
+   既不像控件也不像玻璃。
+   ⚠️ 但也不能给「浅色填充」—— 45° 扫光在报头的右上角正好最亮（26% 白），
+   图标按钮就坐在那个角上，再叠一层浅填充会变成两枚实心灰圆。
+   所以这里用**凹**而不是凸：一层暗overlay + 一圈棱边，
+   和导航轨道同一种语言（深色下玻璃靠「凹槽 + 亮边」成立）。
+   悬停时凹槽变浅，给出「按下去之前先浮起来」的反馈。 */
+html[data-theme="dark"] .iconbtn {
+  background: rgba(0, 0, 0, 0.24);
+  box-shadow:
+    inset 0 0 0 1px var(--glass-edge),
+    inset 0 1px 2px rgba(0, 0, 0, 0.35);
+}
+html[data-theme="dark"] .iconbtn:hover {
+  background: rgba(0, 0, 0, 0.10);
+  color: var(--ink);
+}
 
 /* 工具条：搜索 + 筛选。
    它本身不做玻璃 —— 做成通栏玻璃板的话，只有搜索框的页面（首页）
