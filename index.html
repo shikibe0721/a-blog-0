@@ -54,7 +54,7 @@
     <div class="split mt-4">
       <!-- data-catalog：接口可用时，blog-api.js 会用在线文章整体替换这里的内容；
            接口不可用就保持下面这些静态条目 —— 静态兜底不是备选方案，是默认状态。 -->
-      <div class="catalog" data-slot="catalog" data-catalog>
+      <div class="catalog" data-slot="catalog" data-catalog data-filter>
         <a class="entry" href="post-1.html">
           <div class="entry__meta"><span class="entry__no">№ 001</span><span>2026-08-19</span></div>
           <div>
@@ -100,7 +100,7 @@
   </main>
   <div data-shell="colophon"></div>
 </div>
-<script src="assets/js/shell.js"></script>
-<script src="assets/js/blog-api.js"></script>
+<script src="assets/js/shell.js" defer></script>
+<script src="assets/js/blog-api.js" defer></script>
 </body>
 </html>

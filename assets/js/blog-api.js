@@ -208,11 +208,20 @@ function mdToHtml(source) {
 
 /* -------------------------------------------------------------------------
    接口客户端
+   -------------------------------------------------------------------------
+   所有请求都带超时。没有超时的话，一个「连上了但不回话」的地址
+   （被中间设备吞掉、Worker 卡住、代理挂起）会让文章页的骨架屏一直转下去 ——
+   页面看起来在加载，其实永远不会结束。有超时才有确定的结局。
    ------------------------------------------------------------------------- */
+const REQUEST_TIMEOUT_MS = 10000;
+
 async function request(path, { method = "GET", body, token } = {}) {
   const headers = {};
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (token) headers.Authorization = `Bearer ${token}`;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
 
   let response;
   try {
@@ -220,13 +229,20 @@ async function request(path, { method = "GET", body, token } = {}) {
       method,
       headers,
       body: body === undefined ? undefined : JSON.stringify(body),
+      signal: controller.signal,
     });
   } catch (cause) {
-    // 网络层失败（离线 / 地址写错 / 被 CSP 拦下）—— 给一句人话
-    const err = new Error("连不上接口。检查网络，或后台页里的「接口地址」是否填对。");
+    // 网络层失败（离线 / 地址写错 / 被 CSP 拦下 / 超时）—— 给一句人话
+    const err = new Error(
+      controller.signal.aborted
+        ? "接口响应超时。检查网络，或稍后重试。"
+        : "连不上接口。检查网络，或后台页里的「接口地址」是否填对。"
+    );
     err.status = 0;
     err.cause = cause;
     throw err;
+  } finally {
+    clearTimeout(timer);
   }
 
   const text = await response.text();
@@ -332,6 +348,8 @@ async function hydrateCatalog() {
 
   el.innerHTML = posts.map((p, i) => entryHtml(p, i + 1)).join("");
   el.setAttribute("data-hydrated", "1");
+  // 内容换了，工具栏上已经生效的搜索 / 分类条件要重放一遍
+  window.SiteFilter?.apply?.();
 }
 
 /** 归档页：同上，换的是账本行 */
@@ -344,6 +362,7 @@ async function hydrateLedger() {
 
   el.innerHTML = posts.map(ledgerRowHtml).join("");
   el.setAttribute("data-hydrated", "1");
+  window.SiteFilter?.apply?.();
 }
 
 /** 文章页：按 ?slug= 取一篇 */
@@ -397,15 +416,20 @@ async function hydratePost() {
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute("content", post.excerpt || post.title);
 
+  /* 列表只取一次。编号（「№ 003」）和侧栏的「其它记录」用的都是它 ——
+     以前这两处各发一次请求，加上正文那次，打开一篇文章要跑三趟网络。
+     取不到就都退回静态兜底：编号是装饰，其它记录那块模板里本来就有内容。 */
+  let meta = [];
+  try {
+    ({ posts: meta } = await BlogAPI.list({ meta: true }));
+  } catch {
+    /* 拿不到就算了，下面两处各自有兜底 */
+  }
+
   // 编号按「已发布列表里的位置」算，和目录页保持一致
   let number = "—";
-  try {
-    const { posts } = await BlogAPI.list({ meta: true });
-    const at = posts.findIndex((p) => p.slug === post.slug);
-    if (at >= 0) number = String(at + 1).padStart(3, "0");
-  } catch {
-    /* 编号只是装饰，拿不到就算了 */
-  }
+  const at = meta.findIndex((p) => p.slug === post.slug);
+  if (at >= 0) number = String(at + 1).padStart(3, "0");
 
   const metaBox = root.querySelector("[data-post-meta]");
   if (metaBox) {
@@ -430,24 +454,19 @@ async function hydratePost() {
   const body = root.querySelector("[data-post-body]");
   if (body) body.innerHTML = mdToHtml(post.body);
 
-  // 侧栏「其它记录」：同一份列表里取最近三篇别人
+  // 侧栏「其它记录」：复用上面那一份列表，取最近三篇别人
   const related = root.querySelector("[data-post-related]");
-  if (related) {
-    try {
-      const { posts } = await BlogAPI.list({ meta: true });
-      const others = posts.filter((p) => p.slug !== post.slug).slice(0, 3);
-      related.innerHTML = others.length
-        ? others
-            .map(
-              (p) =>
-                `<div class="facts__row"><a class="facts__k" href="${postUrl(p.slug)}">${esc(p.title)}</a>` +
-                `<span class="facts__v num">${esc(p.date)}</span></div>`
-            )
-            .join("")
-        : `<div class="facts__row"><span class="facts__v">暂时没有别的</span></div>`;
-    } catch {
-      /* 保持模板里的静态兜底 */
-    }
+  if (related && meta.length) {
+    const others = meta.filter((p) => p.slug !== post.slug).slice(0, 3);
+    related.innerHTML = others.length
+      ? others
+          .map(
+            (p) =>
+              `<div class="facts__row"><a class="facts__k" href="${postUrl(p.slug)}">${esc(p.title)}</a>` +
+              `<span class="facts__v num">${esc(p.date)}</span></div>`
+          )
+          .join("")
+      : `<div class="facts__row"><span class="facts__v">暂时没有别的</span></div>`;
   }
 
   // 已经登录的话，顺手给一个「编辑这篇」的入口

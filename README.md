@@ -41,6 +41,8 @@ a-blog-0/
 ├── skeleton.html         骨架屏参考页
 ├── 404.html              未命中页（Cloudflare not_found_handling 用）
 ├── worst-case.html       最坏数据压测夹具（不部署，见 .assetsignore）
+├── robots.txt            爬虫约定（不抓 admin / skeleton；收录与否靠 X-Robots-Tag）
+├── _headers              真实 HTTP 响应头（CSP / HSTS / 权限策略，见 §9.4）
 └── assets/
     ├── css/skeleton.css       设计令牌 + 玻璃材质 + 组件层（约 1500 行）
     ├── css/blog.css           动态渲染的少量补充（[hidden] 修正、加载/空状态）
@@ -190,6 +192,39 @@ const SITE = {
 > `.ledger__row` 与 `.entry` 都带悬停效果。给「没有详情页」的条目（说说、音乐、项目）
 > 用 `<div>` / `<article>` 而不是 `<a>`，点击时不会跳到空地址，但悬停仍会亮 ——
 > 这是可以接受的，别为了消掉它去改组件样式。
+
+#### 搜索与筛选：`data-filter` 这一个约定
+
+工具栏里的搜索框和分类胶囊**是真的会筛的**（早先版本里它们只是装饰 ——
+点了只换高亮，搜了什么都不发生；一个看起来能用却什么都不做的控件
+比没有控件更糟）。规则只有一条，写在 HTML 上：
+
+```html
+<div class="ledger" data-filter>   <!-- ← 加这一个属性就够了 -->
+  <a class="ledger__row">…</a>      <!-- 直接子元素 = 可筛条目 -->
+  <a class="ledger__row">…</a>
+</div>
+```
+
+- **条目 = 容器的直接子元素**，所以不需要再给每个条目挂属性
+- **搜索**：对条目的全部可见文字做不区分大小写的子串匹配
+- **分类胶囊**：标签是「全部」时不加条件；否则匹配条目里的
+  `.tag` / `.ledger__tag` 文字（开头的 `#` 会被去掉）
+- 两者是**「与」**的关系；一条都没匹配上时，列表里会出现一句
+  `.filter-empty` 提示（`role="status"`，读屏会播报）
+
+> `.filter-empty` 是脚本**插进列表内部**的，不是挂在列表后面 ——
+> 首页 / 杂谈 / 音乐 / 说说的列表都在 `.split` 里，多一个兄弟节点
+> 就成了栅格子项，会把右侧边栏挤到第二行。
+
+页面上没有 `data-filter` 就整个跳过 —— 照片墙那种还没内容的页面
+不会因此冒出一句「没有匹配」。注水（`blog-api.js` 换掉列表内容）之后，
+`SiteFilter.apply()` 会把当前条件重放一遍（提示节点被冲掉了也会挂回去），
+所以搜索状态不会因为接口回来了就被清掉。
+
+> 胶囊的文字要和条目里的标签对得上，否则点了就是空的。
+> 归档页的「文章 / 杂谈」、音乐页的「纯音乐 / 循环最多」都是对上的；
+> 改标签文案时记得一起看这里。
 
 ### 5.3 详情页：两条路
 
@@ -720,6 +755,22 @@ npm run deploy    # 部署到生产
 
 页面里的 `<meta>` CSP 保留着，是给 `file://` 本地预览和其他托管用的；
 Cloudflare 上用 `_headers` 补上完整版（多了 `frame-ancestors` 和几个安全响应头）。
+
+响应头里现在有这些，各自挡一类问题：
+
+| 头 | 挡什么 |
+|---|---|
+| `frame-ancestors 'none'` + `X-Frame-Options: DENY` | 点击劫持（两条都写，覆盖老浏览器） |
+| `Strict-Transport-Security` | 首次访问之后的明文回源 / 换证书（**只能**在响应头里） |
+| `Cross-Origin-Resource-Policy: same-origin` | 别的站点把本站 CSS / 图片当自己的资源加载（顺带挡盗链） |
+| `Permissions-Policy` | 用不到的浏览器能力（摄像头、定位、USB…）逐个关掉 |
+| `frame-src` / `worker-src 'none'` | 不写就会回落到 `default-src 'self'`，等于默认允许同源嵌入 |
+| `X-Permitted-Cross-Domain-Policies: none` | Flash / PDF 那套跨域策略文件 |
+| `X-Robots-Tag`（`/admin.html`、`/skeleton.html`） | 被搜索引擎收录 —— 比 `<meta name="robots">` 更早生效 |
+
+`robots.txt` 也在仓库根目录，但它挡的是**抓取**不是**收录**：
+一个被别处链接的页面，搜索引擎仍可能只凭链接文字把它收进去。
+所以那两页真正的防线是 `X-Robots-Tag`，`robots.txt` 只是省点抓取预算。
 
 ### 9.5 ⚠️ 缓存：没有内容哈希就不能 immutable
 

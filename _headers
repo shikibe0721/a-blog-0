@@ -6,12 +6,38 @@
 # 最典型的就是 frame-ancestors（防点击劫持）。见下面 /* 那段。
 
 /*
-  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.workers.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'
+  Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://*.workers.dev; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; frame-src 'none'; worker-src 'none'; manifest-src 'self'; object-src 'none'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: geolocation=(), microphone=(), camera=(), payment=()
+  Permissions-Policy: accelerometer=(), autoplay=(), bluetooth=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), serial=(), usb=(), xr-spatial-tracking=()
   X-Frame-Options: DENY
+  X-Permitted-Cross-Domain-Policies: none
   Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+
+# ── 这几条为什么在这里，而不只是页面里的 <meta> ──────────────────────────
+#
+# 1. frame-ancestors / X-Frame-Options —— 防点击劫持。
+#    只能在响应头里生效，写进 <meta> 会被浏览器静默忽略。
+#
+# 2. Strict-Transport-Security —— 一次访问之后，浏览器就不再允许用 http
+#    回源这个域名，中间人也换不掉证书。没有它的话，「第一次访问」永远是
+#    明文窗口。max-age 一年；includeSubDomains 只影响本域的子域。
+#
+# 3. Cross-Origin-Resource-Policy: same-origin —— 别的站点不能把本站的
+#    CSS / 图片 / 字体当自己的资源加载（顺带挡掉图片盗链）。本站所有资源
+#    都是同源的，所以这条不会误伤自己。
+#
+# 4. Permissions-Policy —— 逐个关掉用不到的浏览器能力。关掉不等于
+#    「将来不能用」，只等于「页面里的第三方脚本不能偷偷用」。
+#    fullscreen 留给本站（self），其余一律清空。
+#
+# 5. frame-src / worker-src 'none' —— 本站不嵌 iframe，也不起 Worker。
+#    不写的话它们会回落到 default-src 'self'，等于默认允许同源嵌入。
+#
+# 6. X-Permitted-Cross-Domain-Policies: none —— 禁止 Flash / PDF 那套
+#    跨域策略文件。现在几乎没人用，但配置成本是零。
 
 # ⚠️ connect-src 是这次新增的，别的指令一个都没动。
 #
@@ -42,6 +68,19 @@
 
 # HTML 同理，且更需要及时更新
 /*.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# 后台页与骨架屏参考页：除了不缓存，再补一条 noindex 的响应头。
+# admin.html 的 <meta name="robots"> 已经写了 noindex，但那要等浏览器
+# 解析到那一行才生效；响应头在字节到达时就生效，也更彻底 ——
+# 万一以后有人从别处链过去，抓取器拿到的第一条信息就是「别收录」。
+# skeleton.html 是作者的草稿纸（页脚有链接，但「不对外」），同样处理。
+/admin.html
+  X-Robots-Tag: noindex, nofollow, noarchive
+  Cache-Control: public, max-age=0, must-revalidate
+
+/skeleton.html
+  X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: public, max-age=0, must-revalidate
 
 /

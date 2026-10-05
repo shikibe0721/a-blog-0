@@ -424,12 +424,18 @@ function setupGreeting() {
 
 /* -------------------------------------------------------------------------
    筛选标签
+   -------------------------------------------------------------------------
+   这里只负责「哪一个是选中的」这一件事 —— 单选切换 + 同步 aria-pressed。
+   真正的筛选在 setupFilters 里，它读的就是这里维护的 is-active。
+   分开的理由：about / tree 这些页面上的胶囊是静态标签或场景选择，
+   它们同样需要单选行为，但没有可筛的列表，不该被卷进筛选逻辑。
    ------------------------------------------------------------------------- */
 function setupChips() {
+  const sync = (b) => b.setAttribute("aria-pressed", String(b.classList.contains("is-active")));
+
   // 初始同步：HTML 里带 is-active 的那个要同时是 aria-pressed="true"
-  document.querySelectorAll("[data-chip]").forEach((b) =>
-    b.setAttribute("aria-pressed", String(b.classList.contains("is-active")))
-  );
+  document.querySelectorAll("[data-chip]").forEach(sync);
+
   document.addEventListener("click", (e) => {
     const btn = e.target.closest("[data-chip]");
     if (!btn) return;
@@ -438,8 +444,87 @@ function setupChips() {
       b.setAttribute("aria-pressed", "false");
     });
     btn.classList.add("is-active");
-    btn.setAttribute("aria-pressed", "true");
+    sync(btn);
+    // 换了一类，列表要立刻跟着变
+    window.SiteFilter?.apply?.();
   });
+}
+
+/* -------------------------------------------------------------------------
+   筛选：工具栏里的搜索框 + 分类胶囊
+   -------------------------------------------------------------------------
+   这些控件在 HTML 里到处都是，但很长一段时间它们只是装饰 ——
+   搜索框拦下提交之后什么都不做，胶囊只切换自己的高亮。一个看起来能用
+   却什么都不做的控件比没有控件更糟：用户会先怀疑是自己搜错了。
+
+   规则只有两条，都很朴素：
+     · 搜索框 —— 对条目的全部可见文字做不区分大小写的子串匹配
+     · 胶囊   —— 标签是「全部」时不加条件，否则匹配条目里的
+                 .tag / .ledger__tag 文字（去掉开头的 #）
+   两者是「与」的关系。
+
+   「条目」= 带 data-filter 的容器的直接子元素。页面上没有 data-filter
+   就整个跳过 —— 照片墙那种还没有内容的页面不会因此冒出一句「没有匹配」。
+   注水（blog-api.js 换掉列表内容）之后由它调用 SiteFilter.apply() 重放条件。
+   ------------------------------------------------------------------------- */
+function setupFilters() {
+  const lists = [...document.querySelectorAll("[data-filter]")];
+  if (!lists.length) return;
+
+  const toolbar = document.querySelector('[data-slot="toolbar"]');
+  const input = toolbar?.querySelector('input[type="search"]');
+  const chips = [...(toolbar?.querySelectorAll("[data-chip]") || [])];
+
+  // 空结果提示挂在**列表里面**。
+  // ⚠️ 不能挂在列表后面：首页 / 杂谈 / 音乐 / 说说 的列表都在 .split 里，
+  //    多一个兄弟节点就成了栅格子项，会把右侧边栏挤到第二行去。
+  // role="status" 让它同时充当读屏播报 ——
+  // 不然「筛完什么都不剩」对屏幕阅读器用户是完全静默的。
+  const empties = lists.map((list) => {
+    const p = document.createElement("p");
+    p.className = "filter-empty";
+    p.setAttribute("role", "status");
+    p.hidden = true;
+    p.textContent = "没有匹配的条目。换个词，或点「全部」看完整列表。";
+    list.append(p);
+    return p;
+  });
+
+  /** 条目上的分类标签文字，去掉 markdown 风格的 # 前缀 */
+  const tagsOf = (item) =>
+    [...item.querySelectorAll(".tag, .ledger__tag")]
+      .map((t) => t.textContent.trim().replace(/^#\s*/, ""))
+      .join(" ");
+
+  function apply() {
+    const query = (input?.value || "").trim().toLowerCase();
+    const active = chips.find((c) => c.classList.contains("is-active"));
+    const label = active?.textContent.trim() || "";
+    // 「全部」= 不加分类条件
+    const category = label === "全部" ? "" : label;
+
+    lists.forEach((list, i) => {
+      const empty = empties[i];
+      // 注水会把列表内容整个换掉，提示节点也一起被冲走了 —— 先挂回去
+      if (empty && empty.parentNode !== list) list.append(empty);
+
+      let shown = 0;
+      for (const item of list.children) {
+        if (item === empty) continue;   // 提示节点不是条目
+        const okText = !query || item.textContent.toLowerCase().includes(query);
+        const okCat = !category || tagsOf(item).includes(category);
+        const show = okText && okCat;
+        item.hidden = !show;
+        if (show) shown++;
+      }
+      if (empty) empty.hidden = shown > 0;
+    });
+  }
+
+  input?.addEventListener("input", apply);
+
+  // 注水会把列表内容整个换掉，换完得把当前条件重放一遍
+  window.SiteFilter = { apply };
 }
 
 /* 搜索框包在 form[role=search] 里，回车会提交。
@@ -532,7 +617,7 @@ function setupSkeletons() {
 
 // 逐项初始化并各自兜底：任何一个环节失败都不影响其余交互。
 function boot() {
-  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupSearch, setupSkeletons, setupGreeting].forEach((fn) => {
+  [mountShell, setupTheme, setupDrawer, setupScroll, setupSlotMode, setupChips, setupFilters, setupSearch, setupSkeletons, setupGreeting].forEach((fn) => {
     try { fn(); } catch (err) { console.warn("[skeleton]", fn.name, err); }
   });
 }

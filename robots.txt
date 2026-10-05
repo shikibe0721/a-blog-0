@@ -1,0 +1,11 @@
+# shikibe's blog —— 全站欢迎抓取，只有两处例外。
+#
+# ⚠️ robots.txt 挡的是「抓取」，不是「收录」。
+# 一个页面如果被别处链接了，搜索引擎仍然可能只凭链接文字就把它收进索引。
+# 所以真正的防线是响应头里的 X-Robots-Tag（见 _headers 里的 /admin.html
+# 与 /skeleton.html 两段）—— 这里只是让它别把抓取预算浪费在这两页上。
+
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /skeleton.html

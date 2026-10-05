@@ -212,6 +212,13 @@ html[data-theme="dark"] {
 
 *, *::before, *::after { box-sizing: border-box; }
 
+/* [hidden] 必须真的能藏住。
+   .split / .card-grid / .ledger 这些类都显式声明了 display，
+   而属性选择器与类选择器权重相同（0,1,0）—— 谁在后面谁赢。
+   少了这条，JS 设 item.hidden = true 会毫无效果：
+   元素还在文档流里，只是屏幕阅读器读不到了。 */
+[hidden] { display: none !important; }
+
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;   /* 横屏时不要自动放大字号 */
@@ -1860,6 +1867,26 @@ html.show-slots [data-slot]::after {
 .mb-10 { margin-bottom: var(--s10); }
 .maxw-sm { max-width: 26.25rem; }
 .maxw-md { max-width: 35rem; }
+
+/* 筛选之后一条都没剩下。
+   虚线边框而不是实心玻璃板：它表达的是「状态」不是「内容」，
+   用和卡片一样的材质会让人以为这里本来就该有东西。
+   左对齐，和全站的节奏一致 —— 中间冒出一段居中文字会像是没对齐。
+
+   ⚠️ 这个节点挂在列表**内部**（见 shell.js 的 setupFilters）：
+   挂在外面的话，.split 里的列表会多出一个栅格子项，把侧栏挤到第二行。 */
+.filter-empty {
+  margin: var(--s5) 0 0;
+  padding: var(--s6) var(--s5);
+  border: 1px dashed var(--glass-edge);
+  border-radius: var(--r-xl);
+  font-size: var(--t-small);
+  line-height: var(--lead-snug);
+  color: var(--ink-3);
+}
+
+/* 索引卡列表是栅格，提示要占满一整行而不是挤进某一格 */
+.card-grid > .filter-empty { grid-column: 1 / -1; }
 
 /* 目录行的正文变体：说说的正文就是一句话，不需要摘要的小字号 */
 .entry__text {

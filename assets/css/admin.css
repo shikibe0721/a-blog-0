@@ -214,7 +214,7 @@ html[data-theme="dark"] .afield textarea {
 .admin__status-select { display: flex; align-items: center; }
 .admin__status-select select {
   height: var(--control-h);
-  padding: 0 var(--s6) 0 var(--s4);
+  padding: 0 var(--s8) 0 var(--s4);
   appearance: none;
   -webkit-appearance: none;
   border: 1px solid var(--glass-edge);
@@ -222,6 +222,24 @@ html[data-theme="dark"] .afield textarea {
   background: var(--glass-fill-lo);
   font-size: 0.875rem;
   cursor: pointer;
+}
+
+/* appearance: none 会把原生的下拉箭头一起带走。
+   不补一个的话，这两个 select 看起来就是一枚静态胶囊 ——
+   没有任何迹象说明它能点开、能改。箭头用 data URI 内联（img-src 已放行 data:），
+   深色下换成更亮的描边，因为它压在更亮的填充上。
+   ⚠️ 必须排在两条 select 规则之后：前面那条 background 简写会把
+      background-image 重置成 none。 */
+.afield select,
+.admin__status-select select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%236b6b74' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--s4) center;
+  background-size: 0.75rem auto;
+}
+html[data-theme="dark"] .afield select,
+html[data-theme="dark"] .admin__status-select select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5 6 6.5l5-5' fill='none' stroke='%238a8a92' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 .btn--danger { color: var(--signal-warn); }
@@ -337,7 +355,25 @@ html[data-theme="dark"] .afield textarea {
 }
 
 /* -------------------------------------------------------------------------
-   7. 移动端
+   7. 偏好适配
+   -------------------------------------------------------------------------
+   skeleton.css 里那份「减少透明度」清单写在前台类名上（.masthead__inner /
+   .index-card / .field input …），够不到后台的 admin__ 前缀。而这两块是
+   后台仅有的、真的挂了 backdrop-filter 的面板 —— 少了这一段，
+   用户明确要求「不要半透明」时，后台仍然会糊。
+   颜色那一半不用管：它们读的是 --glass-fill* 令牌，令牌已经在
+   skeleton.css 里换过了。这里只负责把模糊撤掉。
+   ------------------------------------------------------------------------- */
+@media (prefers-reduced-transparency: reduce) {
+  .admin__card,
+  .admin__bar--sticky {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* -------------------------------------------------------------------------
+   8. 移动端
    ------------------------------------------------------------------------- */
 @media (pointer: coarse) {
   .admin__bar .btn,
